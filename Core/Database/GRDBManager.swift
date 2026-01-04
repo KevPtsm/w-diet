@@ -185,7 +185,7 @@ final class GRDBManager {
     }
 
     /// Read from the database asynchronously
-    func read<T>(_ operation: @escaping (Database) throws -> T) async throws -> T {
+    func read<T>(_ operation: @escaping @Sendable (Database) throws -> T) async throws -> T {
         try await dbQueue.read(operation)
     }
 
@@ -195,7 +195,7 @@ final class GRDBManager {
     }
 
     /// Write to the database asynchronously
-    func write<T>(_ operation: @escaping (Database) throws -> T) async throws -> T {
+    func write<T>(_ operation: @escaping @Sendable (Database) throws -> T) async throws -> T {
         try await dbQueue.write(operation)
     }
 

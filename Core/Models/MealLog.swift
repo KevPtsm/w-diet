@@ -10,10 +10,10 @@ import GRDB
 
 /// Represents a logged meal with macronutrient information
 ///
-/// **CRITICAL:** CodingKeys are MANDATORY for all Codable models
-/// Database uses `snake_case`, Swift uses `camelCase`
-/// Without explicit CodingKeys, Supabase sync silently fails
-struct MealLog: Codable, Identifiable {
+/// **CRITICAL:** GRDB column names use snake_case
+/// Swift properties use camelCase
+/// Column mapping is handled in encode(to:) method
+struct MealLog {
     var id: Int64?
     let userId: String
     let mealName: String
@@ -25,23 +25,6 @@ struct MealLog: Codable, Identifiable {
     let createdAt: Date
     let updatedAt: Date
     var syncedAt: Date?
-
-    // MARK: - CodingKeys (MANDATORY for database sync)
-
-    /// Maps Swift camelCase to database snake_case
-    enum CodingKeys: String, CodingKey {
-        case id
-        case userId = "user_id"
-        case mealName = "meal_name"
-        case caloriesKcal = "calories_kcal"
-        case proteinG = "protein_g"
-        case carbsG = "carbs_g"
-        case fatG = "fat_g"
-        case loggedAt = "logged_at"
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
-        case syncedAt = "synced_at"
-    }
 
     // MARK: - Computed Properties
 
@@ -77,6 +60,9 @@ struct MealLog: Codable, Identifiable {
 // MARK: - GRDB FetchableRecord
 
 extension MealLog: FetchableRecord {
+    /// Database table name
+    static let databaseTableName = "meal_logs"
+
     /// Initialize from database row
     init(row: Row) {
         id = row["id"]
@@ -96,10 +82,7 @@ extension MealLog: FetchableRecord {
 // MARK: - GRDB PersistableRecord
 
 extension MealLog: PersistableRecord {
-    /// Database table name
-    static let databaseTableName = "meal_logs"
-
-    /// Encode to database row
+    /// Encode to database row (maps camelCase to snake_case)
     func encode(to container: inout PersistenceContainer) {
         container["id"] = id
         container["user_id"] = userId

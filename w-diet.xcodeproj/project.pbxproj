@@ -6,6 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		0AAB17462F0ADD00004D6216 /* MealLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB17382F0ADD00004D6216 /* MealLog.swift */; };
+		0AAB17472F0ADD00004D6216 /* GRDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB17342F0ADD00004D6216 /* GRDBManager.swift */; };
+		0AAB17482F0ADD00004D6216 /* TimeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB173B2F0ADD00004D6216 /* TimeProvider.swift */; };
+		0AAB17492F0ADD00004D6216 /* AppError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB17362F0ADD00004D6216 /* AppError.swift */; };
+		0AAB174A2F0AF100004D6216 /* w_dietApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB17562F0AF0FF004D6216 /* w_dietApp.swift */; };
+		0AAB174B2F0AF101004D6216 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB17572F0AF100004D6216 /* ContentView.swift */; };
+		0AAB17502F0AEEE0004D6216 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAB17532F0AEEE3004D6216 /* GRDB */; };
+		0AAB17512F0AEEE1004D6216 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAB17542F0AEEE4004D6216 /* Sentry */; };
+		0AAB17522F0AEEE2004D6216 /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAB17552F0AEEE5004D6216 /* Supabase */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		0AAB17002F0AD243004D6216 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,14 +39,15 @@
 		0AAB16F22F0AD241004D6216 /* w-diet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "w-diet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAB16FF2F0AD243004D6216 /* w-dietTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "w-dietTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAB17092F0AD243004D6216 /* w-dietUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "w-dietUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AAB17342F0ADD00004D6216 /* GRDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GRDBManager.swift; sourceTree = "<group>"; };
+		0AAB17362F0ADD00004D6216 /* AppError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppError.swift; sourceTree = "<group>"; };
+		0AAB17382F0ADD00004D6216 /* MealLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealLog.swift; sourceTree = "<group>"; };
+		0AAB173B2F0ADD00004D6216 /* TimeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeProvider.swift; sourceTree = "<group>"; };
+		0AAB17562F0AF0FF004D6216 /* w_dietApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = w_dietApp.swift; sourceTree = "<group>"; };
+		0AAB17572F0AF100004D6216 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		0AAB16F42F0AD241004D6216 /* w-diet */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "w-diet";
-			sourceTree = "<group>";
-		};
 		0AAB17022F0AD243004D6216 /* w-dietTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "w-dietTests";
@@ -52,6 +65,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AAB17502F0AEEE0004D6216 /* GRDB in Frameworks */,
+				0AAB17512F0AEEE1004D6216 /* Sentry in Frameworks */,
+				0AAB17522F0AEEE2004D6216 /* Supabase in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,10 +91,17 @@
 		0AAB16E92F0AD241004D6216 = {
 			isa = PBXGroup;
 			children = (
-				0AAB16F42F0AD241004D6216 /* w-diet */,
 				0AAB17022F0AD243004D6216 /* w-dietTests */,
 				0AAB170C2F0AD243004D6216 /* w-dietUITests */,
 				0AAB16F32F0AD241004D6216 /* Products */,
+				0AAB17562F0AF0FF004D6216 /* w_dietApp.swift */,
+				0AAB17572F0AF100004D6216 /* ContentView.swift */,
+				0AAB17302F0ADD00004D6216 /* App */,
+				0AAB17312F0ADD00004D6216 /* Config */,
+				0AAB173D2F0ADD00004D6216 /* Core */,
+				0AAB173E2F0ADD00004D6216 /* Scripts */,
+				0AAB17412F0ADD00004D6216 /* Shared */,
+				0AAB17452F0ADD00004D6216 /* Tests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -90,6 +113,188 @@
 				0AAB17092F0AD243004D6216 /* w-dietUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		0AAB172B2F0ADD00004D6216 /* CycleManagement */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = CycleManagement;
+			sourceTree = "<group>";
+		};
+		0AAB172C2F0ADD00004D6216 /* Dashboard */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Dashboard;
+			sourceTree = "<group>";
+		};
+		0AAB172D2F0ADD00004D6216 /* MealLogging */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MealLogging;
+			sourceTree = "<group>";
+		};
+		0AAB172E2F0ADD00004D6216 /* WeightTracking */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = WeightTracking;
+			sourceTree = "<group>";
+		};
+		0AAB172F2F0ADD00004D6216 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB172B2F0ADD00004D6216 /* CycleManagement */,
+				0AAB172C2F0ADD00004D6216 /* Dashboard */,
+				0AAB172D2F0ADD00004D6216 /* MealLogging */,
+				0AAB172E2F0ADD00004D6216 /* WeightTracking */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		0AAB17302F0ADD00004D6216 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB172F2F0ADD00004D6216 /* Features */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0AAB17312F0ADD00004D6216 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		0AAB17322F0ADD00004D6216 /* v1.0-POC */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "v1.0-POC";
+			sourceTree = "<group>";
+		};
+		0AAB17332F0ADD00004D6216 /* Migrations */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB17322F0ADD00004D6216 /* v1.0-POC */,
+			);
+			path = Migrations;
+			sourceTree = "<group>";
+		};
+		0AAB17352F0ADD00004D6216 /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB17332F0ADD00004D6216 /* Migrations */,
+				0AAB17342F0ADD00004D6216 /* GRDBManager.swift */,
+			);
+			path = Database;
+			sourceTree = "<group>";
+		};
+		0AAB17372F0ADD00004D6216 /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB17362F0ADD00004D6216 /* AppError.swift */,
+			);
+			path = Errors;
+			sourceTree = "<group>";
+		};
+		0AAB17392F0ADD00004D6216 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB17382F0ADD00004D6216 /* MealLog.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0AAB173A2F0ADD00004D6216 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		0AAB173C2F0ADD00004D6216 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB173B2F0ADD00004D6216 /* TimeProvider.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		0AAB173D2F0ADD00004D6216 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB17352F0ADD00004D6216 /* Database */,
+				0AAB17372F0ADD00004D6216 /* Errors */,
+				0AAB17392F0ADD00004D6216 /* Models */,
+				0AAB173A2F0ADD00004D6216 /* Services */,
+				0AAB173C2F0ADD00004D6216 /* Utilities */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		0AAB173E2F0ADD00004D6216 /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		0AAB173F2F0ADD00004D6216 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		0AAB17402F0ADD00004D6216 /* ViewModifiers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModifiers;
+			sourceTree = "<group>";
+		};
+		0AAB17412F0ADD00004D6216 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB173F2F0ADD00004D6216 /* Components */,
+				0AAB17402F0ADD00004D6216 /* ViewModifiers */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		0AAB17422F0ADD00004D6216 /* E2ETests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = E2ETests;
+			sourceTree = "<group>";
+		};
+		0AAB17432F0ADD00004D6216 /* Fixtures */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Fixtures;
+			sourceTree = "<group>";
+		};
+		0AAB17442F0ADD00004D6216 /* IntegrationTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = IntegrationTests;
+			sourceTree = "<group>";
+		};
+		0AAB17452F0ADD00004D6216 /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				0AAB17422F0ADD00004D6216 /* E2ETests */,
+				0AAB17432F0ADD00004D6216 /* Fixtures */,
+				0AAB17442F0ADD00004D6216 /* IntegrationTests */,
+			);
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -107,11 +312,11 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				0AAB16F42F0AD241004D6216 /* w-diet */,
-			);
 			name = "w-diet";
 			packageProductDependencies = (
+				0AAB17532F0AEEE3004D6216 /* GRDB */,
+				0AAB17542F0AEEE4004D6216 /* Sentry */,
+				0AAB17552F0AEEE5004D6216 /* Supabase */,
 			);
 			productName = "w-diet";
 			productReference = 0AAB16F22F0AD241004D6216 /* w-diet.app */;
@@ -241,6 +446,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AAB174A2F0AF100004D6216 /* w_dietApp.swift in Sources */,
+				0AAB174B2F0AF101004D6216 /* ContentView.swift in Sources */,
+				0AAB17462F0ADD00004D6216 /* MealLog.swift in Sources */,
+				0AAB17472F0ADD00004D6216 /* GRDBManager.swift in Sources */,
+				0AAB17482F0ADD00004D6216 /* TimeProvider.swift in Sources */,
+				0AAB17492F0ADD00004D6216 /* AppError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -602,6 +813,24 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0AAB17532F0AEEE3004D6216 /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AAB17222F0AD3AE004D6216 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
+			productName = GRDB;
+		};
+		0AAB17542F0AEEE4004D6216 /* Sentry */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AAB17242F0AD48B004D6216 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			productName = Sentry;
+		};
+		0AAB17552F0AEEE5004D6216 /* Supabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AAB17232F0AD3F5004D6216 /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Supabase;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 0AAB16EA2F0AD241004D6216 /* Project object */;
 }
