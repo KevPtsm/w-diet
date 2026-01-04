@@ -195,6 +195,11 @@
 			);
 			mainGroup = 0AAB16E92F0AD241004D6216;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0AAB17222F0AD3AE004D6216 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				0AAB17232F0AD3F5004D6216 /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				0AAB17242F0AD48B004D6216 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 0AAB16F32F0AD241004D6216 /* Products */;
 			projectDirPath = "";
@@ -570,6 +575,33 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0AAB17222F0AD3AE004D6216 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		0AAB17232F0AD3F5004D6216 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+		0AAB17242F0AD48B004D6216 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 0AAB16EA2F0AD241004D6216 /* Project object */;
 }

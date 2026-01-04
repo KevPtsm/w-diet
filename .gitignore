@@ -31,7 +31,7 @@ Config/Secrets.xcconfig
 xcuserdata/
 
 # Swift Package Manager resolved versions
-Package.resolved
+# Package.resolved - KEEP THIS for apps (ensures consistent dependency versions)
 
 # Temporary files
 *.swp
