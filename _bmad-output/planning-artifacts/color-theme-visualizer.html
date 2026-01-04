@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>w-diet Color Theme Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .theme-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 32px;
+        }
+
+        .theme-card {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .theme-header {
+            margin-bottom: 24px;
+        }
+
+        .theme-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .theme-header p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .color-swatch {
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .color-name {
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .color-hex {
+            font-size: 11px;
+            opacity: 0.8;
+            font-family: 'Courier New', monospace;
+        }
+
+        .ui-examples {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .ui-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-card {
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            border: 1px solid #e0e0e0;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            opacity: 0.7;
+        }
+
+        .card-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            opacity: 0.6;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .macro-display {
+            display: flex;
+            justify-content: space-around;
+            padding: 16px;
+            background: #f8f8f8;
+            border-radius: 12px;
+        }
+
+        .macro-item {
+            text-align: center;
+        }
+
+        .macro-emoji {
+            font-size: 32px;
+            margin-bottom: 4px;
+        }
+
+        .macro-label {
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.6;
+        }
+
+        .notification {
+            padding: 16px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid;
+        }
+
+        .notification-icon {
+            font-size: 24px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .progress-circle {
+            transform: rotate(-90deg);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>w-diet Color Themes</h1>
+        <p>Compare visual directions to find the right personality for your app</p>
+    </div>
+
+    <div class="theme-container">
+        <!-- Theme 1: Lion Gold & Energy -->
+        <div class="theme-card">
+            <div class="theme-header">
+                <h2>🦁 Lion Gold & Energy</h2>
+                <p>Warm, motivating, coach-like. Gold represents the lion mascot's energy and confidence. Perfect for a supportive coach that celebrates wins.</p>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: #F4A460; color: white;">
+                    <div class="color-name">Primary (Lion Gold)</div>
+                    <div class="color-hex">#F4A460</div>
+                </div>
+                <div class="color-swatch" style="background: #FF6B35; color: white;">
+                    <div class="color-name">Accent (Energy)</div>
+                    <div class="color-hex">#FF6B35</div>
+                </div>
+                <div class="color-swatch" style="background: #2D2D2D; color: white;">
+                    <div class="color-name">Text Primary</div>
+                    <div class="color-hex">#2D2D2D</div>
+                </div>
+                <div class="color-swatch" style="background: #F8F8F8; color: #2D2D2D;">
+                    <div class="color-name">Background</div>
+                    <div class="color-hex">#F8F8F8</div>
+                </div>
+            </div>
+
+            <div class="ui-examples">
+                <div>
+                    <div class="ui-label">Dashboard Card</div>
+                    <div class="dashboard-card">
+                        <div class="card-title" style="color: #666;">Today's Progress</div>
+                        <div class="card-value" style="color: #F4A460;">1,250</div>
+                        <div class="card-subtitle" style="color: #999;">of 1,900 calories</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Buttons</div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" style="background: #F4A460;">Log Meal</button>
+                        <button class="btn btn-secondary">Settings</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Macro Feedback</div>
+                    <div class="macro-display">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label" style="color: #F4A460;">Protein</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label" style="color: #666;">Carbs</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label" style="color: #999;">Fats</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Notification</div>
+                    <div class="notification" style="background: #FFF8F0; border-color: #F4A460;">
+                        <div class="notification-icon">🦁</div>
+                        <div class="notification-text" style="color: #2D2D2D;">Great job logging lunch!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme 2: Fresh Growth -->
+        <div class="theme-card">
+            <div class="theme-header">
+                <h2>🌱 Fresh Growth</h2>
+                <p>Clean, healthy, optimistic. Green represents nutrition, growth, and health. Feels fresh and motivating without being medical.</p>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: #4CAF50; color: white;">
+                    <div class="color-name">Primary (Fresh Green)</div>
+                    <div class="color-hex">#4CAF50</div>
+                </div>
+                <div class="color-swatch" style="background: #8BC34A; color: white;">
+                    <div class="color-name">Accent (Growth)</div>
+                    <div class="color-hex">#8BC34A</div>
+                </div>
+                <div class="color-swatch" style="background: #1C1C1E; color: white;">
+                    <div class="color-name">Text Primary</div>
+                    <div class="color-hex">#1C1C1E</div>
+                </div>
+                <div class="color-swatch" style="background: #F5F5F7; color: #1C1C1E;">
+                    <div class="color-name">Background</div>
+                    <div class="color-hex">#F5F5F7</div>
+                </div>
+            </div>
+
+            <div class="ui-examples">
+                <div>
+                    <div class="ui-label">Dashboard Card</div>
+                    <div class="dashboard-card">
+                        <div class="card-title" style="color: #666;">Today's Progress</div>
+                        <div class="card-value" style="color: #4CAF50;">1,250</div>
+                        <div class="card-subtitle" style="color: #999;">of 1,900 calories</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Buttons</div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" style="background: #4CAF50;">Log Meal</button>
+                        <button class="btn btn-secondary">Settings</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Macro Feedback</div>
+                    <div class="macro-display">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label" style="color: #4CAF50;">Protein</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label" style="color: #666;">Carbs</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label" style="color: #999;">Fats</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Notification</div>
+                    <div class="notification" style="background: #F1F8F4; border-color: #4CAF50;">
+                        <div class="notification-icon">🌱</div>
+                        <div class="notification-text" style="color: #1C1C1E;">Great job logging lunch!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Theme 3: Calm Confidence -->
+        <div class="theme-card">
+            <div class="theme-header">
+                <h2>🔵 Calm Confidence</h2>
+                <p>Trustworthy, stable, professional. Blue represents reliability and science-backed guidance. Feels credible without being cold.</p>
+            </div>
+
+            <div class="color-palette">
+                <div class="color-swatch" style="background: #2196F3; color: white;">
+                    <div class="color-name">Primary (Trust Blue)</div>
+                    <div class="color-hex">#2196F3</div>
+                </div>
+                <div class="color-swatch" style="background: #00BCD4; color: white;">
+                    <div class="color-name">Accent (Calm)</div>
+                    <div class="color-hex">#00BCD4</div>
+                </div>
+                <div class="color-swatch" style="background: #212121; color: white;">
+                    <div class="color-name">Text Primary</div>
+                    <div class="color-hex">#212121</div>
+                </div>
+                <div class="color-swatch" style="background: #FAFAFA; color: #212121;">
+                    <div class="color-name">Background</div>
+                    <div class="color-hex">#FAFAFA</div>
+                </div>
+            </div>
+
+            <div class="ui-examples">
+                <div>
+                    <div class="ui-label">Dashboard Card</div>
+                    <div class="dashboard-card">
+                        <div class="card-title" style="color: #666;">Today's Progress</div>
+                        <div class="card-value" style="color: #2196F3;">1,250</div>
+                        <div class="card-subtitle" style="color: #999;">of 1,900 calories</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Buttons</div>
+                    <div class="button-group">
+                        <button class="btn btn-primary" style="background: #2196F3;">Log Meal</button>
+                        <button class="btn btn-secondary">Settings</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Macro Feedback</div>
+                    <div class="macro-display">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label" style="color: #2196F3;">Protein</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label" style="color: #666;">Carbs</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label" style="color: #999;">Fats</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="ui-label">Notification</div>
+                    <div class="notification" style="background: #E3F2FD; border-color: #2196F3;">
+                        <div class="notification-icon">💙</div>
+                        <div class="notification-text" style="color: #212121;">Great job logging lunch!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="max-width: 1400px; margin: 40px auto; padding: 32px; background: white; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+        <h3 style="font-size: 24px; font-weight: 700; margin-bottom: 16px;">How to Choose:</h3>
+        <ul style="font-size: 16px; line-height: 1.8; color: #666; list-style-position: inside;">
+            <li><strong style="color: #F4A460;">Lion Gold & Energy:</strong> Best if you want warm, motivating vibes that match the lion mascot personality</li>
+            <li><strong style="color: #4CAF50;">Fresh Growth:</strong> Best if you want to emphasize health, nutrition, and fresh starts</li>
+            <li><strong style="color: #2196F3;">Calm Confidence:</strong> Best if you want to emphasize science-backed trust and reliability</li>
+        </ul>
+        <p style="margin-top: 24px; font-size: 14px; color: #999; font-style: italic;">Open this file in your browser to see the full interactive visualizer.</p>
+    </div>
+</body>
+</html>

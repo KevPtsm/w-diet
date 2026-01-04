@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>w-diet Weight Card Mockup - Dashboard Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2D2D2D;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .mockup-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .mockup-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .mockup-header {
+            padding: 20px;
+            text-align: center;
+            background: #F8F8F8;
+        }
+
+        .mockup-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2D2D2D;
+        }
+
+        .mockup-header p {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .mockup-screen {
+            background: #F8F8F8;
+            padding: 32px 24px 20px 24px;
+            min-height: 700px;
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #2D2D2D;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin: 0 auto 24px auto;
+            display: block;
+            width: fit-content;
+        }
+
+        .notification-banner {
+            background: #FFF8F0;
+            border-left: 4px solid #F4A460;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #2D2D2D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ring-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .segmented-ring {
+            width: 160px;
+            height: 160px;
+            transform: rotate(-90deg);
+        }
+
+        .ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .ring-value {
+            font-size: 34px;
+            font-weight: 700;
+            color: #2D2D2D;
+            line-height: 1;
+        }
+
+        .ring-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .macro-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        }
+
+        .macro-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .macro-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .macro-emoji {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .macro-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+            position: relative;
+            padding-bottom: 6px;
+        }
+
+        .macro-label-protein {
+            color: #4CAF50;
+        }
+
+        .macro-label-carbs {
+            color: #FFA726;
+        }
+
+        .macro-label-fats {
+            color: #EF5350;
+        }
+
+        /* Progress bar underlines */
+        .macro-progress-bar {
+            width: 40px;
+            height: 3px;
+            background: rgba(224, 224, 224, 0.3);
+            border-radius: 2px;
+            margin: 6px auto;
+            overflow: hidden;
+            position: relative;
+            border: 0.5px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .macro-progress-fill {
+            height: 100%;
+            border-radius: 1px;
+            transition: width 0.3s ease-out;
+        }
+
+        .progress-protein {
+            background: #4CAF50;
+        }
+
+        .progress-carbs {
+            background: #FFA726;
+        }
+
+        .progress-fats {
+            background: #EF5350;
+        }
+
+        .macro-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2D2D2D;
+        }
+
+        /* WEIGHT CARD STYLES */
+        .weight-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .weight-main {
+            flex: 1;
+        }
+
+        .weight-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .weight-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2D2D2D;
+        }
+
+        .weight-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .weight-avg {
+            text-align: right;
+        }
+
+        .weight-avg-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+            margin-bottom: 2px;
+        }
+
+        .weight-avg-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .weight-trend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .trend-arrow {
+            font-size: 24px;
+        }
+
+        .trend-amount {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .trend-down {
+            color: #4CAF50;
+        }
+
+        .trend-neutral {
+            color: #999;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: #F4A460;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #E39450;
+            transform: scale(1.02);
+        }
+
+        .comparison-notes {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            margin-top: 32px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comparison-notes h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2D2D2D;
+        }
+
+        .comparison-notes ul {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #666;
+            list-style-position: inside;
+        }
+
+        .comparison-notes li {
+            margin-bottom: 12px;
+        }
+
+        .pro {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .con {
+            color: #EF5350;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>w-diet Dashboard Design</h1>
+        <p>Final dashboard with weight tracking, macro progress bars, and segmented ring</p>
+    </div>
+
+    <div class="mockup-container">
+        <!-- Final Dashboard Design -->
+        <div class="mockup-card">
+            <div class="mockup-header">
+                <h2>Dashboard - Trending Down</h2>
+                <p>Complete dashboard with all components integrated</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge">
+                    🔥 12 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="segmented-ring" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#E0E0E0" stroke-width="20"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#4CAF50" stroke-width="20" stroke-dasharray="123 440" stroke-linecap="round"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#FFA726" stroke-width="20" stroke-dasharray="188 440" stroke-dashoffset="-123" stroke-linecap="round"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#EF5350" stroke-width="20" stroke-dasharray="114 440" stroke-dashoffset="-311" stroke-linecap="round"/>
+                    </svg>
+                    <div class="ring-text">
+                        <div class="ring-value">1,250</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label macro-label-protein">Protein</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-protein" style="width: 80%;"></div>
+                            </div>
+                            <div class="macro-value">128/160g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-carbs">Carbs</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-carbs" style="width: 63%;"></div>
+                            </div>
+                            <div class="macro-value">85/135g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label macro-label-fats">Fats</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-fats" style="width: 40%;"></div>
+                            </div>
+                            <div class="macro-value">32/80g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEIGHT CARD - DOWNWARD TREND -->
+                <div class="weight-card">
+                    <div class="weight-main">
+                        <div class="weight-label">Weight</div>
+                        <div class="weight-value">69.1 kg</div>
+                    </div>
+                    <div class="weight-stats">
+                        <div class="weight-avg">
+                            <div class="weight-avg-label">Avg</div>
+                            <div class="weight-avg-value">69.5</div>
+                        </div>
+                        <div class="weight-trend trend-down">
+                            <div class="trend-arrow">↓</div>
+                            <div class="trend-amount">-0.4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+            </div>
+        </div>
+
+        <!-- Version B: No Trend Shown (Neutral State) -->
+        <div class="mockup-card">
+            <div class="mockup-header">
+                <h2>Version B: No Trend Display</h2>
+                <p>Hides trend indicator when weight increases or stays same</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge">
+                    🔥 12 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="segmented-ring" viewBox="0 0 160 160">
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#E0E0E0" stroke-width="20"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#4CAF50" stroke-width="20" stroke-dasharray="123 440" stroke-linecap="round"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#FFA726" stroke-width="20" stroke-dasharray="188 440" stroke-dashoffset="-123" stroke-linecap="round"/>
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#EF5350" stroke-width="20" stroke-dasharray="114 440" stroke-dashoffset="-311" stroke-linecap="round"/>
+                    </svg>
+                    <div class="ring-text">
+                        <div class="ring-value">1,250</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label macro-label-protein">Protein</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-protein" style="width: 80%;"></div>
+                            </div>
+                            <div class="macro-value">128/160g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-carbs">Carbs</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-carbs" style="width: 63%;"></div>
+                            </div>
+                            <div class="macro-value">85/135g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label macro-label-fats">Fats</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-fats" style="width: 40%;"></div>
+                            </div>
+                            <div class="macro-value">32/80g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEIGHT CARD - DOWNWARD TREND -->
+                <div class="weight-card">
+                    <div class="weight-main">
+                        <div class="weight-label">Weight</div>
+                        <div class="weight-value">69.1 kg</div>
+                    </div>
+                    <div class="weight-stats">
+                        <div class="weight-avg">
+                            <div class="weight-avg-label">Avg</div>
+                            <div class="weight-avg-value">69.5</div>
+                        </div>
+                        <div class="weight-trend trend-down">
+                            <div class="trend-arrow">↓</div>
+                            <div class="trend-amount">-0.4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparison-notes">
+        <h3>Design Philosophy: Visual Hierarchy & Progress Feedback</h3>
+        <ul>
+            <li><span class="pro">✓ Four-Layer Feedback System:</span> Ring segment (macro distribution) + Colored text (identity) + Progress bar (quantity) + Emoji (quality)</li>
+            <li><span class="pro">✓ Progress Bar Placement:</span> Below macro label, above value - creates visual flow from identity → progress → current value</li>
+            <li><span class="pro">✓ Subtle Border:</span> 0.5px border around progress bar provides definition without visual noise</li>
+            <li><span class="pro">✓ Weight Trend Logic:</span> Only show green ↓ when current_weight < rolling_average (celebrate wins, hide setbacks)</li>
+            <li><span class="pro">✓ "Coach, Not Judge" Philosophy:</span> Positive reinforcement emphasized over punishment</li>
+        </ul>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px;">Weight Card Specifications</h3>
+        <ul>
+            <li><strong>Layout:</strong> Horizontal card with 3 sections: Current Weight (left) | Rolling Avg (center-right) | Trend (right)</li>
+            <li><strong>Current Weight:</strong> 28pt bold, neutral dark (#2D2D2D), displayed in kg</li>
+            <li><strong>Rolling Average:</strong> 14pt semibold, gray (#666) - Day 1: single weight, Day 2: avg of 2 days, ... Day 7+: rolling 7-day average</li>
+            <li><strong>Average Label:</strong> Shows "Avg" (not "7-Day Avg") to remain accurate from Day 1</li>
+            <li><strong>Trend Display (conditional):</strong> Green arrow ↓ (24pt) + amount in kg (e.g., "-0.4", 11pt semibold, green #4CAF50)</li>
+            <li><strong>Trend Logic:</strong> Show green ↓ ONLY if current_weight < rolling_average, hide completely otherwise</li>
+            <li><strong>Tap Behavior:</strong> Opens full weight history screen (Phase 2: line graph, all entries)</li>
+        </ul>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px;">Macro Display Specifications</h3>
+        <ul>
+            <li><strong>Format:</strong> current/goal (e.g., "128/160g")</li>
+            <li><strong>Protein Goal:</strong> weight_kg × 2 (e.g., 80kg user → 160g protein)</li>
+            <li><strong>Fats Goal:</strong> weight_kg × 1.0 (e.g., 80kg user → 80g fats, minimum for hormone health)</li>
+            <li><strong>Carbs Goal:</strong> Flexible - fills remaining calories after protein + fats are allocated</li>
+            <li><strong>Auto-Recalculation:</strong> Macro goals update automatically when user logs new weight (protein/fats scale with current bodyweight)</li>
+            <li><strong>Calculation Example (80kg user, 1900 cal diet phase):</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Protein: 160g × 4 cal/g = 640 cal</li>
+                    <li>Fats: 80g × 9 cal/g = 720 cal</li>
+                    <li>Carbs: (1900 - 640 - 720) ÷ 4 = 135g (540 cal)</li>
+                </ul>
+            </li>
+            <li><strong>Smiley Logic (% of goal):</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>😊 Green: ≥70% of goal (e.g., 112g+ for 160g protein target)</li>
+                    <li>😐 Yellow: 50-69% of goal (e.g., 80-111g)</li>
+                    <li>😞 Red: <50% of goal (e.g., <80g)</li>
+                </ul>
+            </li>
+            <li><strong>Progress Bar (positioned below label, above value):</strong>
+                <ul style="margin-left: 20px; margin-top: 8px;">
+                    <li>Width: 40px, Height: 3pt, Border-radius: 2px</li>
+                    <li>Border: 0.5px solid rgba(0,0,0,0.1) for subtle definition</li>
+                    <li>Background: Light gray (#E0E0E0, 30% opacity)</li>
+                    <li>Fill color: Matches macro color (Protein=Green #4CAF50, Carbs=Orange #FFA726, Fats=Red #EF5350)</li>
+                    <li>Fill percentage: current ÷ goal × 100% (e.g., 128/160 = 80% filled)</li>
+                    <li>Animation: 300ms ease-out on page load</li>
+                    <li>Placement: Emoji → Label → Progress Bar → Value (top to bottom)</li>
+                    <li>Purpose: Visual reinforcement of progress (complements emoji feedback)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+</body>
+</html>

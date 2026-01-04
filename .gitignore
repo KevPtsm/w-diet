@@ -1,0 +1,39 @@
+# Xcode
+*.xcodeproj/*
+!*.xcodeproj/project.pbxproj
+!*.xcodeproj/xcshareddata/
+!*.xcodeproj/project.xcworkspace/
+*.xcworkspace/*
+!*.xcworkspace/contents.xcworkspacedata
+
+# Build artifacts
+DerivedData/
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods (not used, but just in case)
+Pods/
+
+# Secrets - NEVER commit these!
+Config/Secrets.xcconfig
+*.xcconfig.secret
+
+# macOS
+.DS_Store
+
+# Xcode user settings
+xcuserdata/
+
+# Swift Package Manager resolved versions
+Package.resolved
+
+# Temporary files
+*.swp
+*~
+.*.sw?

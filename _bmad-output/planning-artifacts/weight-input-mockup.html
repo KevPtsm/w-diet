@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>w-diet Weight Input Options - 3 Approaches</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2D2D2D;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .mockup-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .mockup-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .mockup-header {
+            padding: 20px;
+            text-align: center;
+            background: #F8F8F8;
+            border-bottom: 2px solid #F4A460;
+        }
+
+        .mockup-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2D2D2D;
+        }
+
+        .mockup-header p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .mockup-screen {
+            background: #F8F8F8;
+            padding: 32px 24px 80px 24px;
+            min-height: 650px;
+            position: relative;
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #2D2D2D;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin: 0 auto 24px auto;
+            display: block;
+            width: fit-content;
+        }
+
+        .streak-inactive {
+            opacity: 0.5;
+        }
+
+        .notification-banner {
+            background: #FFF8F0;
+            border-left: 4px solid #F4A460;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #2D2D2D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ring-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .segmented-ring {
+            width: 140px;
+            height: 140px;
+            transform: rotate(-90deg);
+        }
+
+        .ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .ring-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2D2D2D;
+            line-height: 1;
+        }
+
+        .ring-subtitle {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        .macro-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        }
+
+        .macro-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .macro-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .macro-emoji {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .macro-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .macro-label-protein {
+            color: #4CAF50;
+        }
+
+        .macro-label-carbs {
+            color: #FFA726;
+        }
+
+        .macro-label-fats {
+            color: #EF5350;
+        }
+
+        .macro-progress-bar {
+            width: 35px;
+            height: 3px;
+            background: rgba(224, 224, 224, 0.3);
+            border-radius: 2px;
+            margin: 4px auto;
+            overflow: hidden;
+            position: relative;
+            border: 0.5px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .macro-progress-fill {
+            height: 100%;
+            border-radius: 1px;
+        }
+
+        .progress-protein {
+            background: #4CAF50;
+        }
+
+        .progress-carbs {
+            background: #FFA726;
+        }
+
+        .progress-fats {
+            background: #EF5350;
+        }
+
+        .macro-value {
+            font-size: 12px;
+            font-weight: 700;
+            color: #2D2D2D;
+        }
+
+        /* WEIGHT CARD STYLES */
+        .weight-card {
+            background: white;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .weight-card:hover {
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .weight-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .weight-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #666;
+        }
+
+        .weight-edit-icon {
+            font-size: 16px;
+            color: #F4A460;
+        }
+
+        .weight-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .weight-main {
+            flex: 1;
+        }
+
+        .weight-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2D2D2D;
+        }
+
+        .weight-empty {
+            font-size: 28px;
+            font-weight: 700;
+            color: #CCC;
+        }
+
+        .weight-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .weight-stats {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .weight-avg {
+            text-align: right;
+        }
+
+        .weight-avg-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #999;
+            margin-bottom: 2px;
+        }
+
+        .weight-avg-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .weight-trend {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .trend-arrow {
+            font-size: 24px;
+        }
+
+        .trend-amount {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .trend-down {
+            color: #4CAF50;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: #F4A460;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #E39450;
+            transform: scale(1.02);
+        }
+
+        /* NAVBAR STYLES */
+        .navbar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #E0E0E0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 16px 0;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-icon {
+            font-size: 24px;
+        }
+
+        .nav-item.active .nav-icon {
+            filter: brightness(0.8);
+        }
+
+        .nav-label {
+            font-size: 10px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-label {
+            color: #F4A460;
+            font-weight: 600;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 20px;
+            padding: 32px 24px;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 24px;
+            color: #2D2D2D;
+        }
+
+        .weight-input-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .weight-input {
+            font-size: 48px;
+            font-weight: 700;
+            text-align: center;
+            border: none;
+            outline: none;
+            width: 140px;
+            color: #2D2D2D;
+            background: #F8F8F8;
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        .weight-unit {
+            font-size: 28px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .btn-save {
+            width: 100%;
+            padding: 16px;
+            background: #F4A460;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-save:hover {
+            background: #E39450;
+        }
+
+        .notification-prompt {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .notification-prompt-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #2D2D2D;
+        }
+
+        .notification-prompt-btn {
+            padding: 12px 24px;
+            background: #F4A460;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .comparison-notes {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            margin-top: 32px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comparison-notes h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2D2D2D;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .comparison-item {
+            padding: 20px;
+            background: #F8F8F8;
+            border-radius: 12px;
+        }
+
+        .comparison-item h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #F4A460;
+        }
+
+        .comparison-item ul {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #666;
+            list-style-position: inside;
+        }
+
+        .comparison-item li {
+            margin-bottom: 8px;
+        }
+
+        .pro {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .con {
+            color: #EF5350;
+            font-weight: 600;
+        }
+
+        .note {
+            color: #666;
+            font-style: italic;
+            font-size: 13px;
+            margin-top: 16px;
+            padding: 12px;
+            background: #FFF8F0;
+            border-left: 3px solid #F4A460;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Weight Input Options</h1>
+        <p>Three approaches for weight logging UX - tap card, dedicated button, or notification-driven</p>
+    </div>
+
+    <div class="mockup-container">
+        <!-- Option A: Tap Weight Card -->
+        <div class="mockup-card">
+            <div class="mockup-header">
+                <h2>Option A: Tap Weight Card</h2>
+                <p>Tap anywhere on weight card to open input modal. Clean UI, no extra buttons.</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge streak-inactive">
+                    🔥 0 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="segmented-ring" viewBox="0 0 140 140">
+                        <circle cx="70" cy="70" r="60" fill="none" stroke="#E0E0E0" stroke-width="16"/>
+                    </svg>
+                    <div class="ring-text">
+                        <div class="ring-value">0</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-protein">Protein</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-protein" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/160g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-carbs">Carbs</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-carbs" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/135g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-fats">Fats</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-fats" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/80g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEIGHT CARD - EMPTY STATE (TAPPABLE) -->
+                <div class="weight-card">
+                    <div class="weight-card-header">
+                        <div class="weight-label">Weight</div>
+                    </div>
+                    <div class="weight-content">
+                        <div class="weight-main">
+                            <div class="weight-empty">-- kg</div>
+                            <div class="weight-hint">Tap to log your weight</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+
+                <!-- NAVBAR -->
+                <div class="navbar">
+                    <div class="nav-item active">
+                        <div class="nav-icon">🏠</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">📊</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">🎓</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">⚙️</div>
+                    </div>
+                </div>
+
+                <!-- MODAL OVERLAY -->
+                <div class="modal-overlay">
+                    <div class="modal">
+                        <div class="modal-title">Log Weight</div>
+                        <div class="weight-input-container">
+                            <input type="text" class="weight-input" value="69.1" readonly>
+                            <div class="weight-unit">kg</div>
+                        </div>
+                        <button class="btn-save">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option B: Dedicated Edit Button -->
+        <div class="mockup-card">
+            <div class="mockup-header">
+                <h2>Option B: Edit Button on Card</h2>
+                <p>Pencil icon (✏️) on weight card explicitly shows edit affordance.</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge streak-inactive">
+                    🔥 0 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="segmented-ring" viewBox="0 0 140 140">
+                        <circle cx="70" cy="70" r="60" fill="none" stroke="#E0E0E0" stroke-width="16"/>
+                    </svg>
+                    <div class="ring-text">
+                        <div class="ring-value">0</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-protein">Protein</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-protein" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/160g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-carbs">Carbs</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-carbs" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/135g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-fats">Fats</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-fats" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/80g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEIGHT CARD - WITH EDIT BUTTON -->
+                <div class="weight-card">
+                    <div class="weight-card-header">
+                        <div class="weight-label">Weight</div>
+                        <div class="weight-edit-icon">✏️</div>
+                    </div>
+                    <div class="weight-content">
+                        <div class="weight-main">
+                            <div class="weight-empty">-- kg</div>
+                            <div class="weight-hint">Tap pencil to log weight</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+
+                <!-- NAVBAR -->
+                <div class="navbar">
+                    <div class="nav-item active">
+                        <div class="nav-icon">🏠</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">📊</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">🎓</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">⚙️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Option C: Notification-Driven -->
+        <div class="mockup-card">
+            <div class="mockup-header">
+                <h2>Option C: Notification Prompt</h2>
+                <p>Morning notification + in-app prompt card guides user to log weight.</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge streak-inactive">
+                    🔥 0 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <!-- WEIGHT LOG PROMPT -->
+                <div class="notification-prompt">
+                    <div class="notification-prompt-title">⚖️ Log today's weight to track progress</div>
+                    <button class="notification-prompt-btn">Log Weight</button>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="segmented-ring" viewBox="0 0 140 140">
+                        <circle cx="70" cy="70" r="60" fill="none" stroke="#E0E0E0" stroke-width="16"/>
+                    </svg>
+                    <div class="ring-text">
+                        <div class="ring-value">0</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-protein">Protein</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-protein" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/160g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-carbs">Carbs</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-carbs" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/135g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-fats">Fats</div>
+                            <div class="macro-progress-bar">
+                                <div class="macro-progress-fill progress-fats" style="width: 0%;"></div>
+                            </div>
+                            <div class="macro-value">0/80g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WEIGHT CARD - EMPTY (NO INTERACTION) -->
+                <div class="weight-card" style="opacity: 0.6; cursor: default;">
+                    <div class="weight-card-header">
+                        <div class="weight-label">Weight</div>
+                    </div>
+                    <div class="weight-content">
+                        <div class="weight-main">
+                            <div class="weight-empty">-- kg</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+
+                <!-- NAVBAR -->
+                <div class="navbar">
+                    <div class="nav-item active">
+                        <div class="nav-icon">🏠</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">📊</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">🎓</div>
+                    </div>
+                    <div class="nav-item">
+                        <div class="nav-icon">⚙️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="comparison-notes">
+        <h3>Comparison: Weight Input Approaches</h3>
+
+        <div class="comparison-grid">
+            <div class="comparison-item">
+                <h4>Option A: Tap Weight Card</h4>
+                <ul>
+                    <li><span class="pro">PRO:</span> Cleanest UI (no extra buttons)</li>
+                    <li><span class="pro">PRO:</span> Follows iOS patterns (cards are tappable)</li>
+                    <li><span class="pro">PRO:</span> Discoverable (hint text guides user)</li>
+                    <li><span class="con">CON:</span> Might not be obvious it's tappable at first</li>
+                    <li><span class="con">CON:</span> Accidental taps possible</li>
+                </ul>
+            </div>
+
+            <div class="comparison-item">
+                <h4>Option B: Edit Button on Card</h4>
+                <ul>
+                    <li><span class="pro">PRO:</span> Explicit affordance (pencil icon = editable)</li>
+                    <li><span class="pro">PRO:</span> Prevents accidental input triggers</li>
+                    <li><span class="pro">PRO:</span> Consistent with eating window edit pattern</li>
+                    <li><span class="con">CON:</span> Extra visual element (less minimal)</li>
+                    <li><span class="con">CON:</span> Small tap target (icon only)</li>
+                </ul>
+            </div>
+
+            <div class="comparison-item">
+                <h4>Option C: Notification-Driven</h4>
+                <ul>
+                    <li><span class="pro">PRO:</span> Proactive guidance (app tells user what to do)</li>
+                    <li><span class="pro">PRO:</span> Builds daily habit (morning routine)</li>
+                    <li><span class="pro">PRO:</span> Prominent CTA (can't miss it)</li>
+                    <li><span class="con">CON:</span> Takes up dashboard space</li>
+                    <li><span class="con">CON:</span> Requires notification permissions</li>
+                    <li><span class="con">CON:</span> Feels pushy if user doesn't want to log weight</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="note">
+            <strong>Streak Trigger Logic:</strong> Streak activates (grey 🔥 → colored 🔥) when user performs EITHER action on a given day:
+            <br>• Logs weight (any time of day)
+            <br>• Logs at least one meal
+            <br><br>
+            This creates flexibility - users can maintain streak by logging weight OR meals, encouraging daily engagement without being overly rigid.
+        </div>
+
+        <h3 style="margin-top: 32px; margin-bottom: 16px;">Recommendation: Hybrid Approach</h3>
+        <p style="font-size: 15px; line-height: 1.8; color: #666;">
+            <strong>Best UX:</strong> Combine Option A (tap card) + Option C (notification prompt on Day 1 only).
+            <br><br>
+            <strong>How it works:</strong>
+            <br>• <strong>Day 1 (first time):</strong> Show notification prompt card to guide user to log first weight
+            <br>• <strong>Day 2+:</strong> Prompt disappears, weight card becomes tappable (clean UI)
+            <br>• <strong>Morning notification:</strong> "Good morning! Log today's weight 🦁" (optional, user can enable/disable in settings)
+            <br>• <strong>Empty state hint:</strong> Weight card shows "Tap to log your weight" when no entry for today
+            <br><br>
+            This gives new users clear guidance while keeping the UI minimal for experienced users.
+        </p>
+    </div>
+
+</body>
+</html>

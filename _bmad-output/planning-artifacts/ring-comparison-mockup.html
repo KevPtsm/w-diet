@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>w-diet Ring Comparison - Version A vs Version B</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2D2D2D;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #666;
+        }
+
+        .comparison-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .version-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+        }
+
+        .version-header {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .version-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #2D2D2D;
+        }
+
+        .version-header p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .mockup-screen {
+            background: #F8F8F8;
+            padding: 32px 32px 20px 32px;
+            min-height: 600px;
+        }
+
+        .streak-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: white;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            color: #2D2D2D;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin: 0 auto 24px auto;
+            display: block;
+            width: fit-content;
+        }
+
+        .notification-banner {
+            background: #FFF8F0;
+            border-left: 4px solid #F4A460;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #2D2D2D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ring-container {
+            width: 160px;
+            height: 160px;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .ring-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .ring-value {
+            font-size: 34px;
+            font-weight: 700;
+            color: #2D2D2D;
+            line-height: 1;
+        }
+
+        .ring-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+
+        /* Version A - Segmented Ring */
+        .segmented-ring {
+            width: 160px;
+            height: 160px;
+            transform: rotate(-90deg);
+        }
+
+        /* Version B - Simple Ring */
+        .simple-ring {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #F4A460 0% 65.8%,
+                #E0E0E0 65.8% 100%
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .simple-ring::before {
+            content: '';
+            width: 120px;
+            height: 120px;
+            background: #F8F8F8;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .macro-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.06);
+        }
+
+        .macro-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .macro-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .macro-emoji {
+            font-size: 28px;
+            margin-bottom: 6px;
+        }
+
+        .macro-label {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .macro-label-protein {
+            color: #4CAF50;
+        }
+
+        .macro-label-carbs {
+            color: #FFA726;
+        }
+
+        .macro-label-fats {
+            color: #EF5350;
+        }
+
+        .macro-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2D2D2D;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: #F4A460;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #E39450;
+            transform: scale(1.02);
+        }
+
+        .legend {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 32px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .legend h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2D2D2D;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .legend-item {
+            padding: 16px;
+            background: #F8F8F8;
+            border-radius: 12px;
+        }
+
+        .legend-item h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2D2D2D;
+        }
+
+        .legend-item ul {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            list-style-position: inside;
+        }
+
+        .legend-item li {
+            margin-bottom: 4px;
+        }
+
+        .pro {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+
+        .con {
+            color: #EF5350;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Ring Design Comparison</h1>
+        <p>Version A (Segmented) vs Version B (Simple Lion Gold)</p>
+    </div>
+
+    <div class="comparison-container">
+        <!-- Version A: Segmented Ring -->
+        <div class="version-card">
+            <div class="version-header">
+                <h2>Version A: Segmented Ring</h2>
+                <p>Multi-color segments showing macro calorie distribution</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge">
+                    🔥 12 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="ring-container">
+                    <svg class="segmented-ring" viewBox="0 0 160 160">
+                        <!-- Background ring (unfilled portion) -->
+                        <circle cx="80" cy="80" r="70" fill="none" stroke="#E0E0E0" stroke-width="20"/>
+
+                        <!-- Protein segment (green) - 340 cal = 64° -->
+                        <circle
+                            cx="80"
+                            cy="80"
+                            r="70"
+                            fill="none"
+                            stroke="#4CAF50"
+                            stroke-width="20"
+                            stroke-dasharray="123 440"
+                            stroke-linecap="round"
+                        />
+
+                        <!-- Carbs segment (orange) - 568 cal = 108° -->
+                        <circle
+                            cx="80"
+                            cy="80"
+                            r="70"
+                            fill="none"
+                            stroke="#FFA726"
+                            stroke-width="20"
+                            stroke-dasharray="188 440"
+                            stroke-dashoffset="-123"
+                            stroke-linecap="round"
+                        />
+
+                        <!-- Fats segment (red) - 342 cal = 65° -->
+                        <circle
+                            cx="80"
+                            cy="80"
+                            r="70"
+                            fill="none"
+                            stroke="#EF5350"
+                            stroke-width="20"
+                            stroke-dasharray="114 440"
+                            stroke-dashoffset="-311"
+                            stroke-linecap="round"
+                        />
+                    </svg>
+                    <div class="ring-text">
+                        <div class="ring-value">1,250</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label macro-label-protein">Protein</div>
+                            <div class="macro-value">85g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label macro-label-carbs">Carbs</div>
+                            <div class="macro-value">142g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label macro-label-fats">Fats</div>
+                            <div class="macro-value">38g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+            </div>
+        </div>
+
+        <!-- Version B: Simple Ring -->
+        <div class="version-card">
+            <div class="version-header">
+                <h2>Version B: Simple Ring</h2>
+                <p>Single Lion Gold ring, macro feedback in card only</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="streak-badge">
+                    🔥 12 day streak
+                </div>
+
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="ring-container">
+                    <div class="simple-ring"></div>
+                    <div class="ring-text" style="z-index: 10;">
+                        <div class="ring-value">1,250</div>
+                        <div class="ring-subtitle">of 1,900 cal</div>
+                    </div>
+                </div>
+
+                <div class="macro-card">
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label">Protein</div>
+                            <div class="macro-value">85g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label">Carbs</div>
+                            <div class="macro-value">142g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label">Fats</div>
+                            <div class="macro-value">38g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="legend">
+        <h3>Comparison Analysis:</h3>
+        <div class="legend-grid">
+            <div class="legend-item">
+                <h4>Version A: Segmented Ring</h4>
+                <ul>
+                    <li><span class="pro">PRO:</span> Shows macro distribution visually</li>
+                    <li><span class="pro">PRO:</span> Educational (calories come from macros)</li>
+                    <li><span class="pro">PRO:</span> More data in same space</li>
+                    <li><span class="con">CON:</span> Higher visual complexity</li>
+                    <li><span class="con">CON:</span> Requires learning to interpret</li>
+                    <li><span class="con">CON:</span> Slightly harder to scan total calories</li>
+                </ul>
+            </div>
+            <div class="legend-item">
+                <h4>Version B: Simple Ring</h4>
+                <ul>
+                    <li><span class="pro">PRO:</span> Crystal clear calorie progress</li>
+                    <li><span class="pro">PRO:</span> Familiar pattern (Apple Health rings)</li>
+                    <li><span class="pro">PRO:</span> Lower cognitive load</li>
+                    <li><span class="pro">PRO:</span> Faster to scan at a glance</li>
+                    <li><span class="con">CON:</span> Doesn't show macro distribution</li>
+                    <li><span class="con">CON:</span> Less educational/innovative</li>
+                </ul>
+            </div>
+        </div>
+        <p style="margin-top: 24px; font-size: 14px; color: #666; text-align: center;">
+            <strong>Recommendation:</strong> A/B test both versions in POC. Track user comprehension, engagement, and performance.
+        </p>
+    </div>
+
+</body>
+</html>

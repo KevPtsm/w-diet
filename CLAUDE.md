@@ -1,0 +1,1 @@
+- never use 'any' type for type declarations, create type interfaces.

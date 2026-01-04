@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>w-diet Design Directions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #f5f5f7;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2D2D2D;
+        }
+
+        .header p {
+            font-size: 18px;
+            color: #666;
+        }
+
+        .directions-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+        }
+
+        .direction-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .direction-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .direction-header {
+            padding: 20px;
+            background: linear-gradient(135deg, #F4A460 0%, #FF6B35 100%);
+            color: white;
+        }
+
+        .direction-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .direction-header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .mockup-screen {
+            background: #FAFAFA;
+            padding: 24px;
+            min-height: 500px;
+        }
+
+        .screen-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2D2D2D;
+            margin-bottom: 24px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .card-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: #999;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #F4A460;
+            margin-bottom: 8px;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #E0E0E0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 12px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #F4A460, #FF6B35);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .macro-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+
+        .macro-item {
+            text-align: center;
+            flex: 1;
+        }
+
+        .macro-emoji {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+
+        .macro-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .macro-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2D2D2D;
+            margin-top: 2px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 16px;
+            background: #F4A460;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: #E39450;
+            transform: scale(1.02);
+        }
+
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            background: white;
+            border-top: 1px solid #E0E0E0;
+            margin-top: 24px;
+        }
+
+        .tab-item {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-icon {
+            font-size: 24px;
+            margin-bottom: 4px;
+        }
+
+        .tab-label {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .tab-item.active .tab-label {
+            color: #F4A460;
+            font-weight: 600;
+        }
+
+        .lion-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #F4A460, #FF6B35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin: 0 auto 12px;
+        }
+
+        .stat-pill {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #FFF8F0;
+            color: #F4A460;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 4px;
+        }
+
+        .notification-banner {
+            background: #FFF8F0;
+            border-left: 4px solid #F4A460;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .notification-text {
+            font-size: 14px;
+            color: #2D2D2D;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .list-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #2D2D2D;
+        }
+
+        .item-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #F4A460;
+        }
+
+        .circular-progress {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: conic-gradient(#F4A460 0% 65%, #E0E0E0 65% 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            position: relative;
+        }
+
+        .circular-progress::before {
+            content: '';
+            width: 90px;
+            height: 90px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .circular-progress-text {
+            position: relative;
+            z-index: 1;
+            font-size: 24px;
+            font-weight: 700;
+            color: #2D2D2D;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #2D2D2D;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        .comparison-note {
+            background: white;
+            padding: 24px;
+            border-radius: 16px;
+            margin-top: 40px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .comparison-note h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: #2D2D2D;
+        }
+
+        .comparison-note ul {
+            list-style-position: inside;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        .comparison-note li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>w-diet Design Directions</h1>
+        <p>Explore different visual approaches for the iOS app</p>
+    </div>
+
+    <div class="directions-container">
+
+        <!-- Direction 1: Bold & Energetic -->
+        <div class="direction-card">
+            <div class="direction-header">
+                <h2>Direction 1: Bold & Energetic</h2>
+                <p>Strong visual hierarchy, gradient accents, celebration-focused</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="screen-title">Today</div>
+
+                <div class="dashboard-card">
+                    <div class="lion-avatar">🦁</div>
+                    <div style="text-align: center;">
+                        <div class="card-value">1,250</div>
+                        <div class="card-subtitle">of 1,900 cal today</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">Macros</div>
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label">PROTEIN</div>
+                            <div class="macro-value">85g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label">CARBS</div>
+                            <div class="macro-value">142g</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label">FATS</div>
+                            <div class="macro-value">38g</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">Streak</div>
+                    <div style="text-align: center;">
+                        <div class="card-value">12</div>
+                        <div class="card-subtitle">days of logging 🔥</div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">🍽️ Log Meal</button>
+
+                <div class="tab-bar">
+                    <div class="tab-item active">
+                        <div class="tab-icon">🏠</div>
+                        <div class="tab-label">Home</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">📊</div>
+                        <div class="tab-label">Progress</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">🎓</div>
+                        <div class="tab-label">Learn</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">⚙️</div>
+                        <div class="tab-label">Settings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 2: Clean & Minimal -->
+        <div class="direction-card">
+            <div class="direction-header">
+                <h2>Direction 2: Clean & Minimal</h2>
+                <p>Maximum white space, icon-driven, data-focused</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="notification-banner">
+                    <div class="notification-text">
+                        <span>🍽️</span>
+                        <span>Eating window: 12pm - 6pm</span>
+                    </div>
+                </div>
+
+                <div class="circular-progress">
+                    <div class="circular-progress-text">1,250</div>
+                </div>
+                <div style="text-align: center; margin-bottom: 32px;">
+                    <div style="font-size: 14px; color: #666;">of 1,900 cal</div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="list-item">
+                        <span class="item-title">😊 Protein</span>
+                        <span class="item-value">85g / 120g</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="item-title">😐 Carbs</span>
+                        <span class="item-value">142g / 180g</span>
+                    </div>
+                    <div class="list-item">
+                        <span class="item-title">😞 Fats</span>
+                        <span class="item-value">38g / 60g</span>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin: 24px 0;">
+                    <span class="badge">🔥 12 day streak</span>
+                </div>
+
+                <button class="btn-primary">Log Meal</button>
+
+                <div class="tab-bar">
+                    <div class="tab-item active">
+                        <div class="tab-icon">🏠</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">📊</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">🎓</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">⚙️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 3: Card-Heavy Simple Style -->
+        <div class="direction-card">
+            <div class="direction-header">
+                <h2>Direction 3: Card-Heavy (Simple)</h2>
+                <p>Duolingo nav + Simple's card style, balanced layout</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="screen-title">Dashboard</div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">Today's Calories</div>
+                    <div class="card-value">1,250</div>
+                    <div class="card-subtitle">of 1,900 remaining</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">Macros Today</div>
+                    <div class="macro-row">
+                        <div class="macro-item">
+                            <div class="macro-emoji">😊</div>
+                            <div class="macro-label">Protein</div>
+                            <div class="macro-value">71%</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😐</div>
+                            <div class="macro-label">Carbs</div>
+                            <div class="macro-value">79%</div>
+                        </div>
+                        <div class="macro-item">
+                            <div class="macro-emoji">😞</div>
+                            <div class="macro-label">Fats</div>
+                            <div class="macro-value">63%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">Streak</div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px;">🔥</div>
+                        <div>
+                            <div class="card-value" style="font-size: 28px; margin: 0;">12 days</div>
+                            <div class="card-subtitle">Keep it up!</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-primary">🍽️ Log Meal</button>
+
+                <div class="tab-bar">
+                    <div class="tab-item active">
+                        <div class="tab-icon">🏠</div>
+                        <div class="tab-label">Home</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">📊</div>
+                        <div class="tab-label">Progress</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">🦁</div>
+                        <div class="tab-label">Coach</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon">⚙️</div>
+                        <div class="tab-label">Settings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Direction 4: Dense & Efficient -->
+        <div class="direction-card">
+            <div class="direction-header">
+                <h2>Direction 4: Dense & Efficient</h2>
+                <p>More info per screen, compact spacing, power-user feel</p>
+            </div>
+            <div class="mockup-screen">
+                <div class="notification-banner" style="margin-bottom: 12px;">
+                    <div class="notification-text" style="font-size: 12px;">
+                        <span>🦁</span>
+                        <span>Deficit Phase • Day 12 of 14</span>
+                    </div>
+                </div>
+
+                <div class="screen-title" style="font-size: 22px; margin-bottom: 16px;">Today</div>
+
+                <div class="dashboard-card" style="padding: 16px; margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <div class="card-header" style="margin-bottom: 4px;">Calories</div>
+                            <div class="card-value" style="font-size: 28px; margin: 0;">1,250</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 13px; color: #666;">Target</div>
+                            <div style="font-size: 20px; font-weight: 600; color: #2D2D2D;">1,900</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar" style="margin: 8px 0 0 0;">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 12px;">
+                    <div class="dashboard-card" style="padding: 12px; text-align: center;">
+                        <div style="font-size: 24px;">😊</div>
+                        <div style="font-size: 11px; color: #999; margin: 4px 0;">Protein</div>
+                        <div style="font-size: 16px; font-weight: 700; color: #2D2D2D;">85g</div>
+                    </div>
+                    <div class="dashboard-card" style="padding: 12px; text-align: center;">
+                        <div style="font-size: 24px;">😐</div>
+                        <div style="font-size: 11px; color: #999; margin: 4px 0;">Carbs</div>
+                        <div style="font-size: 16px; font-weight: 700; color: #2D2D2D;">142g</div>
+                    </div>
+                    <div class="dashboard-card" style="padding: 12px; text-align: center;">
+                        <div style="font-size: 24px;">😞</div>
+                        <div style="font-size: 11px; color: #999; margin: 4px 0;">Fats</div>
+                        <div style="font-size: 16px; font-weight: 700; color: #2D2D2D;">38g</div>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                    <div class="stat-pill">🔥 12 day streak</div>
+                    <div class="stat-pill">🍽️ 2 meals logged</div>
+                </div>
+
+                <button class="btn-primary" style="padding: 14px;">Log Meal</button>
+
+                <div class="tab-bar" style="padding: 8px 0; margin-top: 16px;">
+                    <div class="tab-item active">
+                        <div class="tab-icon" style="font-size: 20px;">🏠</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon" style="font-size: 20px;">📊</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon" style="font-size: 20px;">🎓</div>
+                    </div>
+                    <div class="tab-item">
+                        <div class="tab-icon" style="font-size: 20px;">⚙️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="comparison-note">
+        <h3>Evaluation Criteria:</h3>
+        <ul>
+            <li><strong>Direction 1 (Bold & Energetic):</strong> Strong celebration-focused design with gradient accents and prominent lion mascot. Best for users who want motivation and visual energy.</li>
+            <li><strong>Direction 2 (Clean & Minimal):</strong> Maximum simplicity with circular progress and list-based macros. Best for users who want distraction-free data at a glance.</li>
+            <li><strong>Direction 3 (Card-Heavy Simple):</strong> Balanced approach combining Simple's card style with Duolingo's friendly nav. Best for general appeal and familiar patterns.</li>
+            <li><strong>Direction 4 (Dense & Efficient):</strong> More information per screen with compact spacing. Best for power users who want quick overview of all metrics.</li>
+        </ul>
+        <p style="margin-top: 16px; font-size: 14px; color: #999; font-style: italic;">Open this file in your browser to explore all design directions interactively.</p>
+    </div>
+
+</body>
+</html>
