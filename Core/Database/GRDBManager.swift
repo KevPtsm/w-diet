@@ -24,10 +24,10 @@ import GRDB
 ///     try MealLog.fetchAll(db)
 /// }
 /// ```
-final class GRDBManager {
+final class GRDBManager: @unchecked Sendable {
     // MARK: - Singleton
 
-    static let shared: GRDBManager = {
+    nonisolated static let shared: GRDBManager = {
         do {
             return try GRDBManager()
         } catch {
@@ -174,6 +174,55 @@ final class GRDBManager {
             try db.create(index: "idx_sync_queue_created_at", on: "sync_queue", columns: ["created_at"])
         }
 
+        // Migration 5: Create user_profiles table
+        migrator.registerMigration("v1_create_user_profiles") { db in
+            try db.create(table: "user_profiles") { t in
+                t.autoIncrementedPrimaryKey("id")
+                t.column("user_id", .text).notNull().unique()
+                t.column("email", .text).notNull().unique()
+                t.column("created_at", .datetime).notNull()
+                t.column("updated_at", .datetime).notNull()
+                t.column("synced_at", .datetime) // NULL = not synced yet
+            }
+
+            // Indexes for performance
+            try db.create(index: "idx_user_profiles_user_id", on: "user_profiles", columns: ["user_id"])
+            try db.create(index: "idx_user_profiles_email", on: "user_profiles", columns: ["email"])
+        }
+
+        // MARK: - v2 Migrations (Onboarding)
+
+        // Migration 6: Add onboarding fields to user_profiles
+        migrator.registerMigration("v2_add_onboarding_fields") { db in
+            try db.alter(table: "user_profiles") { t in
+                t.add(column: "goal", .text) // NULL = not set yet
+                t.add(column: "calorie_target", .integer) // NULL = not set yet
+                t.add(column: "eating_window_start", .text) // HH:mm format, NULL = not set yet
+                t.add(column: "eating_window_end", .text) // HH:mm format, NULL = not set yet
+                t.add(column: "onboarding_completed", .boolean).notNull().defaults(to: false)
+            }
+        }
+
+        // MARK: - v3 Migrations (Story 1.3 - Enhanced Onboarding)
+
+        // Migration 7: Add user metrics for calorie calculation
+        migrator.registerMigration("v3_add_user_metrics") { db in
+            try db.alter(table: "user_profiles") { t in
+                t.add(column: "gender", .text) // "male", "female", "other" - NULL = not set yet
+                t.add(column: "height_cm", .double) // Height in centimeters - NULL = not set yet
+                t.add(column: "weight_kg", .double) // Weight in kilograms - NULL = not set yet
+                t.add(column: "activity_level", .text) // "sedentary", "lightly_active", etc. - NULL = not set yet
+                t.add(column: "calculated_calories", .integer) // Mifflin-St Jeor result - NULL = not calculated yet
+            }
+        }
+
+        // Migration 8: Add MATADOR cycle start date
+        migrator.registerMigration("v3_add_cycle_start_date") { db in
+            try db.alter(table: "user_profiles") { t in
+                t.add(column: "cycle_start_date", .datetime) // When user started MATADOR cycle - NULL = no active cycle
+            }
+        }
+
         return migrator
     }
 
@@ -233,6 +282,7 @@ final class GRDBManager {
             try db.execute(sql: "DELETE FROM weight_logs")
             try db.execute(sql: "DELETE FROM cycle_state")
             try db.execute(sql: "DELETE FROM sync_queue")
+            try db.execute(sql: "DELETE FROM user_profiles")
         }
     }
 }

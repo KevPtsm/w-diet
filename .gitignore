@@ -22,7 +22,13 @@ Pods/
 
 # Secrets - NEVER commit these!
 Config/Secrets.xcconfig
+Config/Dev.xcconfig
+Config/Staging.xcconfig
+Config/Production.xcconfig
 *.xcconfig.secret
+
+# Keep template
+!Config/Secrets.xcconfig.template
 
 # macOS
 .DS_Store

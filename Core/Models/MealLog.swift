@@ -10,21 +10,67 @@ import GRDB
 
 /// Represents a logged meal with macronutrient information
 ///
-/// **CRITICAL:** GRDB column names use snake_case
-/// Swift properties use camelCase
-/// Column mapping is handled in encode(to:) method
-struct MealLog {
+/// **CRITICAL RULES:**
+/// - Uses Codable + FetchableRecord + PersistableRecord
+/// - CodingKeys maps camelCase ↔ snake_case for database
+/// - All dates use GRDB's `.datetime` column type
+/// - synced_at = NULL means not yet synced to Supabase
+struct MealLog: Codable, Identifiable, FetchableRecord, PersistableRecord {
+    // MARK: - Properties
+
+    /// Local SQLite primary key (auto-increment)
     var id: Int64?
+
+    /// Supabase auth user ID
     let userId: String
+
+    /// Meal name
     let mealName: String
+
+    /// Calories in kcal
     let caloriesKcal: Int
+
+    /// Protein in grams
     let proteinG: Double
+
+    /// Carbohydrates in grams
     let carbsG: Double
+
+    /// Fat in grams
     let fatG: Double
+
+    /// When the meal was logged
     let loggedAt: Date
+
+    /// Timestamp when log was created locally
     let createdAt: Date
+
+    /// Timestamp when log was last updated locally
     let updatedAt: Date
+
+    /// Timestamp when log was last synced to Supabase (NULL = not synced)
     var syncedAt: Date?
+
+    // MARK: - GRDB Configuration
+
+    /// Database table name
+    static let databaseTableName = "meal_logs"
+
+    // MARK: - CodingKeys (CRITICAL: snake_case ↔ camelCase mapping)
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case userId = "user_id"
+        case mealName = "meal_name"
+        case caloriesKcal = "calories_kcal"
+        case proteinG = "protein_g"
+        case carbsG = "carbs_g"
+        case fatG = "fat_g"
+        case loggedAt = "logged_at"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+        case syncedAt = "synced_at"
+    }
 
     // MARK: - Computed Properties
 
@@ -55,81 +101,58 @@ struct MealLog {
     var isSynced: Bool {
         syncedAt != nil
     }
-}
 
-// MARK: - GRDB FetchableRecord
+    // MARK: - Initialization
 
-extension MealLog: FetchableRecord {
-    /// Database table name
-    static let databaseTableName = "meal_logs"
-
-    /// Initialize from database row
-    init(row: Row) {
-        id = row["id"]
-        userId = row["user_id"]
-        mealName = row["meal_name"]
-        caloriesKcal = row["calories_kcal"]
-        proteinG = row["protein_g"]
-        carbsG = row["carbs_g"]
-        fatG = row["fat_g"]
-        loggedAt = row["logged_at"]
-        createdAt = row["created_at"]
-        updatedAt = row["updated_at"]
-        syncedAt = row["synced_at"]
-    }
-}
-
-// MARK: - GRDB PersistableRecord
-
-extension MealLog: PersistableRecord {
-    /// Encode to database row (maps camelCase to snake_case)
-    func encode(to container: inout PersistenceContainer) {
-        container["id"] = id
-        container["user_id"] = userId
-        container["meal_name"] = mealName
-        container["calories_kcal"] = caloriesKcal
-        container["protein_g"] = proteinG
-        container["carbs_g"] = carbsG
-        container["fat_g"] = fatG
-        container["logged_at"] = loggedAt
-        container["created_at"] = createdAt
-        container["updated_at"] = updatedAt
-        container["synced_at"] = syncedAt
-    }
-
-    /// Update auto-incrementing ID after insert
-    mutating func didInsert(_ inserted: InsertionSuccess) {
-        id = inserted.rowID
-    }
-}
-
-// MARK: - Convenience Initializers
-
-extension MealLog {
-    /// Create a new meal log with current timestamp
     init(
+        id: Int64? = nil,
         userId: String,
         mealName: String,
         caloriesKcal: Int,
         proteinG: Double,
         carbsG: Double,
         fatG: Double,
-        loggedAt: Date = Date()
+        loggedAt: Date = Date(),
+        createdAt: Date = Date(),
+        updatedAt: Date = Date(),
+        syncedAt: Date? = nil
     ) {
-        let now = Date()
-        self.init(
-            id: nil,
-            userId: userId,
-            mealName: mealName,
-            caloriesKcal: caloriesKcal,
-            proteinG: proteinG,
-            carbsG: carbsG,
-            fatG: fatG,
-            loggedAt: loggedAt,
-            createdAt: now,
-            updatedAt: now,
-            syncedAt: nil
-        )
+        self.id = id
+        self.userId = userId
+        self.mealName = mealName
+        self.caloriesKcal = caloriesKcal
+        self.proteinG = proteinG
+        self.carbsG = carbsG
+        self.fatG = fatG
+        self.loggedAt = loggedAt
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
+        self.syncedAt = syncedAt
+    }
+}
+
+// MARK: - Query Extensions
+
+extension MealLog {
+    /// Fetch meal logs for a specific user on a specific day
+    static func fetchForUserToday(_ db: Database, userId: String, today: Date = Date()) throws -> [MealLog] {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: today)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+
+        return try MealLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfDay)
+            .filter(Column("logged_at") < endOfDay)
+            .order(Column("logged_at").desc)
+            .fetchAll(db)
+    }
+
+    /// Fetch all logs that need syncing
+    static func fetchUnsynced(_ db: Database) throws -> [MealLog] {
+        try MealLog
+            .filter(Column("synced_at") == nil || Column("synced_at") < Column("updated_at"))
+            .fetchAll(db)
     }
 }
 
@@ -156,18 +179,6 @@ extension MealLog {
 
         guard fatG >= 0 else {
             throw AppError.invalidInput(field: "Fett", reason: "muss 0 oder größer sein")
-        }
-
-        // Sanity check: macros should roughly match calories
-        // Protein: 4 kcal/g, Carbs: 4 kcal/g, Fat: 9 kcal/g
-        let calculatedCalories = (proteinG * 4) + (carbsG * 4) + (fatG * 9)
-        let tolerance = 0.2 // 20% tolerance
-        let diff = abs(calculatedCalories - Double(caloriesKcal)) / Double(caloriesKcal)
-
-        if diff > tolerance {
-            throw AppError.mealLogInvalid(
-                reason: "Makronährstoffe stimmen nicht mit Kalorien überein (Berechnet: \(Int(calculatedCalories)) kcal, Angegeben: \(caloriesKcal) kcal)"
-            )
         }
     }
 }

@@ -195,10 +195,10 @@ import Shared  // OK - shared components are reusable
 
 **❌ FORBIDDEN (business logic in shared component):**
 ```swift
-struct LionCharacterView: View {
+struct FireCharacterView: View {
     let macroProgress: Double
 
-    var variation: LionVariation {
+    var variation: FireVariation {
         macroProgress >= 0.7 ? .happy : .concerned  // NO! Business logic!
     }
 }
@@ -206,9 +206,9 @@ struct LionCharacterView: View {
 
 **✅ REQUIRED PATTERN (presentational only):**
 ```swift
-// Shared/Components/LionCharacter/LionCharacterView.swift
-struct LionCharacterView: View {
-    let variation: LionVariation  // Takes enum, no calculation
+// Shared/Components/FireCharacter/FireCharacterView.swift
+struct FireCharacterView: View {
+    let variation: FireVariation  // Takes enum, no calculation
     let size: CGFloat
 
     var body: some View {
@@ -220,10 +220,10 @@ struct LionCharacterView: View {
 
 // Business logic stays in ViewModel
 class DashboardViewModel: ObservableObject {
-    @Published var lionVariation: LionVariation = .happy
+    @Published var fireVariation: FireVariation = .happy
 
-    func updateLion() {
-        lionVariation = macroProgress >= 0.7 ? .happy : .concerned
+    func updateFire() {
+        fireVariation = macroProgress >= 0.7 ? .happy : .concerned
     }
 }
 ```
@@ -448,6 +448,46 @@ Use `Scripts/generate-migration.sh` to create migrations with unique timestamps.
 
 ---
 
-**Last Updated:** 2026-01-04
+---
+
+## 🎨 UI/UX Design System
+
+### CRITICAL RULE: Always Reference UX Documentation
+
+**❌ NEVER hardcode UI colors or styles without checking UX doc:**
+```swift
+Button("Continue") {
+    // ...
+}
+.foregroundColor(.blue)  // WRONG! Use Theme constants
+```
+
+**✅ ALWAYS use Theme.swift constants and reference UX document:**
+```swift
+Button("Continue") {
+    // ...
+}
+.foregroundColor(Theme.fireGold)  // Correct! From Theme.swift
+```
+
+**Rule:** Before implementing ANY UI element (button, card, text, icon, etc.):
+1. Check `_bmad-output/planning-artifacts/ux-design-specification.md` for design guidance
+2. Use color constants from `Core/Theme/Theme.swift` (NEVER use Color.blue, Color.red, etc.)
+3. Follow spacing, typography, and component patterns defined in UX doc
+
+**Why:** Consistent design system across the app. The UX document defines the fire-inspired Fire Gold (#F4A460) color palette, typography scales, component patterns, and spacing system. Using hardcoded colors or ignoring the UX doc creates visual inconsistency.
+
+**Theme Constants Available:**
+- Primary: `Theme.fireGold` (#F4A460), `Theme.energyOrange` (#FF6B35)
+- Text: `Theme.textPrimary`, `Theme.textSecondary`, `Theme.textTertiary`
+- Background: `Theme.backgroundPrimary`, `Theme.backgroundSecondary`
+- Semantic: `Theme.success`, `Theme.warning`, `Theme.error`, `Theme.info`
+- Grays: `Theme.gray100` through `Theme.gray500`
+- MATADOR: `Theme.maintenancePhase` (green), `Theme.deficitPhase` (blue)
+
+---
+
+**Last Updated:** 2026-01-06
 **Architecture Document:** `_bmad-output/planning-artifacts/architecture.md`
+**UX Design Document:** `_bmad-output/planning-artifacts/ux-design-specification.md`
 **Party Mode Review:** Amelia (Developer), Winston (Architect), Murat (Test Architect)

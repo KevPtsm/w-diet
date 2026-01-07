@@ -1,0 +1,420 @@
+//
+//  DashboardView.swift
+//  w-diet
+//
+//  Created by Kevin Pietschmann on 04.01.26.
+//
+
+import SwiftUI
+
+/// Main dashboard view showing cycle status and macro progress
+struct DashboardView: View {
+    // MARK: - State
+
+    /// ViewModel - CRITICAL: Initialize directly, NOT in init()!
+    @StateObject private var viewModel = DashboardViewModel()
+
+    /// Currently selected tab
+    @State private var selectedTab: Tab = .home
+
+    /// Show weight logging sheet
+    @State private var showWeightLogging = false
+
+    /// Show add food sheet
+    @State private var showAddFood = false
+
+    // MARK: - Tab enum
+
+    enum Tab {
+        case home
+        case logging
+        case settings
+    }
+
+    // MARK: - Body
+
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            // Home Tab
+            NavigationStack {
+                ScrollView {
+                    VStack(spacing: 32) {
+                        // Weight Reminder Card (shown daily until weight logged)
+                        if viewModel.showWeightReminder {
+                            weightReminderCard
+                        }
+
+                        // Cycle Status Card
+                        cycleStatusCard
+
+                        // Weight Stats Card
+                        if viewModel.currentWeight != nil {
+                            weightStatsCard
+                        }
+
+                        // Macro Progress
+                        macroProgressSection
+                            .padding(.bottom, 8)
+
+                        // Quick Meal Add Button
+                        Button {
+                            showAddFood = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "plus.circle.fill")
+                                Text("Essen hinzufügen")
+                                    .font(.headline)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 4)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .tint(Theme.fireGold)
+
+                        Spacer()
+                    }
+                    .padding()
+                }
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .principal) {
+                        EmptyView()
+                    }
+                }
+                .task {
+                    await viewModel.loadData()
+                }
+                .overlay {
+                    if viewModel.isLoading {
+                        ProgressView()
+                    }
+                }
+                .alert("Fehler", isPresented: .constant(viewModel.errorMessage != nil)) {
+                    Button("OK") {
+                        viewModel.errorMessage = nil
+                    }
+                } message: {
+                    if let error = viewModel.errorMessage {
+                        Text(error)
+                    }
+                }
+            }
+            .tabItem {
+                Image(systemName: selectedTab == .home ? "house.fill" : "house")
+            }
+            .tag(Tab.home)
+
+            // Logging Tab
+            MealLoggingView()
+            .tabItem {
+                Image(systemName: selectedTab == .logging ? "fork.knife.circle.fill" : "fork.knife.circle")
+            }
+            .tag(Tab.logging)
+
+            // Settings Tab
+            NavigationStack {
+                SettingsView()
+            }
+            .tabItem {
+                Image(systemName: selectedTab == .settings ? "gearshape.fill" : "gearshape")
+            }
+            .tag(Tab.settings)
+        }
+        .tint(Theme.fireGold)
+        .sheet(isPresented: $showWeightLogging) {
+            WeightLoggingSheet(
+                isPresented: $showWeightLogging,
+                onWeightSaved: {
+                    // Reload dashboard data after weight is saved
+                    Task {
+                        await viewModel.loadData()
+                    }
+                }
+            )
+        }
+        .sheet(isPresented: $showAddFood) {
+            FoodSearchView(onFoodAdded: {
+                // Reload dashboard data after food is added
+                Task {
+                    await viewModel.loadData()
+                }
+            })
+        }
+    }
+
+    // MARK: - View Components
+
+    private var weightReminderCard: some View {
+        Button {
+            showWeightLogging = true
+        } label: {
+            HStack(spacing: 16) {
+                // Fire icon (matches MATADOR calendar)
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 24))
+                    .foregroundColor(Theme.fireGold)
+                    .frame(width: 40)
+
+                // Text
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Auf die Waage!")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text("Dein täglicher Check-in")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+
+                // Chevron
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .padding()
+            .background(Theme.backgroundSecondary)
+            .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(Theme.fireGold, lineWidth: 2)
+            )
+            .shadow(color: Color.black.opacity(0.05), radius: 8, y: 2)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private var cycleStatusCard: some View {
+        VStack(spacing: 16) {
+            // MATADOR Cycle Calendar
+            MatadorCycleCalendar(currentDay: viewModel.currentDay)
+
+            // Status text below calendar
+            if viewModel.currentDay == 0 {
+                Text("Kein aktiver Zyklus")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .padding()
+        .background(Theme.backgroundSecondary)
+        .cornerRadius(16)
+        .shadow(color: Color.black.opacity(0.05), radius: 8, y: 2)
+    }
+
+    private var weightStatsCard: some View {
+        HStack(spacing: 16) {
+            // Left: 7-Day Average + Trend (PRIMARY)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Ø 7 Tage")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                HStack(spacing: 6) {
+                    if let avg = viewModel.averageWeight7Days {
+                        Text("\(avg, specifier: "%.1f") kg")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                    } else {
+                        Text("--")
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Image(systemName: viewModel.weightTrend.icon)
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundColor(viewModel.weightTrend.color)
+                }
+            }
+
+            Spacer()
+
+            // Right: Current Weight (SECONDARY)
+            VStack(alignment: .trailing, spacing: 4) {
+                Text("Heute")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                if let weight = viewModel.currentWeight {
+                    Text("\(weight, specifier: "%.1f") kg")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.secondary)
+                } else {
+                    Text("--")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .padding(.horizontal)
+    }
+
+    private var macroProgressSection: some View {
+        VStack(spacing: 32) {
+            // Circular Progress Ring
+            ZStack {
+                // Center text
+                VStack(spacing: 4) {
+                    Text(viewModel.caloriesConsumed, format: .number.grouping(.never))
+                        .font(.system(size: 48, weight: .bold))
+                        .foregroundColor(viewModel.caloriesConsumed > 0 ? Theme.fireGold : Theme.gray400)
+                    Text("/ \(viewModel.caloriesTarget.formatted(.number.grouping(.never)))")
+                        .font(.title3)
+                        .foregroundStyle(.secondary)
+                    Text("kcal")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                // Circular ring
+                CircularMacroRing(
+                    proteinCalories: viewModel.proteinConsumed * 4, // 4 kcal per gram
+                    carbsCalories: viewModel.carbsConsumed * 4, // 4 kcal per gram
+                    fatCalories: viewModel.fatConsumed * 9, // 9 kcal per gram
+                    targetCalories: Double(viewModel.caloriesTarget)
+                )
+                .frame(width: 200, height: 200)
+            }
+
+            // Three macros side by side
+            HStack(spacing: 16) {
+                macroColumn(
+                    title: "Eiweiß",
+                    consumed: viewModel.proteinConsumed,
+                    target: viewModel.proteinTarget,
+                    unit: "g",
+                    color: Theme.macroProtein
+                )
+
+                macroColumn(
+                    title: "Kohlenhydrate",
+                    consumed: viewModel.carbsConsumed,
+                    target: viewModel.carbsTarget,
+                    unit: "g",
+                    color: Theme.warning
+                )
+
+                macroColumn(
+                    title: "Fett",
+                    consumed: viewModel.fatConsumed,
+                    target: viewModel.fatTarget,
+                    unit: "g",
+                    color: Theme.macroFat
+                )
+            }
+        }
+    }
+
+    private func macroColumn(
+        title: String,
+        consumed: Double,
+        target: Double,
+        unit: String,
+        color: Color
+    ) -> some View {
+        let progress = target > 0 ? min(consumed / target, 1.0) : 0
+
+        return VStack(spacing: 8) {
+            // Title
+            Text(title)
+                .font(.footnote)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.center)
+
+            // Value (consumed / target)
+            Text("\(Int(consumed)) / \(Int(target))")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+
+            // Progress bar
+            GeometryReader { geometry in
+                ZStack(alignment: .leading) {
+                    // Background
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Theme.gray100)
+                        .frame(height: 6)
+
+                    // Fill
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(color)
+                        .frame(width: geometry.size.width * progress, height: 6)
+                }
+            }
+            .frame(height: 6)
+        }
+        .frame(maxWidth: .infinity)
+    }
+
+}
+
+// MARK: - Circular Macro Ring Component
+
+struct CircularMacroRing: View {
+    let proteinCalories: Double
+    let carbsCalories: Double
+    let fatCalories: Double
+    let targetCalories: Double
+
+    private var totalConsumed: Double {
+        proteinCalories + carbsCalories + fatCalories
+    }
+
+    private var proteinPercentage: Double {
+        guard targetCalories > 0 else { return 0 }
+        return proteinCalories / targetCalories
+    }
+
+    private var carbsPercentage: Double {
+        guard targetCalories > 0 else { return 0 }
+        return carbsCalories / targetCalories
+    }
+
+    private var fatPercentage: Double {
+        guard targetCalories > 0 else { return 0 }
+        return fatCalories / targetCalories
+    }
+
+    private var remainingPercentage: Double {
+        guard targetCalories > 0 else { return 0 }
+        let remaining = max(0, targetCalories - totalConsumed)
+        return remaining / targetCalories
+    }
+
+    var body: some View {
+        ZStack {
+            // Background ring (full circle)
+            Circle()
+                .stroke(Theme.gray100, lineWidth: 20)
+
+            // Protein segment
+            Circle()
+                .trim(from: 0, to: min(proteinPercentage, 1.0))
+                .stroke(Theme.macroProtein, style: StrokeStyle(lineWidth: 20, lineCap: .butt))
+                .rotationEffect(.degrees(-90))
+
+            // Carbs segment
+            Circle()
+                .trim(from: 0, to: min(carbsPercentage, 1.0))
+                .stroke(Theme.warning, style: StrokeStyle(lineWidth: 20, lineCap: .butt))
+                .rotationEffect(.degrees(-90 + proteinPercentage * 360))
+
+            // Fat segment
+            Circle()
+                .trim(from: 0, to: min(fatPercentage, 1.0))
+                .stroke(Theme.macroFat, style: StrokeStyle(lineWidth: 20, lineCap: .butt))
+                .rotationEffect(.degrees(-90 + (proteinPercentage + carbsPercentage) * 360))
+        }
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    DashboardView()
+}

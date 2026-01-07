@@ -14,7 +14,7 @@
 - Phase 3: Premium tier launch
 
 **NEW PLAN:**
-- **POC (Weeks 1-10): Basics only** - Manual logging, MATADOR automation, Lion coaching, Education
+- **POC (Weeks 1-10): Basics only** - Manual logging, MATADOR automation, Fire coaching, Education
 - **Phase 2 (Weeks 11-18): Both scanning features** - Photo scan + Menu scan as Premium tier (€7/mo)
 - **Phase 3 (Weeks 19-30): Enhancements** - AI meal recommendations, food database, learning loop
 
@@ -51,7 +51,7 @@
 - ✅ Manual Meal Logging (simple form)
 - ✅ Daily Weight Tracking (7-day average, trend indicators)
 - ✅ MATADOR Cycling Automation (auto-switch every 14 days, Week 1 maintenance)
-- ✅ Lion Character (4 variations, roar system)
+- ✅ Fire Character (4 variations, roar system)
 - ✅ "Why Like This?" Education Section
 - ✅ Streak Tracking
 - ✅ Offline-First Implementation
@@ -59,7 +59,7 @@
 - ✅ Quality Infrastructure (tests, crash monitoring)
 
 **Rationale Added:**
-> "Focus POC on proving the **core differentiators** (MATADOR automation + Lion coaching + Education) work BEFORE adding scanning features. If the basics don't create behavior change, scanning won't save it. Validate the moat first, add accelerators later."
+> "Focus POC on proving the **core differentiators** (MATADOR automation + Fire coaching + Education) work BEFORE adding scanning features. If the basics don't create behavior change, scanning won't save it. Validate the moat first, add accelerators later."
 
 ### 3. POC Validation Strategy (Updated)
 
@@ -105,7 +105,7 @@
 - Point camera at plate → AI identifies food → Auto-log macros
 - API cost: ~$0.0125/scan (1.25 cents per photo)
 - User cost: ~$0.625/user/month (50 scans)
-- Features: Offline queue, confidence scoring, manual editing, Lion context
+- Features: Offline queue, confidence scoring, manual editing, Fire context
 - Value prop: "Log meals in 5 seconds with AI"
 
 **2. Menu Scanning**
@@ -163,7 +163,7 @@
 - **Before:** Menu scanning (~80-100 hours) + basics
 - **After:** Basics only (~60-80 hours)
 - **Time saved:** ~40 hours
-- **Focus:** Prove MATADOR + Lion + Education works
+- **Focus:** Prove MATADOR + Fire + Education works
 
 ### Phase 2 (Weeks 11-18):
 - **Before:** Marketing only
@@ -182,7 +182,7 @@
 ## 💰 Business Model Impact
 
 ### Free Tier (Unchanged):
-- Manual logging, MATADOR automation, Lion coaching, Education
+- Manual logging, MATADOR automation, Fire coaching, Education
 - Ad-free forever
 - Core differentiators accessible
 
@@ -202,20 +202,20 @@
 **1. Reduced POC Risk**
 - Simpler POC = higher chance of completion in 10 weeks
 - No complex API integrations during university deadline pressure
-- Focus on unique differentiators (MATADOR + Lion + Education)
+- Focus on unique differentiators (MATADOR + Fire + Education)
 
 **2. Validated Foundation First**
 - If basics don't work, scanning won't save it
-- POC proves: "Do users trust MATADOR automation and Lion coaching?"
+- POC proves: "Do users trust MATADOR automation and Fire coaching?"
 - Phase 2 adds: "Does scanning make Premium worth €7/month?"
 
 **3. Better Revenue Justification**
-- Free tier: Manual logging + MATADOR + Lion = Real value, not crippled
+- Free tier: Manual logging + MATADOR + Fire = Real value, not crippled
 - Premium tier: Scanning features = Clear upgrade path, worth €7/month
 - Not just "pay to remove ads" - actual feature value
 
 **4. Competitive Positioning**
-- POC differentiators (MATADOR + Lion + Education) = NO competitor has
+- POC differentiators (MATADOR + Fire + Education) = NO competitor has
 - Phase 2 scanning = Matches competitors BUT combined with coaching = unique
 - Phase 3 learning loop = Defensible moat (proprietary German restaurant database)
 
@@ -263,7 +263,7 @@
 - Phase switching automation
 
 **Week 7-8:**
-- Lion character variations
+- Fire character variations
 - Roar reward system (haptic + sound)
 - "Why Like This?" education section
 - Streak tracking
@@ -296,14 +296,14 @@
 
 ---
 
-## 🦁 Bottom Line
+## 🔥 Bottom Line
 
 **Before:** Menu scanning POC → Marketing Phase 2 → Premium Phase 3
 **After:** Basics POC → Scanning Premium Phase 2 → AI enhancements Phase 3
 
 **Result:**
 - ✅ Lower POC risk (simpler)
-- ✅ Prove core moat first (MATADOR + Lion + Education)
+- ✅ Prove core moat first (MATADOR + Fire + Education)
 - ✅ Add accelerators when foundation validated (scanning in Phase 2)
 - ✅ Better revenue justification (€7/month for real features)
 - ✅ Defensible long-term moat (learning loop in Phase 3)

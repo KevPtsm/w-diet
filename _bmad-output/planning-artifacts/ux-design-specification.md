@@ -27,7 +27,7 @@ designPrinciples:
 
 ### Project Vision
 
-w-diet is an iOS-native nutrition app that automates metabolic cycling through the research-backed MATADOR method while providing empowering coaching via a friendly lion character. The product solves a critical gap: existing diet apps either oversimplify (becoming passive trackers) or overcomplicate (overwhelming users with decisions). w-diet's core promise is **"Just follow the app and not think further"** - handling complexity through automation while satisfying intellectual curiosity through transparent education.
+w-diet is an iOS-native nutrition app that automates metabolic cycling through the research-backed MATADOR method while providing empowering coaching via a friendly fire character. The product solves a critical gap: existing diet apps either oversimplify (becoming passive trackers) or overcomplicate (overwhelming users with decisions). w-diet's core promise is **"Just follow the app and not think further"** - handling complexity through automation while satisfying intellectual curiosity through transparent education.
 
 **The Breakthrough Moment:** Week 3, when the app automatically switches to maintenance calories and users tap "Why am I eating more now?" They read about metabolic adaptation from the MATADOR study and realize: *"The app is smarter than me about this. I can just trust it and follow."*
 
@@ -57,7 +57,7 @@ w-diet is an iOS-native nutrition app that automates metabolic cycling through t
 
 **1. Week 1 Confusion Bounce Prevention**
 - **Problem:** 80% diet app dropout happens in Week 1. Users expect immediate deficit, see "2300 kcal maintenance" and think app calculated wrong, abandon on Day 2.
-- **UX Solution:** Micro-intervention tooltip in onboarding BEFORE dashboard reveal: "🦁 Week 1 starts gentle. Why? [Tap to learn]" prevents confusion bounce.
+- **UX Solution:** Micro-intervention tooltip in onboarding BEFORE dashboard reveal: "🔥 Week 1 starts gentle. Why? [Tap to learn]" prevents confusion bounce.
 - **Validation Target:** >80% of users who reach Day 14 continue through maintenance phase switch.
 
 **2. Manual Logging Friction (POC Without AI Scanning)**
@@ -86,7 +86,7 @@ w-diet is an iOS-native nutrition app that automates metabolic cycling through t
 
 **2. Duolingo-Style Engagement Patterns**
 - **Bottom navigation:** Home (dashboard), Log Meal (primary action), Weight, Education
-- **Lion character variations:** Contextual appearances (🦁🤓 glasses during education, 🦁💪 strong for milestones, 🦁😌 gentle Week 1 support)
+- **Fire character variations:** Contextual appearances (🔥🤓 glasses during education, 🔥💪 strong for milestones, 🔥😌 gentle Week 1 support)
 - **Streak counter:** Prominent placement (Duolingo's daily engagement driver), celebrates consistency over perfection
 - **Roar celebrations:** Haptic + sound variable rewards (single roar = weight log, double roar = 7-day average trending down, triple roar = first cycle complete)
 
@@ -118,7 +118,7 @@ The core experience of w-diet centers on **trusting automated guidance through t
 - **Context:** User wakes up Day 14, sees "Maintenance Phase - 2300 kcal" (vs yesterday's 1900 kcal)
 - **Risk:** Thinks app is broken, abandons
 - **Primary solution:** Cycle timer always visible ("Day 14 of 14 - Switching to Maintenance"), just-in-time education tooltip, "Why Like This?" accessible
-- **Secondary safety net:** Day 2 check-in notification: "🦁 Still with me? Your gentle start is working as designed. [See the science]" - preemptive reassurance BEFORE confusion sets in
+- **Secondary safety net:** Day 2 check-in notification: "🔥 Still with me? Your gentle start is working as designed. [See the science]" - preemptive reassurance BEFORE confusion sets in
 - **Validation:** >80% of users who reach Day 14 continue through phase switch
 
 **Core Loop (Hooked Model):**
@@ -180,7 +180,7 @@ The core experience of w-diet centers on **trusting automated guidance through t
 - **No manual phase planning:** MyFitnessPal requires users to manually change calorie targets when cycling, w-diet automates
 - **No ad interruptions:** Yazio shows ads after every meal log, w-diet is ad-free free tier
 - **No database searching in POC:** Accept manual entry slowness (Phase 2 adds AI scanning to fix)
-- **No shame-based check-ins:** Noom's daily psychology prompts feel judgmental, w-diet uses supportive lion coaching
+- **No shame-based check-ins:** Noom's daily psychology prompts feel judgmental, w-diet uses supportive fire coaching
 
 **Automatic Without User Intervention:**
 - MATADOR phase switches (every 14 days at midnight)
@@ -203,13 +203,13 @@ Week 3, Day 21 - First maintenance phase completion
 - **UX delivery:** Data comparison modal: "Your metabolism vs traditional dieting: You maintained energy, they hit plateau"
 
 **First-Time User Success:**
-Onboarding Step 5: Dashboard reveal with micro-intervention tooltip: "🦁 Week 1 starts gentle. Why? [Tap to learn]"
+Onboarding Step 5: Dashboard reveal with micro-intervention tooltip: "🔥 Week 1 starts gentle. Why? [Tap to learn]"
 - If they understand Week 1 maintenance strategy BEFORE seeing 2300 kcal, confusion bounce prevented
 - Validation: A/B test in Week 9 TestFlight (10 users with tooltip, 10 without), measure Day 2 return rate
 
 **Week 6 Reflection (Day 42):** First complete MATADOR cycle
 - **User insight:** "I've done something different than every diet I've tried before"
-- **UX delivery:** "🦁 You've completed your first MATADOR cycle! Here's your progress..." with before/after metabolic data comparison
+- **UX delivery:** "🔥 You've completed your first MATADOR cycle! Here's your progress..." with before/after metabolic data comparison
 - **Measurable success:** >50% of Day 42+ users engage with cycle reflection modal
 
 **User Feels Successful/Accomplished:**
@@ -323,7 +323,7 @@ Focus ruthlessly on make-or-break interactions - everything else supports these.
 
 **Implementation:**
 - **Onboarding tooltip (Day 1):** Prevents Day 2 confusion bounce by explaining Week 1 maintenance BEFORE dashboard reveal
-- **Day 2 check-in (secondary safety net):** Proactive reassurance: "🦁 Still with me? Your gentle start is working." Prevents early abandonment.
+- **Day 2 check-in (secondary safety net):** Proactive reassurance: "🔥 Still with me? Your gentle start is working." Prevents early abandonment.
 - **Day 14 phase switch trust-building:** Cycle timer + just-in-time education makes "eating more" feel intentional, not broken
 - **First green smiley achievement:** 70% threshold makes success feel attainable (not impossible perfectionism)
 - **Day 28 cycle completion celebration:** Triple roar + data reflection = investment payoff, commitment to Cycle 2
@@ -344,7 +344,7 @@ Focus ruthlessly on make-or-break interactions - everything else supports these.
 - ✅ Weight logging with 7-day rolling average trend indicator
 - ✅ Offline-first SQLite architecture (100% core features work without internet)
 - ✅ Roar celebrations (haptic + sound feedback for milestones)
-- ✅ Lion character variations (4 states: default, glasses, strong, gentle - static images only)
+- ✅ Fire character variations (4 states: default, glasses, strong, gentle - static images only)
 
 **Phase 2+ Features (Explicitly Deferred):**
 - ❌ Photo food scanning (AI-powered plate recognition for instant meal logging)
@@ -370,7 +370,7 @@ w-diet's emotional design follows a deliberate progression that transforms first
 This journey mirrors the user's relationship with automated guidance. Users begin intellectually curious about MATADOR cycling ("Wait, I eat MORE after 2 weeks?"), develop hope during the gentle Week 1 start, build confidence through the Day 14 phase switch breakthrough, and ultimately feel safe surrendering to the system's intelligence.
 
 **"Safe" encompasses two critical dimensions:**
-1. **Protected/Secure** - "The app has my back" (lion coaching, forgiving design, supportive nudges)
+1. **Protected/Secure** - "The app has my back" (fire coaching, forgiving design, supportive nudges)
 2. **Predictable/Stable** - "I know what to expect" (14-day cycles, transparent automation, consistent patterns)
 
 This dual safety enables the core promise: **"Just follow the app and not think further."**
@@ -378,7 +378,7 @@ This dual safety enables the core promise: **"Just follow the app and not think 
 ### Emotional Journey Mapping
 
 **Stage 1: Curiosity (Discovery/Onboarding - Day 1-2)**
-- First opening app, encountering lion character
+- First opening app, encountering fire character
 - Reading about MATADOR cycling methodology
 - Moment: "Wait, I eat MORE after 2 weeks? How does that work?"
 - Emotion: Intrigued, intellectually engaged, willing to try
@@ -441,7 +441,7 @@ Critical emotional states throughout the experience:
 - Streak counter incrementing each day (predictable win)
 - Haptic feedback on meal save (tactile pleasure)
 - Progress bars filling throughout day (visual satisfaction)
-- Lion roars (single/double/triple celebration escalation)
+- Fire roars (single/double/triple celebration escalation)
 - Design priority: Deliver daily dopamine hits that drive habit formation (Hooked model Variable Reward step)
 
 ### Design Implications
@@ -456,7 +456,7 @@ Critical emotional states throughout the experience:
 - Day 2 check-in notification: "Still with me? Your gentle start is working as designed"
 - Cycle timer prominently displayed: "There's a plan, you're on track"
 - Week 1 maintenance phase (1900 cal) - gentle, achievable start
-- Supportive lion messaging creates optimism
+- Supportive fire messaging creates optimism
 
 **Confidence → Automated Intelligence:**
 - Automatic phase switches (no decisions required from user)
@@ -467,7 +467,7 @@ Critical emotional states throughout the experience:
 **Safe → Forgiving & Reliable:**
 - 70% macro thresholds (not 100% perfectionism)
 - Offline-first architecture (app always works, never fails)
-- Consistent lion coaching tone (coach not judge)
+- Consistent fire coaching tone (coach not judge)
 - Predictable cycle timer countdown (no surprises)
 - Forgiving language ("You're doing great at 75%!" not "You missed 25%")
 - **Technical requirements:** <100ms P95 dashboard load, offline-first SQLite, 60fps UI performance
@@ -476,32 +476,32 @@ Critical emotional states throughout the experience:
 - Variable macro smileys (unpredictable appearances create variable rewards)
 - Streak increments (daily win, consistent reinforcement)
 - Haptic feedback on every meal save (tactile pleasure)
-- Lion roars with escalating intensity (single/double/triple)
+- Fire roars with escalating intensity (single/double/triple)
 - Progress bars with smooth animations (visual satisfaction)
 - Note: After POC testing, may add daily check-ins, streak milestones (7/14/28 days), or mini-celebrations for hitting all 3 macros
 
 ### Re-Engagement Notification Strategy (POC A/B Test)
 
-**The Challenge:** Balance effective re-engagement (proven through Duolingo's guilt-based tactics) with emotional consistency (supportive lion coach).
+**The Challenge:** Balance effective re-engagement (proven through Duolingo's guilt-based tactics) with emotional consistency (supportive fire coach).
 
-**Hypothesis:** Supportive notifications (Group A) will outperform gentle guilt (Group B) for German students because the core emotional journey already builds deep trust through transparency and protection. By Week 1, users don't need guilt - they need reinforcement of the supportive relationship they're building with the lion. Users who experience consistent supportive coaching will develop stronger brand advocacy and long-term retention than those re-engaged through guilt.
+**Hypothesis:** Supportive notifications (Group A) will outperform gentle guilt (Group B) for German students because the core emotional journey already builds deep trust through transparency and protection. By Week 1, users don't need guilt - they need reinforcement of the supportive relationship they're building with the fire. Users who experience consistent supportive coaching will develop stronger brand advocacy and long-term retention than those re-engaged through guilt.
 
-**Decision Approach:** Optimize for measured outcomes (Day 7 retention), not emotional ideology. If data shows gentle guilt drives higher Week 1 retention (our #1 risk), we ship gentle guilt - while ensuring it stays in the lion's supportive character to minimize brand damage.
+**Decision Approach:** Optimize for measured outcomes (Day 7 retention), not emotional ideology. If data shows gentle guilt drives higher Week 1 retention (our #1 risk), we ship gentle guilt - while ensuring it stays in the fire's supportive character to minimize brand damage.
 
 **POC Beta A/B Test (20-25 students):**
 
 **Group A - Supportive Notifications (10-13 users):**
-- "Your streak is waiting for you 🦁"
+- "Your streak is waiting for you 🔥"
 - "Day 3 is calling - keep that momentum!"
 - "I've got your macro goals ready when you are 💪"
 - Stays in supportive coach character 100%
 
 **Group B - Gentle Guilt Notifications (10-12 users):**
-- "Your lion checked... no meals logged today 😔"
-- "I'm still here, waiting to help you track today 🦁💭"
+- "Your fire checked... no meals logged today 😔"
+- "I'm still here, waiting to help you track today 🔥💭"
 - "Day 3 is slipping by - your streak needs you!"
-- Uses FOMO/mild disappointment while staying in lion character (disappointed FOR you, not IN you)
-- **Critical constraint:** Must maintain lion's supportive personality (no passive-aggressive Duolingo tactics)
+- Uses FOMO/mild disappointment while staying in fire character (disappointed FOR you, not IN you)
+- **Critical constraint:** Must maintain fire's supportive personality (no passive-aggressive Duolingo tactics)
 
 **Success Metrics:**
 
@@ -549,25 +549,25 @@ Handle metabolic cycling calculations, phase switches, and macro adjustments aut
 
 **3. Celebrate Progress, Forgive Imperfection**
 
-70% macro threshold = 😊 green success (not 100% perfectionism). Streak tracks daily logging consistency, not perfect adherence. Lion messaging uses "You're doing great at 75%!" not "You failed to hit 100%." Coach, don't judge. Support, don't shame.
+70% macro threshold = 😊 green success (not 100% perfectionism). Streak tracks daily logging consistency, not perfect adherence. Fire messaging uses "You're doing great at 75%!" not "You failed to hit 100%." Coach, don't judge. Support, don't shame.
 
 **4. Deliver Daily Dopamine Through Variable Rewards**
 
-Macro smileys appear unpredictably based on user behavior (Hooked model Variable Reward). Progress bars provide predictable satisfaction. Haptic feedback delivers tactile pleasure. Lion roars escalate (single/double/triple) for variable celebration intensity. Balance expected rewards (streak) with unexpected delights (progressive disclosure, educational insights).
+Macro smileys appear unpredictably based on user behavior (Hooked model Variable Reward). Progress bars provide predictable satisfaction. Haptic feedback delivers tactile pleasure. Fire roars escalate (single/double/triple) for variable celebration intensity. Balance expected rewards (streak) with unexpected delights (progressive disclosure, educational insights).
 
 **5. Build Safety Through Predictability + Protection**
 
-14-day cycles are predictable and consistent (users know what to expect). Lion coaching is protective and supportive (users feel backed by intelligent guide). Offline-first architecture is reliable (app never fails). Forgiving thresholds are protective (users can't "fail"). Predictable stability + protective guidance = deep safety.
+14-day cycles are predictable and consistent (users know what to expect). Fire coaching is protective and supportive (users feel backed by intelligent guide). Offline-first architecture is reliable (app never fails). Forgiving thresholds are protective (users can't "fail"). Predictable stability + protective guidance = deep safety.
 
 **Technical requirements for safety:** <100ms P95 dashboard load, offline-first SQLite architecture, 60fps UI performance, consistent 14-day cycle automation. Emotional design writes checks that architecture must cash.
 
 **6. Optimize for Measured Outcomes, Not Emotional Ideology**
 
-When emotional design philosophy conflicts with data, trust the data. If gentle guilt drives higher Week 1 retention (our #1 risk), we ship gentle guilt - while keeping it in the lion's supportive character to minimize brand damage. Emotional design serves user retention and engagement, not vice versa.
+When emotional design philosophy conflicts with data, trust the data. If gentle guilt drives higher Week 1 retention (our #1 risk), we ship gentle guilt - while keeping it in the fire's supportive character to minimize brand damage. Emotional design serves user retention and engagement, not vice versa.
 
 Test assumptions rigorously through A/B testing. Ship what works based on measured outcomes (retention, engagement, brand perception), not what feels ideologically pure. Be willing to adjust emotional design strategy when data proves a better approach exists.
 
-**Brand constraint:** Even when optimizing for effectiveness, maintain the lion's core supportive personality. No passive-aggressive tactics, no mean-spirited guilt. Disappointed FOR users, never IN them.
+**Brand constraint:** Even when optimizing for effectiveness, maintain the fire's core supportive personality. No passive-aggressive tactics, no mean-spirited guilt. Disappointed FOR users, never IN them.
 
 **7. Distinguish Productive Tension From Harmful Anxiety**
 
@@ -664,8 +664,8 @@ Simple (budgeting app) excels at presenting complex financial data through elega
 
 **Interaction Patterns:**
 
-**Character-Based Coaching (Duolingo → w-diet Lion)**
-- Apply: Lion with 4 variations (default, glasses, strong, gentle) appears in key moments
+**Character-Based Coaching (Duolingo → w-diet Fire)**
+- Apply: Fire with 4 variations (default, glasses, strong, gentle) appears in key moments
 - ONE sentence coaching messages maximum
 - Character conveys emotion through visual variation, not lengthy text
 - Builds parasocial relationship through consistency and personality
@@ -702,7 +702,7 @@ Simple (budgeting app) excels at presenting complex financial data through elega
 
 **Minimalist Text Philosophy (Both → w-diet)**
 - Apply: Icons communicate actions/categories faster than words
-- Lion coaching messages = ONE sentence maximum
+- Fire coaching messages = ONE sentence maximum
 - Education tooltips = scannable bullets, never paragraphs
 - Numbers prominent, labels secondary
 - Rationale: Supports extreme simplicity principle, reduces cognitive load
@@ -796,8 +796,8 @@ Simple (budgeting app) excels at presenting complex financial data through elega
 
 **Duolingo's Character-Driven Coaching**
 - Why: Builds parasocial relationship, reduces text while maintaining personality
-- Implementation: Lion with 4 variations, ONE sentence messages, appears in key moments
-- Success criteria: Users describe lion as "supportive" (>80% in post-beta interviews)
+- Implementation: Fire with 4 variations, ONE sentence messages, appears in key moments
+- Success criteria: Users describe fire as "supportive" (>80% in post-beta interviews)
 
 **Duolingo's Haptic Celebration Pattern**
 - Why: Delivers instant physical micro-reward without visual clutter
@@ -835,7 +835,7 @@ Simple (budgeting app) excels at presenting complex financial data through elega
 **What to Avoid (Conflicts with w-diet Goals):**
 
 **Duolingo's Passive-Aggressive Notifications**
-- Why avoid: Conflicts with supportive lion character (A/B test will validate if gentle guilt outperforms)
+- Why avoid: Conflicts with supportive fire character (A/B test will validate if gentle guilt outperforms)
 - Alternative: POC tests supportive vs gentle guilt, chooses based on Day 7 retention data
 - Decision framework: Optimize for measured outcomes, maintain brand damage threshold
 
@@ -870,10 +870,10 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 
 **Core Approach:**
 - **Foundation:** SwiftUI standard components (List, Card, Button, Sheet, NavigationStack)
-- **Custom Layer:** Brand-specific components (lion character, macro smileys, cycle timer, roar haptics)
+- **Custom Layer:** Brand-specific components (fire character, macro smileys, cycle timer, roar haptics)
 - **Icons:** SF Symbols (Apple's native icon system) for navigation and UI elements
 - **Typography:** iOS Dynamic Type system (17pt+ body text, supports accessibility scaling)
-- **Color:** iOS semantic colors with custom brand accents for lion and macro feedback
+- **Color:** iOS semantic colors with custom brand accents for fire and macro feedback
 
 ### Rationale for Selection
 
@@ -898,7 +898,7 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 **Minimalist Philosophy Match:**
 - iOS design language IS minimalist (white space, large typography, clean hierarchy)
 - Simple and Duolingo both leverage platform conventions heavily
-- Custom components only where brand differentiation matters (lion, macro smileys)
+- Custom components only where brand differentiation matters (fire, macro smileys)
 - Reduces visual noise - users see familiar iOS patterns
 
 **Solo Developer Pragmatism:**
@@ -938,7 +938,7 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 
 **Custom Brand Components (Build from Scratch):**
 
-**Lion Character Component:**
+**Fire Character Component:**
 - 4 SVG/PNG variations (default, glasses, strong, gentle)
 - Appears in coaching messages with ONE sentence text
 - Asset catalog for @2x/@3x retina support
@@ -973,7 +973,7 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 **Design Tokens (Minimal Custom Palette):**
 
 **Colors:**
-- Primary: iOS system blue (default) or custom lion gold (#F4A460) for brand accent
+- Primary: iOS system blue (default) or custom fire gold (#F4A460) for brand accent
 - Success: iOS system green for macro smileys (😊)
 - Warning: iOS system yellow for macro smileys (😐)
 - Error: iOS system red for macro smileys (😞) - used sparingly, never for shame
@@ -992,7 +992,7 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 - Large Title: Cycle Timer "Day 7 of 14" (34pt default)
 - Title: Dashboard card headers (28pt default)
 - Headline: Macro percentages (17pt bold)
-- Body: Lion coaching messages (17pt regular)
+- Body: Fire coaching messages (17pt regular)
 - Caption: Supporting labels (12pt regular)
 
 **Spacing System (iOS Standard):**
@@ -1010,7 +1010,7 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 - Leverage iOS accessibility features (VoiceOver, Dynamic Type, Reduce Motion)
 
 **Custom Only for Brand Moments:**
-- Lion character (unique to w-diet)
+- Fire character (unique to w-diet)
 - Macro smileys (core product differentiation)
 - Cycle timer (MATADOR automation visualization)
 - Roar haptics (micro-reward system)
@@ -1018,7 +1018,7 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 **Performance Budget Enforcement:**
 - All custom components must render <16ms (60fps target)
 - Custom animations use SwiftUI `.animation()` modifier (GPU-accelerated)
-- Asset optimization (compress lion PNGs, use SF Symbols where possible)
+- Asset optimization (compress fire PNGs, use SF Symbols where possible)
 - Pre-calculate macro percentages in background thread
 
 **Iteration Strategy:**
@@ -1026,12 +1026,12 @@ w-diet will use Apple's native SwiftUI framework as the design system foundation
 **POC Beta (Weeks 1-10):**
 - Ship with iOS standard components + minimal custom layer
 - Validate core UX patterns (icon-only nav, card dashboard, macro smileys)
-- Gather feedback on lion character personality and coaching tone
+- Gather feedback on fire character personality and coaching tone
 - Measure performance (<100ms dashboard, <30 sec logging)
 
 **Post-POC Refinement (Based on Data):**
 - If users confused by icons → add text labels (adaptive pattern)
-- If lion feels generic → explore animation/expression variety
+- If fire feels generic → explore animation/expression variety
 - If macro smileys insufficient → test additional micro-rewards
 - If performance lags → optimize custom component rendering
 
@@ -1225,7 +1225,7 @@ This shift happens gradually through:
 - **Pre-meal:** 30 min before each user-set eating time (e.g., "Prepare your lunch 🍽️")
 - **Post-meal (30 min after expected time):** Check if ANY meal logged in last 30 min
   - If logged: "Thanks for logging! Keep it up 💪" (positive reinforcement)
-  - If not logged: "Did you log your meal? 🦁" (gentle reminder, no shame)
+  - If not logged: "Did you log your meal? 🔥" (gentle reminder, no shame)
 - **Phase 2 refinement:** Per-meal tracking, smart cancellation if user logs early, 60-min grace period
 
 **Success Indicators by Timeframe:**
@@ -1326,7 +1326,7 @@ This shift happens gradually through:
 - Teaching strategy: First green smiley at 70% = delightful surprise, positive reinforcement teaches pattern
 - No explanation needed initially, ℹ️ icon reveals: "70-100% = great work! Consistency over perfection"
 
-✅🆕 **Lion character coaching with personality variations**
+✅🆕 **Fire character coaching with personality variations**
 - Familiar pattern: Duolingo owl mascot, character-driven coaching
 - Innovative twist: 4 variations (default, glasses, strong, gentle) showing personality, ONE sentence max
 - Teaching strategy: Character appears in key moments (Day 2 check-in, Day 14 education), builds parasocial relationship
@@ -1398,7 +1398,7 @@ w-diet takes **proven patterns** (streaks, color-coded feedback, cards, bottom n
 **Alternative triggers:**
 - User opens app organically → taps Log Meal tab (bottom nav ➕ icon)
 - User finishes eating → remembers to log (internal trigger, habit formation over time)
-- Post-meal gentle reminder (30 min after expected time if not logged): "Did you log your meal? 🦁"
+- Post-meal gentle reminder (30 min after expected time if not logged): "Did you log your meal? 🔥"
 
 **Invitation to begin:**
 - Log Meal screen shows eating window at top: "🍽️ 12pm-6pm" (contextual, non-blocking banner)
@@ -1489,10 +1489,10 @@ w-diet takes **proven patterns** (streaks, color-coded feedback, cards, bottom n
 - System checks: Was ANY meal logged in the last 30 minutes?
 - **If logged:** Push notification with positive reinforcement
   - "Thanks for logging! Keep it up 💪"
-  - "Great job logging your meal 🦁"
+  - "Great job logging your meal 🔥"
   - "Logged! You're on fire today 🔥"
 - **If not logged:** Gentle reminder notification
-  - "Did you log your meal? 🦁"
+  - "Did you log your meal? 🔥"
 - **Phase 2 refinement:** Per-meal precision, 60-min grace period, smart cancellation if user logs early
 
 **Handling mistakes:**
@@ -1505,7 +1505,7 @@ w-diet takes **proven patterns** (streaks, color-coded feedback, cards, bottom n
 
 **If user forgets to log:**
 - 30 min after expected meal time (forgiving design)
-- Gentle reminder notification: "Did you log your meal? 🦁"
+- Gentle reminder notification: "Did you log your meal? 🔥"
 - No shame language, no streak penalties (supportive, not punitive)
 
 **4. Completion: How Users Know They're Done**
@@ -1563,12 +1563,12 @@ w-diet takes **proven patterns** (streaks, color-coded feedback, cards, bottom n
 
 ### Color System
 
-**Primary Palette: Lion Gold & Energy**
+**Primary Palette: Fire Gold & Energy**
 
-The color system centers on warm, motivating tones that align with the lion mascot's personality and the "coach, not judge" principle.
+The color system centers on warm, motivating tones that align with the fire mascot's personality and the "coach, not judge" principle.
 
 **Core Colors:**
-- **Primary (Lion Gold):** `#F4A460` - Warm, motivating, represents the lion mascot's energy and confidence
+- **Primary (Fire Gold):** `#F4A460` - Warm, motivating, represents the fire mascot's energy and confidence
 - **Accent (Energy Orange):** `#FF6B35` - Energetic highlights for celebrations and rewards
 - **Text Primary:** `#2D2D2D` - Deep charcoal for excellent readability without harsh black
 - **Background:** `#F8F8F8` - Soft off-white for reduced eye strain and premium feel
@@ -1581,11 +1581,11 @@ The color system centers on warm, motivating tones that align with the lion masc
 - **Neutral:** `#E0E0E0` - Light gray for borders, dividers, inactive states
 
 **UI Application:**
-- Primary buttons: Lion Gold background, white text
-- Dashboard metrics: Lion Gold for primary values
+- Primary buttons: Fire Gold background, white text
+- Dashboard metrics: Fire Gold for primary values
 - Macro feedback: Semantic colors (green = good, orange = medium, red = needs attention)
-- Notifications: Lion Gold tint with soft backgrounds (#FFF8F0)
-- Lion mascot: Primary gold with accent orange highlights
+- Notifications: Fire Gold tint with soft backgrounds (#FFF8F0)
+- Fire mascot: Primary gold with accent orange highlights
 - Card elevation: Moderate shadows (4-8pt blur radius) for premium feel
 
 **Technical Implementation:**
@@ -1595,12 +1595,12 @@ The color system centers on warm, motivating tones that align with the lion masc
 
 **Accessibility Compliance:**
 - All text meets WCAG AA contrast ratios (4.5:1 minimum)
-- Lion Gold (#F4A460) on white background: 4.52:1 ✓
-- White text on Lion Gold: 4.52:1 ✓
+- Fire Gold (#F4A460) on white background: 4.52:1 ✓
+- White text on Fire Gold: 4.52:1 ✓
 - Semantic colors reinforced with emojis for colorblind users
 
 **Phase 2 Considerations:**
-- Validate Lion Gold emotional response through user feedback (motivating vs muted)
+- Validate Fire Gold emotional response through user feedback (motivating vs muted)
 - A/B test color variants if retention/engagement data suggests need
 - Track qualitative sentiment: "How does w-diet make you feel?" (motivated, calm, energized, clinical)
 - Iterate based on data + user feedback, not assumptions
@@ -1702,7 +1702,7 @@ Standard iOS layout guides (no custom grid) - use SwiftUI's built-in spacing and
 **Color Accessibility:**
 - All text meets WCAG AA contrast (4.5:1 minimum)
 - Semantic colors reinforced with emojis (😊😐😞) for colorblind users
-- Primary actions use high-contrast Lion Gold + white text
+- Primary actions use high-contrast Fire Gold + white text
 
 **Typography Accessibility:**
 - Minimum 17pt body text for comfortable reading
@@ -1736,7 +1736,7 @@ Standard iOS layout guides (no custom grid) - use SwiftUI's built-in spacing and
 
 **This foundation ensures w-diet feels:**
 - Premium and polished (airy spacing, clean typography, subtle shadows)
-- Warm and motivating (Lion Gold palette)
+- Warm and motivating (Fire Gold palette)
 - Native and familiar (SF Pro, iOS layout guides)
 - Minimal and focused (icon-first, text-minimal)
 - Performance-optimized (theme abstraction, system fonts, tested shadows)
@@ -1749,7 +1749,7 @@ Standard iOS layout guides (no custom grid) - use SwiftUI's built-in spacing and
 
 Four distinct visual approaches were explored through interactive HTML mockups (`ux-design-directions.html`):
 
-1. **Bold & Energetic** - Strong visual hierarchy, gradient accents, prominent lion mascot avatar, celebration-focused design with progress bars
+1. **Bold & Energetic** - Strong visual hierarchy, gradient accents, prominent fire mascot avatar, celebration-focused design with progress bars
 2. **Clean & Minimal** - Maximum white space, circular progress indicator, icon-driven layout, list-based macro display, eating window banner
 3. **Card-Heavy (Simple Style)** - Balanced 3-card dashboard combining Simple's card aesthetic with Duolingo navigation patterns, friendly 4-tab navigation with labels
 4. **Dense & Efficient** - Compact spacing with more information per screen, grid layout for macros, phase indicator banners, stat pills for quick metrics
@@ -1767,7 +1767,7 @@ The chosen design combines Direction 2's clean, minimal aesthetic with Direction
 2. **Eating Window Banner** - Contextual notification: "🍽️ 12pm - 6pm"
 3. **Segmented Progress Ring** - 160px circular ring showing calorie distribution by macro
 4. **Macro Feedback Card** - Single card with emoji-based 3-column display
-5. **Log Meal Button** - Primary action, Lion Gold, full-width
+5. **Log Meal Button** - Primary action, Fire Gold, full-width
 6. **Icon-Only Tab Bar** - 4 icons (🏠📊🎓⚙️), maximum simplicity
 
 **Segmented Ring Innovation:**
@@ -1815,7 +1815,7 @@ The chosen design combines Direction 2's clean, minimal aesthetic with Direction
 
 4. **Supports Emotional Goals:**
    - Generous white space feels calm and trustworthy (not overwhelming)
-   - Lion Gold accents create warm, motivating visual anchors
+   - Fire Gold accents create warm, motivating visual anchors
    - Macro emojis provide friendly, non-judgmental feedback (coach, not judge)
    - Segmented ring celebrates progress visually without shame
 
@@ -1845,8 +1845,8 @@ The chosen design combines Direction 2's clean, minimal aesthetic with Direction
 
 **2. Eating Window Banner (Contextual)**
 - Notification-style banner: "🍽️ Eating window: 12pm - 6pm"
-- Soft Lion Gold tint background (#FFF8F0)
-- Left border accent (4px solid Lion Gold #F4A460)
+- Soft Fire Gold tint background (#FFF8F0)
+- Left border accent (4px solid Fire Gold #F4A460)
 - 12px vertical padding, 16px horizontal padding
 - 8px border radius
 - Flex layout: emoji + text with 8px gap
@@ -1904,7 +1904,7 @@ Fat calories: (fats_g × 9) / 1900 × 360° = red segment angle
 
 **5. Log Meal Button (Primary Action)**
 - Full-width button (width: 100%)
-- Lion Gold background (#F4A460)
+- Fire Gold background (#F4A460)
 - White text: 17pt SF Pro Text Semibold
 - 16px vertical padding, 12px border radius
 - Hover state: Slightly darker gold (#E39450), scale(1.02)
@@ -1918,7 +1918,7 @@ Fat calories: (fats_g × 9) / 1900 × 360° = red segment angle
 - Standard iOS height: 49pt + Safe Area bottom
 - White background, 1px top border (#E0E0E0)
 - Each icon: 24pt size (SF Symbols or emoji)
-- Active state: Lion Gold tint (#F4A460)
+- Active state: Fire Gold tint (#F4A460)
 - Inactive state: Neutral gray (#999)
 - No text labels (icon-only for maximum simplicity)
 - Icons: 🏠 Home, 📊 Progress, 🎓 Learn, ⚙️ Settings
@@ -1931,7 +1931,7 @@ Fat calories: (fats_g × 9) / 1900 × 360° = red segment angle
 - Icon + text gaps: 8px (streak badge, eating window banner)
 
 **Color System Applied:**
-- Primary (Lion Gold #F4A460): Primary button, active tab
+- Primary (Fire Gold #F4A460): Primary button, active tab
 - Semantic colors:
   - Success Green (#4CAF50): Protein segment, protein label
   - Warning Orange (#FFA726): Carbs segment, carbs label
@@ -1983,14 +1983,14 @@ Fat calories: (fats_g × 9) / 1900 × 360° = red segment angle
   2. Engagement: Does segmented ring increase macro awareness/adherence?
   3. Performance: Any lag in ring rendering or dashboard load?
   4. Qualitative: Post-onboarding survey asking about ring clarity
-- Fallback: If comprehension issues arise, can simplify to single Lion Gold ring (Version B) in Phase 2
+- Fallback: If comprehension issues arise, can simplify to single Fire Gold ring (Version B) in Phase 2
 - Success criteria: >80% users understand ring without explanation, no performance degradation
 
 ---
 
 **This hybrid direction ensures w-diet feels:**
 - Premium and polished (airy spacing, clean typography, subtle shadows)
-- Warm and motivating (Lion Gold accents, friendly emojis)
+- Warm and motivating (Fire Gold accents, friendly emojis)
 - Native and familiar (iOS patterns, SF Pro font)
 - Minimal and focused (icon-first, text-minimal, maximum white space)
 - Educational and innovative (segmented ring teaches macro-calorie relationship)
@@ -2211,7 +2211,7 @@ flowchart TD
 **Navigation Patterns:**
 - Progress indication for multi-step flows (onboarding: 1 of 5, 2 of 5, etc.)
 - Back button always top-left for corrections
-- Primary actions bottom, full-width, Lion Gold color
+- Primary actions bottom, full-width, Fire Gold color
 - Smooth slide transitions (no jarring cuts)
 - Auto-navigation after save actions (meal → history)
 
@@ -2284,7 +2284,7 @@ w-diet uses **Native iOS SwiftUI + Custom Brand Components** as the design syste
 - **ProgressView** - Loading states (API calls, database queries)
 - **Toggle** - On/off switches (settings, preferences - Phase 2)
 - **Text** - Typography (all text using SF Pro Display/Text)
-- **Image** - Icons and graphics (SF Symbols, lion character assets)
+- **Image** - Icons and graphics (SF Symbols, fire character assets)
 - **Sheet** - Modal presentations (edit screens, info popups)
 - **Alert** - System alerts (errors, confirmations)
 - **ScrollView** - Scrolling containers (content overflow)
@@ -2310,7 +2310,7 @@ Based on user journeys and design direction, we identified 10 unique components:
 4. ✅ **Eating Window Banner** - Notification-style contextual info banner
 5. ⚠️ **Food Search Autocomplete** - Database search with <200ms results (partially available)
 6. ⚠️ **Meal History List** - Running totals + today's meals (partially available)
-7. ✅ **Lion Character** - Brand mascot for celebrations/coaching
+7. ✅ **Fire Character** - Brand mascot for celebrations/coaching
 8. ✅ **Roar Haptics** - Custom haptic feedback patterns
 9. ⚠️ **Toast Notifications** - Temporary success messages (partially available)
 10. ✅ **Cycle Timer Visual** - MATADOR phase indicator (Phase 2 - deferred)
@@ -2438,7 +2438,7 @@ Based on user journeys and design direction, we identified 10 unique components:
 
 **States:**
 - **Inactive (grey fire):** "🔥 0 days" - grey/desaturated fire (#999), neutral text
-- **Active (colored fire):** "🔥 1 day" - full-color fire (Lion Gold #F4A460 or orange #FF6B35)
+- **Active (colored fire):** "🔥 1 day" - full-color fire (Fire Gold #F4A460 or orange #FF6B35)
 - **Long streak (7+ days):** Consider special animation or badge (Phase 2)
 
 **Variants:**
@@ -2458,7 +2458,7 @@ Based on user journeys and design direction, we identified 10 unique components:
 
 **Technical Implementation:**
 - SwiftUI HStack (emoji + text) wrapped in custom pill-shaped container
-- State-driven color: `fireColor = streakCount > 0 ? .lionGold : .gray`
+- State-driven color: `fireColor = streakCount > 0 ? .fireGold : .gray`
 
 ---
 
@@ -2476,7 +2476,7 @@ Based on user journeys and design direction, we identified 10 unique components:
 - Tap banner body → No action (display-only)
 
 **States:**
-- **Default:** Soft Lion Gold background (#FFF8F0), Lion Gold left border (4px solid #F4A460)
+- **Default:** Soft Fire Gold background (#FFF8F0), Fire Gold left border (4px solid #F4A460)
 - **Edit mode:** Not applicable (navigation to separate screen)
 
 **Variants:**
@@ -2549,7 +2549,7 @@ Based on user journeys and design direction, we identified 10 unique components:
   - Macros with emojis: "😊 Protein 85g | 😐 Carbs 142g | 😞 Fats 38g"
 - **List:** Today's meals in reverse chronological order (most recent first)
   - Each row: Meal name, time logged, calories
-- **Footer:** "Add Another Meal" button (prominent, Lion Gold)
+- **Footer:** "Add Another Meal" button (prominent, Fire Gold)
 
 **Actions:**
 - Tap meal row → Navigate to Edit Meal screen (Phase 2, POC is view-only)
@@ -2580,12 +2580,12 @@ Based on user journeys and design direction, we identified 10 unique components:
 
 ---
 
-#### Custom Component #7: Lion Character (Brand Mascot)
+#### Custom Component #7: Fire Character (Brand Mascot)
 
 **Purpose:** Friendly brand mascot for celebrations, coaching moments, and personality
 
 **Content:**
-- SVG or PNG asset of lion character
+- SVG or PNG asset of fire character
 - Multiple expressions: Happy, Celebrating, Encouraging
 
 **Actions:**
@@ -2603,7 +2603,7 @@ Based on user journeys and design direction, we identified 10 unique components:
 
 **Accessibility:**
 - Decorative image: `accessibilityLabel: ""` (VoiceOver skips)
-- Or `accessibilityLabel: "Lion mascot"` if contextually meaningful
+- Or `accessibilityLabel: "Fire mascot"` if contextually meaningful
 
 **Interaction Behavior:**
 - Static display (no animation in POC)
@@ -2692,7 +2692,7 @@ Based on user journeys and design direction, we identified 10 unique components:
 **Foundation Components (SwiftUI Standard):**
 - **TabView** → Tab bar navigation (4 tabs: Home 🏠, Progress 📊, Learn 🎓, Settings ⚙️)
 - **NavigationStack** → Screen-to-screen navigation with standard iOS push/pop
-- **Button** → Primary actions (Log Meal, Save, Next) with Lion Gold styling
+- **Button** → Primary actions (Log Meal, Save, Next) with Fire Gold styling
 - **TextField** → Text input (TDEE inputs, manual calorie entry, food search)
 - **Slider** → Range input (eating window 6-hour slider, portion selection)
 - **List** → Scrolling lists (food search results, meal history, settings options)
@@ -2706,13 +2706,13 @@ Based on user journeys and design direction, we identified 10 unique components:
 - **Eating Window Banner** → Custom HStack with notification styling + edit button
 - **Food Search Autocomplete** → TextField + List with custom row design + debouncing
 - **Meal History List** → List with custom sticky header/footer/rows
-- **Lion Character** → SVG/PNG asset with expression variants (static in POC)
+- **Fire Character** → SVG/PNG asset with expression variants (static in POC)
 - **Roar Haptics** → UIImpactFeedbackGenerator wrapper for celebrations
 - **Toast Notifications** → Custom overlay with auto-dismiss logic (or Alert fallback)
 
 **Implementation Approach:**
 - Build custom components using SwiftUI primitives + design system tokens
-- All custom components follow Lion Gold palette, SF Pro typography, 8px spacing
+- All custom components follow Fire Gold palette, SF Pro typography, 8px spacing
 - Ensure 44x44pt minimum tap targets (iOS HIG standard)
 - Animations use spring curves (`.spring(response: 0.6, dampingFraction: 0.8)`) for native iOS feel
 - Performance target: 60fps for all animations, <100ms for data updates
@@ -2790,11 +2790,11 @@ Based on user journeys and design direction, we identified 10 unique components:
 
 *Timeline: After POC validation, based on user feedback*
 
-9. **Lion Character Animations** (Priority: Low)
+9. **Fire Character Animations** (Priority: Low)
    - Needed for: Personality/delight (bounce, roar animations)
    - Complexity: High (animation sequences, timing)
    - Estimated effort: 2-3 days
-   - **POC:** Static lion PNG images only
+   - **POC:** Static fire PNG images only
 
 10. **Cycle Timer Visual** (Priority: Deferred)
     - Needed for: MATADOR phase indicator (visual countdown)
@@ -2849,13 +2849,13 @@ This section documents comprehensive UX patterns for consistent implementation a
 
 1. **Streak Badge** (top center)
    - Inactive state: Grey 🔥 0 day streak (opacity 50%)
-   - Active state: Colored 🔥 [N] day streak (full opacity, Lion Gold accent)
+   - Active state: Colored 🔥 [N] day streak (full opacity, Fire Gold accent)
    - Trigger: First weight log OR first meal log of the day
 
 2. **Eating Window Banner** (contextual)
    - Format: 🍽️ Eating window: 12pm - 6pm
    - Background: #FFF8F0 (warm beige)
-   - Border: 4px left border #F4A460 (Lion Gold)
+   - Border: 4px left border #F4A460 (Fire Gold)
    - Tap behavior: No action (static display)
    - Edit: Via ✏️ icon (launches eating window adjustment modal)
 
@@ -2880,12 +2880,12 @@ This section documents comprehensive UX patterns for consistent implementation a
    - Trend logic: Show green ↓ + amount ONLY if current < rolling_avg
    - Tap behavior: Opens weight input modal (iOS picker wheel)
 
-6. **Log Meal Button** (Lion Gold, full-width, rounded 12px)
+6. **Log Meal Button** (Fire Gold, full-width, rounded 12px)
    - Primary CTA, always visible
    - Haptic feedback on tap
 
 7. **Icon-Only Tab Bar** (bottom, 4 tabs)
-   - 🏠 Home (active state: Lion Gold accent)
+   - 🏠 Home (active state: Fire Gold accent)
    - 📊 Progress
    - 🎓 Education
    - ⚙️ Settings
@@ -2955,7 +2955,7 @@ When weight not logged today, show prompt card above ring on dashboard:
 
 **Content:**
 - Title: "⚖️ Log today's weight to track progress" (16pt semibold, #2D2D2D)
-- Button: "Log Weight" (Lion Gold background, white text, 15pt semibold, 12px×24px padding, 10px border radius)
+- Button: "Log Weight" (Fire Gold background, white text, 15pt semibold, 12px×24px padding, 10px border radius)
 
 **Visibility Logic:**
 - Show: Day 1 OR if no weight logged today
@@ -2992,7 +2992,7 @@ When weight not logged today, show prompt card above ring on dashboard:
 - Title: "Log Weight" (24pt bold, center, #2D2D2D)
 - Subtitle: "Scroll to select your weight" (14pt, center, #666)
 - Picker wheel (see below)
-- Save button: Full-width, Lion Gold, 16px padding, 12px radius, 17pt semibold
+- Save button: Full-width, Fire Gold, 16px padding, 12px radius, 17pt semibold
 - Cancel button: Full-width, transparent, 12px padding, 15pt regular, #666
 
 **iOS Picker Wheel Specifications:**
@@ -3015,7 +3015,7 @@ When weight not logged today, show prompt card above ring on dashboard:
 - Color: #999 (unselected), #2D2D2D (selected)
 
 **Selection Indicator:**
-- Horizontal band: rgba(244, 164, 96, 0.1) (Lion Gold tint, 10% opacity)
+- Horizontal band: rgba(244, 164, 96, 0.1) (Fire Gold tint, 10% opacity)
 - Top/bottom borders: 1px solid #F4A460
 - Height: 44pt (standard iOS tap target)
 
@@ -3166,7 +3166,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 **8-Step Conditional Flow:**
 
 1. **Welcome Screen**
-   - Title: "Meet Your Lion Coach 🦁"
+   - Title: "Meet Your Fire Coach 🔥"
    - Subtitle: "Science-backed weight loss without the shame"
    - CTA: "Get Started"
 
@@ -3239,7 +3239,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 ### Button Hierarchy Patterns
 
 **Primary Button:**
-- Background: Lion Gold (#F4A460)
+- Background: Fire Gold (#F4A460)
 - Text: White, 17pt semibold
 - Padding: 16px vertical, full-width
 - Border radius: 12px
@@ -3257,7 +3257,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 
 **Tertiary Button:**
 - Background: Transparent
-- Text: Lion Gold (#F4A460) or Grey (#666), 15pt regular
+- Text: Fire Gold (#F4A460) or Grey (#666), 15pt regular
 - Padding: 8px
 - No border
 - Hover state: Opacity 70%
@@ -3289,13 +3289,13 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 - Example: "Eating outside your window (12pm-6pm)"
 
 **Info Feedback:**
-- Modal with ℹ️ icon, Lion Gold accent
+- Modal with ℹ️ icon, Fire Gold accent
 - "Got it" button to dismiss
 - Example: Phase switch explanation, MATADOR science
 
 **Progress Feedback:**
 - <200ms: No indicator (feels instant)
-- 200ms-2s: Spinner only (small Lion Gold circle)
+- 200ms-2s: Spinner only (small Fire Gold circle)
 - >2s: Spinner + text ("Loading food database...")
 
 ---
@@ -3318,12 +3318,12 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 
 **Pickers (iOS Native):**
 - Style: .wheel for modals
-- Selection indicator: Lion Gold tint background
+- Selection indicator: Fire Gold tint background
 - Haptic: Light impact on value change
 
 **Sliders:**
 - Track: Light grey (#E0E0E0)
-- Fill: Lion Gold (#F4A460)
+- Fill: Fire Gold (#F4A460)
 - Thumb: White with shadow
 - Labels: Above and below track
 
@@ -3346,7 +3346,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 - Layout: Icon-only (no labels in POC)
 - Icon size: 24pt
 - Spacing: Evenly distributed (space-around)
-- Active state: Icon brightness 80%, optional Lion Gold tint
+- Active state: Icon brightness 80%, optional Fire Gold tint
 - Inactive state: Grey (#666)
 - Tap: Haptic light impact + screen transition
 
@@ -3381,7 +3381,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 
 **Loading States:**
 - Skeleton screens: Grey placeholder shapes with shimmer animation
-- Spinner: Lion Gold circular progress (POC: system spinner)
+- Spinner: Fire Gold circular progress (POC: system spinner)
 - Text: Optional "Loading..." below spinner for >2s operations
 
 **Error States:**
@@ -3415,7 +3415,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 
 **Color Contrast:**
 - Text on white: #2D2D2D (meets WCAG AA)
-- White text on Lion Gold: Verify contrast ratio ≥4.5:1
+- White text on Fire Gold: Verify contrast ratio ≥4.5:1
 - Smiley emojis: Visual + semantic (% of goal also shown numerically)
 
 **Haptic Feedback:**
@@ -3532,7 +3532,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 1. `weight-card-mockup.html` - Dashboard with weight tracking, macro progress bars, segmented ring
 2. `weight-input-mockup.html` - Three weight input options (tap card, edit button, notification prompt)
 3. `weight-input-detailed-mockup.html` - Complete flow + three input methods (text field, picker wheel, stepper)
-4. `color-theme-visualizer.html` - Lion Gold theme comparison
+4. `color-theme-visualizer.html` - Fire Gold theme comparison
 5. `ux-design-directions.html` - Four design directions (selected: Direction 2 Clean & Minimal)
 6. `ring-comparison-mockup.html` - Segmented ring vs simple ring (selected: Segmented Version A)
 
@@ -3540,7 +3540,7 @@ Streak activates (grey → colored fire) when user performs **EITHER** action on
 - Interactive HTML/CSS demonstrations
 - Comparative analysis (pros/cons)
 - Implementation specifications
-- Visual consistency with Lion Gold theme
+- Visual consistency with Fire Gold theme
 
 ---
 
@@ -3665,8 +3665,8 @@ Given target demographic (22-34, digitally native, German students/professionals
 
 **1. Color Contrast (WCAG 2.1 AA Compliant):**
 - Text on white background: #2D2D2D (contrast ratio 14.5:1 ✓ Exceeds 4.5:1)
-- White text on Lion Gold (#F4A460): Requires verification (target ≥4.5:1)
-- If contrast insufficient: Use darker Lion Gold variant (#D88A40) or add text shadow
+- White text on Fire Gold (#F4A460): Requires verification (target ≥4.5:1)
+- If contrast insufficient: Use darker Fire Gold variant (#D88A40) or add text shadow
 - Smiley emojis: Visual + semantic (% also shown numerically: "128/160g")
 - Progress bars: Visual only (not relied upon for critical information)
 
@@ -3955,8 +3955,8 @@ Button("") {
 .accessibilityLabel("Log today's meal")
 .accessibilityHint("Opens meal entry form")
 
-Image("lion-icon")
-    .accessibilityLabel("Lion coach mascot")
+Image("fire-icon")
+    .accessibilityLabel("Fire coach mascot")
     .accessibilityHidden(true) // If decorative only
 ```
 

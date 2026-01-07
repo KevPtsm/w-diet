@@ -120,10 +120,10 @@ This brainstorming session focuses on software and product development for a uni
 
 **Core Emotional Truth:** "Guidance without shame. Not being judged by another person."
 
-**The Lion Character:**
+**The Fire Character:**
 - Gender-adaptive (male/female based on user)
 - Empowering coach, never judge
-- "Your journey is yours. The lion guards it." (motto)
+- "Your journey is yours. The fire guards it." (motto)
 - In-app: Supportive and empowering
 - Notifications: Aggressive accountability (direct, not passive-aggressive) + Big celebrations
 
@@ -140,12 +140,12 @@ This brainstorming session focuses on software and product development for a uni
 
 **Evening Completion Feeling:**
 - "Not hungry, not sleepy, just GOOD" (Kevin's lived experience)
-- Lion acknowledges this state: "Fed, fueled, finished. This is discipline."
+- Fire acknowledges this state: "Fed, fueled, finished. This is discipline."
 
 **Localization - Native Emotional Tone:**
 - Notification ID system (not 1:1 translation)
 - German should sound natively German, not translated English
-- Directness works well in German (matches lion personality)
+- Directness works well in German (matches fire personality)
 
 **Habit Formation - Hook Model:**
 - **Triggers:** Morning motivation, eating window alerts, streak protection, phase transitions
@@ -165,11 +165,11 @@ This brainstorming session focuses on software and product development for a uni
 **Unique Benefits vs Competitors:**
 1. **MATADOR Cycling** (automated 2-week deficit/maintenance)
 2. **Mental Focus Mode** (cognitive performance meals for students/professionals)
-3. **Active Daily Guidance** (lion coaches through the day)
+3. **Active Daily Guidance** (fire coaches through the day)
 4. **Goal-Based Food Selection** (not just macro-fitting, optimized for weight loss/gut health/brain performance)
 5. **Meal Timing Optimization** (pre-workout, post-workout, training session integration)
 6. **Education On-Demand** (tooltips, "Why Like This?" section, no forced learning)
-7. **Privacy-First Design** (just you + lion, optional social features)
+7. **Privacy-First Design** (just you + fire, optional social features)
 
 **Kevin's Unfair Advantage:**
 - Lost 60kg using this exact methodology (lived credibility)
@@ -214,7 +214,7 @@ This brainstorming session focuses on software and product development for a uni
 
 **4. Week 1 Dropout**
 - Risk: 80% of diet apps lose users in first week
-- Mitigation: Start with maintenance calories (Week 1), extra gentle lion messaging, 7-day average validation
+- Mitigation: Start with maintenance calories (Week 1), extra gentle fire messaging, 7-day average validation
 
 **5. GDPR Compliance**
 - Risk: Collecting sensitive health data (weight, photos, meals) in Germany/EU
@@ -228,7 +228,7 @@ This brainstorming session focuses on software and product development for a uni
 ### Technique 2: Six Thinking Hats - Green Hat (Creativity)
 
 **80/20 Strategy - Students + Young Professionals:**
-- **80% effort:** Student acquisition (guerrilla campus, content, Lion's Den)
+- **80% effort:** Student acquisition (guerrilla campus, content, Fire's Den)
 - **20% effort:** Professional preparation (mental focus mode, LinkedIn, B2B research)
 
 **Kevin's Dual Identity Advantage:**
@@ -255,12 +255,12 @@ This brainstorming session focuses on software and product development for a uni
    - Sticker campaign (mirrors, water fountains, elevators)
 
 3. **Content Empire (Multi-Channel Synergy):**
-   - **TikTok/Reels:** "60 Seconds of Truth" series (60 videos, one per kg lost), Lion's Wisdom, Student hacks, Behind-the-app dev vlogs
+   - **TikTok/Reels:** "60 Seconds of Truth" series (60 videos, one per kg lost), Fire's Wisdom, Student hacks, Behind-the-app dev vlogs
    - **YouTube Longform:** "How I Lost 60kg" pillar video, MATADOR explained, App dev journey, User transformations, Meal prep tutorials
    - **Cross-channel:** TikTok → YouTube (full story), YouTube → App (download links), App → Content (education links to videos)
    - **Flyers → Landing page** with embedded video (seamless funnel)
 
-4. **Lion's Den Beta Program:**
+4. **Fire's Den Beta Program:**
    - 100 students from different universities
    - Get: Lifetime Pro, founder access, shape features, exclusive badge, early access
    - Give: Feedback, testimonials, word-of-mouth, usage data
@@ -289,11 +289,11 @@ This brainstorming session focuses on software and product development for a uni
 **Creative Features (Wild Ideas):**
 - Meal Memory (photo recognition AI)
 - Energy Forecast (tomorrow's prediction based on today's food/sleep)
-- Lion's Wisdom (daily micro-lessons via notifications)
+- Fire's Wisdom (daily micro-lessons via notifications)
 - Cycle Buddy Matching (anonymous pairs, 4-week commitment)
 - Reverse Engineer Restaurant Meals (photo of menu → macro estimates)
 - Progress Playlist (Spotify integration, milestone rewards)
-- "What Would Lion Eat?" (real-time decision helper at grocery store)
+- "What Would Fire Eat?" (real-time decision helper at grocery store)
 
 **Creative Monetization:**
 - Pay-what-you-want launch pricing (first 1000 users set own price €0-10)
@@ -303,8 +303,8 @@ This brainstorming session focuses on software and product development for a uni
 - Unlimited referrals (both get Premium free when friend completes first cycle)
 
 **Momentum Strategy:**
-- Week 1-2: Lübeck saturation, 10 TikToks, 1 YouTube, Lion's Den recruitment
-- Week 3-4: Hamburg expansion, Reddit AMA, 50 Lion's Den members
+- Week 1-2: Lübeck saturation, 10 TikToks, 1 YouTube, Fire's Den recruitment
+- Week 3-4: Hamburg expansion, Reddit AMA, 50 Fire's Den members
 - Month 2: Multi-city presence, daily content, PwC colleague testing
 - Month 3: 1000 downloads goal, corporate wellness pilot pitch
 - Guerrilla success → Legitimacy → Official university/corporate partnerships
@@ -390,7 +390,7 @@ Supabase (cloud) ← Background sync when online
 3. **Battery efficiency** - Fewer network calls
 4. **User trust** - Data feels local and private
 5. **Industry standard** - WhatsApp, Spotify, Notion use same pattern
-6. **Scales well** - SQLite handles millions of rows efficiently
+6. **Scales well** - SQLite handles milfires of rows efficiently
 
 ---
 
@@ -441,7 +441,7 @@ Supabase (cloud) ← Background sync when online
    - All logic runs locally (no server needed)
    - Week 1 special: Start at MAINTENANCE calories (reduce stress, build habit)
 
-6. **Lion Character**
+6. **Fire Character**
    - Gender-adaptive static image (male/female based on user input)
    - Basic roar sound file + haptic vibration
    - Supportive text messaging in-app
@@ -478,7 +478,7 @@ Supabase (cloud) ← Background sync when online
   - Competitive analysis (vs MyFitnessPal, Noom, LoseIt)
   - Business model (3-tier freemium + B2B corporate wellness)
   - Financial projections (user acquisition, conversion rates, MRR growth)
-  - Marketing strategy (guerrilla campus + content + Lion's Den)
+  - Marketing strategy (guerrilla campus + content + Fire's Den)
   - Exit strategy (potential acquirers, valuation drivers)
   - Founder background (60kg transformation, PwC/BCG experience)
 
@@ -492,7 +492,7 @@ Supabase (cloud) ← Background sync when online
 
 ### **PHASE 2: Soft Launch (Weeks 11-18, Months 3-4.5)**
 
-**Objective:** Lion's Den beta + Initial student traction + Premium tier validation
+**Objective:** Fire's Den beta + Initial student traction + Premium tier validation
 
 **New Features to Add:**
 
@@ -516,14 +516,14 @@ Supabase (cloud) ← Background sync when online
    - Milestone badges (7-day streak, 30-day streak, first cycle complete)
    - Badge gallery in profile
 
-4. **Lion Animations (If Performance Allows)**
+4. **Fire Animations (If Performance Allows)**
    - Lightweight roar animation (2-second clip)
    - Static → Roaring → Static (60fps, GPU-accelerated)
    - Skip if device is slow (graceful degradation)
 
 5. **Week 1 Special Messaging**
    - Maintenance calories for first 7 days (coded into onboarding logic)
-   - Extra gentle lion dialogue ("Day 1. Just data, no judgment.")
+   - Extra gentle fire dialogue ("Day 1. Just data, no judgment.")
    - First 7-day average = Big celebration moment (special notification)
 
 6. **Meal History View**
@@ -538,8 +538,8 @@ Supabase (cloud) ← Background sync when online
 
 **Marketing & Launch Activities:**
 
-1. **Lion's Den Recruitment**
-   - Announce on TikTok/YouTube: "Looking for 100 warriors to join Lion's Den"
+1. **Fire's Den Recruitment**
+   - Announce on TikTok/YouTube: "Looking for 100 warriors to join Fire's Den"
    - Application: Google Form ("Why do you want to join? What's your weight loss goal?")
    - Selection criteria: Diverse universities, committed individuals, engaged personalities
    - Onboard via Discord/Telegram group
@@ -549,7 +549,7 @@ Supabase (cloud) ← Background sync when online
    - Design flyer (3 versions, A/B test):
      ```
      Version A: Before/after photo + "I lost 60kg. You can too."
-     Version B: "The app with a roaring lion 🦁"
+     Version B: "The app with a roaring fire 🔥"
      Version C: "MATADOR cycling: Lose weight, keep metabolism"
      ```
    - Print 2000 flyers (€100-150)
@@ -581,7 +581,7 @@ Supabase (cloud) ← Background sync when online
        - Video 15: "The MATADOR study that changed everything."
        - Video 30: "Halfway there. What discipline really means."
        - Video 60: "How I built w-diet to help you."
-     - Lion's Wisdom (30-sec educational clips: "Why intermittent fasting works")
+     - Fire's Wisdom (30-sec educational clips: "Why intermittent fasting works")
      - Student hacks ("How to eat healthy on €5/day")
    - **YouTube:** Weekly longform
      - Pillar video (20-30 min): "How I Lost 60kg While Studying and Working at PwC"
@@ -599,8 +599,8 @@ Supabase (cloud) ← Background sync when online
    - Document: "Day in consulting life with w-diet" content (LinkedIn/TikTok)
 
 **Success Metrics:**
-- 🎯 100 Lion's Den members recruited and onboarded
-- 🎯 500 total downloads (Lion's Den 100 + Guerrilla 250 + Content 150)
+- 🎯 100 Fire's Den members recruited and onboarded
+- 🎯 500 total downloads (Fire's Den 100 + Guerrilla 250 + Content 150)
 - 🎯 200 active weekly users (40% activation rate)
 - 🎯 50 Premium conversions (test €5-7 pricing)
 - 🎯 €250-350 MRR (Monthly Recurring Revenue)
@@ -645,7 +645,7 @@ Supabase (cloud) ← Background sync when online
 
 4. **Advanced Roar Celebrations**
    - Milestone-specific roars (7-day different from 30-day different from cycle complete)
-   - Full-screen lion animation on major milestones (Pride Rock moment)
+   - Full-screen fire animation on major milestones (Pride Rock moment)
    - Confetti effects (can be disabled in settings)
    - Shareable milestone cards (screenshot-worthy for social media)
 
@@ -669,17 +669,17 @@ Supabase (cloud) ← Background sync when online
 
 3. **Content Ramp-Up**
    - **TikTok:** Daily posts (7/week)
-     - User transformation highlights (Lion's Den members)
+     - User transformation highlights (Fire's Den members)
      - Behind-the-scenes (building features)
      - Controversial takes ("Why calorie counting apps are broken")
    - **YouTube:** 2 videos/week
      - User interviews ("Meet Lisa: Lost 12kg in 3 months with w-diet")
      - Meal prep tutorials ("Student budget gut-health meals")
-     - Technical deep-dives ("How the lion roar works")
+     - Technical deep-dives ("How the fire roar works")
    - **Reddit AMA:** "I lost 60kg as a student, built an app, now 1000 people use it. AMA"
      - Post in r/loseit, r/fitness, r/de
      - Transparent about app, focus on story
-     - Link to Lion's Den (still accepting members)
+     - Link to Fire's Den (still accepting members)
 
 4. **PwC/BCG Professional Push (20% Effort)**
    - **If BCG Platinion happens:**
@@ -781,13 +781,13 @@ Supabase (cloud) ← Background sync when online
 
 4. **Product Hunt Launch**
    - Prepare assets:
-     - Hero image (lion + dashboard screenshot)
+     - Hero image (fire + dashboard screenshot)
      - Demo video (60 seconds: Problem → Solution → Roar)
-     - Tagline: "The nutrition app with a roaring lion 🦁"
+     - Tagline: "The nutrition app with a roaring fire 🔥"
      - Description: MATADOR cycling, mental focus, gut health, built by student who lost 60kg
    - Launch strategy:
      - Post at 12:01 AM PST (midnight launch)
-     - Rally Lion's Den to upvote + comment
+     - Rally Fire's Den to upvote + comment
      - Respond to every comment within 1 hour
      - Offer: "Product Hunt exclusive - 50% off Pro for life"
    - Goal: Top 5 product of the day (500+ upvotes)
@@ -819,7 +819,7 @@ Supabase (cloud) ← Background sync when online
 | Phase | Timeline | Focus | Key Metrics |
 |-------|----------|-------|-------------|
 | **POC** | Weeks 1-10 | University course + Core features | POC working, course passed |
-| **Soft Launch** | Weeks 11-18 | Lion's Den + Lübeck saturation | 500 downloads, 50 Premium, €350 MRR |
+| **Soft Launch** | Weeks 11-18 | Fire's Den + Lübeck saturation | 500 downloads, 50 Premium, €350 MRR |
 | **Expansion** | Weeks 19-30 | Multi-city + Professional testing | 2k downloads, 150 paid, €1.5k MRR |
 | **Legitimization** | Weeks 31-52 | Partnerships + Corporate + Media | 5k downloads, 400 paid, €3.5k MRR |
 

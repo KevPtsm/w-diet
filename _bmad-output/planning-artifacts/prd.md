@@ -21,7 +21,7 @@ status: 'complete'
 
 w-diet is an iOS-native nutrition app that combines automated metabolic cycling with empowering coaching to help German students and young professionals lose weight without the shame, complexity, or cognitive load of traditional diet apps. Built on the research-backed MATADOR method, w-diet automates the decision-making around diet phases while providing transparent explanations of the science behind each recommendation.
 
-The app centers on a simple promise: "Just follow the app and not think further." Users receive guidance through an empowering lion character that coaches rather than judges, with the system automatically managing 2-week diet/maintenance cycles, calorie targets, and eating windows. Unlike passive tracking apps, w-diet actively guides users through their weight loss journey while explaining the "why" behind every decision through integrated research references and educational content.
+The app centers on a simple promise: "Just follow the app and not think further." Users receive guidance through an empowering fire character that coaches rather than judges, with the system automatically managing 2-week diet/maintenance cycles, calorie targets, and eating windows. Unlike passive tracking apps, w-diet actively guides users through their weight loss journey while explaining the "why" behind every decision through integrated research references and educational content.
 
 The product addresses a critical gap in the current market: existing diet apps either oversimplify (becoming mere calorie counters) or overcomplicate (overwhelming users with decisions). w-diet solves this by handling complexity through automation while satisfying intellectual curiosity through transparent education. The result is "guidance without shame" - users understand the science but don't have to manage the complexity.
 
@@ -33,7 +33,7 @@ What separates w-diet from "just another calorie tracking app" is the combinatio
 
 **Guidance means:**
 - Automated MATADOR cycling (app switches diet/maintenance phases every 2 weeks without user intervention)
-- Proactive coaching through the lion character (tells users what to do, when, and why)
+- Proactive coaching through the fire character (tells users what to do, when, and why)
 - Decision automation (calorie targets, phase transitions, meal timing all handled by the system)
 - "Just follow" simplicity (users execute, app orchestrates)
 
@@ -55,7 +55,7 @@ What separates w-diet from "just another calorie tracking app" is the combinatio
 1. **MATADOR Cycling Automation** - Only app that implements research-backed 2-week deficit/maintenance rotation fully automated
 2. **Week 1 Strategy** - Starts at maintenance calories to build habit before stress, addressing 80% dropout rate
 3. **Guidance + Explanation Combo** - Active coaching PLUS transparent research references (not just passive tracking)
-4. **Lion Coach Character** - Empowering coach providing "guidance without shame" (forgiving thresholds, supportive messaging)
+4. **Fire Coach Character** - Empowering coach providing "guidance without shame" (forgiving thresholds, supportive messaging)
 5. **Forgiving Design** - 70% macro threshold = success (green smiley), compassion built into core architecture
 6. **Roar Reward System** - Haptic + audio celebrations for milestones, emotional validation without human judgment
 7. **Offline-First Performance** - Native Swift architecture delivers <50ms dashboard loads, works without internet
@@ -77,13 +77,13 @@ What separates w-diet from "just another calorie tracking app" is the combinatio
 - Simple color system aligned with emotional feedback (green = success, yellow = caution, red = concern)
 - Friendly and approachable while maintaining professional credibility
 
-**Lion Character Design:**
-- Minimalist geometric lion face (app icon and in-app personality)
+**Fire Character Design:**
+- Minimalist geometric fire face (app icon and in-app personality)
 - Professional-friendly static illustrations with personality variations:
-  - 🦁 Default: Confident, calm presence
-  - 🦁🤓 Glasses: Educational content/"Why Like This?" explanations
-  - 🦁💪 Strong: Milestone celebrations, cycle completions
-  - 🦁😌 Gentle: Week 1 supportive messaging
+  - 🔥 Default: Confident, calm presence
+  - 🔥🤓 Glasses: Educational content/"Why Like This?" explanations
+  - 🔥💪 Strong: Milestone celebrations, cycle completions
+  - 🔥😌 Gentle: Week 1 supportive messaging
 - No animations in POC (performance-focused, add polish post-validation)
 - Gender-neutral for POC (adaptive versions deferred to Phase 2)
 - Subtle enough for professional settings while maintaining encouraging personality
@@ -139,7 +139,7 @@ What separates w-diet from "just another calorie tracking app" is the combinatio
 
 ### POC Scope (Weeks 1-10)
 
-**Goal:** Prove core hypothesis - MATADOR automation + Lion coaching + Educational transparency creates sustainable behavior change.
+**Goal:** Prove core hypothesis - MATADOR automation + Fire coaching + Educational transparency creates sustainable behavior change.
 
 **Core Features (Must Have):**
 
@@ -183,13 +183,13 @@ What separates w-diet from "just another calorie tracking app" is the combinatio
 - All logic runs locally (no server dependency)
 - **Week 1 special:** Start at MAINTENANCE calories (build habit without stress)
 
-*Lion Character (Minimalist):*
-- Static minimalist geometric lion face (Duolingo-inspired)
+*Fire Character (Minimalist):*
+- Static minimalist geometric fire face (Duolingo-inspired)
 - 4 variations:
-  - 🦁 Default (confident, calm)
-  - 🦁🤓 Glasses (educational content)
-  - 🦁💪 Strong (milestone celebrations)
-  - 🦁😌 Gentle (Week 1 supportive messaging)
+  - 🔥 Default (confident, calm)
+  - 🔥🤓 Glasses (educational content)
+  - 🔥💪 Strong (milestone celebrations)
+  - 🔥😌 Gentle (Week 1 supportive messaging)
 - Gender-neutral for POC (single design)
 - No animations (performance priority)
 - Roar system: Haptic + sound only (no visual animation)
@@ -229,15 +229,15 @@ What separates w-diet from "just another calorie tracking app" is the combinatio
 - ❌ Menu scanning with AI ratings (Phase 2 Premium feature)
 - ❌ AI meal recommendations (Phase 3 Premium feature)
 - ❌ Food database search (Phase 3 Premium feature)
-- ❌ Gender-adaptive lion (single design for POC)
-- ❌ Lion roar animations (haptic + sound only, no visual animation)
+- ❌ Gender-adaptive fire (single design for POC)
+- ❌ Fire roar animations (haptic + sound only, no visual animation)
 - ❌ Mental Focus Mode (Phase 3 feature)
 - ❌ Advanced analytics (30/90-day trends, Pro feature)
 - ❌ Photo progress tracking (Pro feature)
 - ❌ Social features/"Pride" system (post-validation)
 - ❌ Barcode scanning (future enhancement)
 
-**Rationale:** Focus POC on proving the **core differentiators** (MATADOR automation + Lion coaching + Education) work BEFORE adding scanning features. If the basics don't create behavior change, scanning won't save it. Validate the moat first, add accelerators later.
+**Rationale:** Focus POC on proving the **core differentiators** (MATADOR automation + Fire coaching + Education) work BEFORE adding scanning features. If the basics don't create behavior change, scanning won't save it. Validate the moat first, add accelerators later.
 
 ### POC Validation Strategy (Weeks 1-10)
 
@@ -299,7 +299,7 @@ Priority screens monitored for time-on-screen analysis:
 
 *Qualitative Validation:*
 - 10-15 user interviews at Day 14 and Day 28 (post-phase-switch feedback)
-- Questions focus on: **MATADOR automation trust**, education content value, lion character appeal, willingness-to-pay for future Premium features
+- Questions focus on: **MATADOR automation trust**, education content value, fire character appeal, willingness-to-pay for future Premium features
 - Test price sensitivity: "Would you pay €5/month? €7/month? €10/month for AI meal recommendations?" (inform Phase 3 pricing)
 - Document insights for UX refinement and business plan narrative
 
@@ -323,11 +323,11 @@ Priority screens monitored for time-on-screen analysis:
 **Deliverable for Business Plan:**
 
 The POC validation section of the business plan will include:
-1. **Hypothesis:** MATADOR automation + Lion coaching + Educational transparency creates sustainable behavior change without manual decision-making
+1. **Hypothesis:** MATADOR automation + Fire coaching + Educational transparency creates sustainable behavior change without manual decision-making
 2. **Measurement Framework:** 11 tracked events across onboarding, engagement, education, and phase switching
 3. **Early Results:** Week 1-10 actual cohort data (activation, Week 1 retention, cycle completion, education engagement)
 4. **Behavioral Insights:** How users respond to automated phase switches, education content consumption patterns, trust formation timeline
-5. **Qualitative Findings:** Student interview themes about automation trust, lion character appeal, education value, willingness-to-pay for future features
+5. **Qualitative Findings:** Student interview themes about automation trust, fire character appeal, education value, willingness-to-pay for future features
 6. **Pricing Validation:** Data to support €5-7/month Premium tier (Phase 2) with scanning features
 7. **Next Steps:** How Phase 2 adds Photo/Menu scanning to unlock monetization, Phase 3 adds AI recommendations
 
@@ -627,13 +627,13 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 - All logic runs locally (no server dependency)
 - **Week 1 special:** Start at MAINTENANCE calories (build habit without stress)
 
-*Lion Character (Minimalist):*
-- Static minimalist geometric lion face (Duolingo-inspired)
+*Fire Character (Minimalist):*
+- Static minimalist geometric fire face (Duolingo-inspired)
 - 4 variations:
-  - 🦁 Default (confident, calm)
-  - 🦁🤓 Glasses (educational content)
-  - 🦁💪 Strong (milestone celebrations)
-  - 🦁😌 Gentle (Week 1 supportive messaging)
+  - 🔥 Default (confident, calm)
+  - 🔥🤓 Glasses (educational content)
+  - 🔥💪 Strong (milestone celebrations)
+  - 🔥😌 Gentle (Week 1 supportive messaging)
 - Gender-neutral for POC (single design)
 - No animations (performance priority)
 - Roar system: Haptic + sound only (no visual animation)
@@ -669,8 +669,8 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 - Week 9 TestFlight beta testing (10 users, crash/battery validation)
 
 **Out of Scope for POC:**
-- ❌ Gender-adaptive lion (single design sufficient)
-- ❌ Lion roar animations (haptic + sound only)
+- ❌ Gender-adaptive fire (single design sufficient)
+- ❌ Fire roar animations (haptic + sound only)
 - ❌ Mental Focus Mode (Phase 3 feature)
 - ❌ AI meal recommendations (Phase 3 Premium feature)
 - ❌ Food database search (Phase 3 Premium feature)
@@ -704,13 +704,13 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
   - AI analyzes → Results: "Chicken breast (200g), Rice (150g), Broccoli (100g)"
   - Shows macros: 520 kcal, 45g protein, 55g carbs, 8g fat
   - User can edit before saving
-  - Lion roars: "🦁 Logged! 520 kcal added to your day"
+  - Fire roars: "🔥 Logged! 520 kcal added to your day"
 - **API Cost:** ~$0.0125/scan (1.25 cents), ~$0.625/user/month (50 scans)
 - **Features:**
   - Offline queue (save photo, analyze when online)
   - Confidence scoring ("85% sure, please verify")
   - Manual editing allowed
-  - Works with Lion coaching context
+  - Works with Fire coaching context
 - **Value prop:** "Log meals in 5 seconds with AI"
 
 **2. Menu Scanning (AI Menu Analysis + Ratings)**
@@ -718,7 +718,7 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 - **User flow:**
   - At restaurant → Tap "🍽️ Eating Out"
   - Point camera at menu → AI reads dishes
-  - Lion shows A/B/C/D/E ratings for each dish
+  - Fire shows A/B/C/D/E ratings for each dish
   - "🟢 Grilled Salmon (A) - 520 kcal, perfect for Diet Phase Day 5"
   - "🟡 Pasta (C) - 850 kcal, would use 80% of daily target"
   - Smart modifications: "Ask for no dressing", "Sub fries for salad"
@@ -752,11 +752,11 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 *Guerrilla Marketing Execution:*
 - Lübeck saturation (2,000 flyers, bathroom stalls, Mensa, gym, bike racks)
 - Campus events ("MATADOR Method Workshop" monthly, "Weigh-In Wednesdays" weekly)
-- Lion's Den beta recruitment (100 members, Lifetime Pro access)
+- Fire's Den beta recruitment (100 members, Lifetime Pro access)
 - Hamburg expansion initiation (identify 2 campus ambassadors)
 
 *Content Empire Launch:*
-- TikTok/Reels: 3-5 videos/week ("60 Seconds of Truth" series, Lion's Wisdom, student hacks, **scanning demos**)
+- TikTok/Reels: 3-5 videos/week ("60 Seconds of Truth" series, Fire's Wisdom, student hacks, **scanning demos**)
 - YouTube: Weekly longform (pillar video "How I Lost 60kg", MATADOR explained, app dev vlogs, **"Scan any menu" feature showcase**)
 - Reddit: Build credibility + **AMA about menu/photo scanning tech**
 
@@ -779,7 +779,7 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 - **€250-350 MRR** (50 Premium × €7)
 - **>60% Premium users use photo scan weekly** (validates utility)
 - **>40% Premium users use menu scan monthly** (validates restaurant use case)
-- 100 Lion's Den members recruited
+- 100 Fire's Den members recruited
 - 5,000 TikTok followers, 500 YouTube subscribers (content traction)
 
 ### Expansion Phase (Phase 3 - Weeks 19-30)
@@ -808,8 +808,8 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 - **Basic favorites** (10 foods)
 
 *Polish & Refinements:*
-- Lightweight lion animations (if performance allows, 2-second clips, GPU-accelerated)
-- Week 1 special messaging refinement (extra gentle lion dialogue)
+- Lightweight fire animations (if performance allows, 2-second clips, GPU-accelerated)
+- Week 1 special messaging refinement (extra gentle fire dialogue)
 - Milestone badges (7-day streak, 30-day streak, first cycle complete)
 - Badge gallery in profile
 
@@ -857,8 +857,8 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 - Anonymous option (join random pride)
 - Opt-in only
 
-**Gender-Adaptive Lion:**
-- Male/female lion variants based on user preference
+**Gender-Adaptive Fire:**
+- Male/female fire variants based on user preference
 - Culturally appropriate coaching tone variations
 
 **Apple Ecosystem Integration:**
@@ -899,13 +899,13 @@ User success in w-diet follows a causal chain where each stage unlocks the next:
 
 Lukas is a 22-year-old computer science student at Universität zu Lübeck. He's tried losing weight twice before - first with MyFitnessPal (abandoned after 2 weeks of confusing macro calculations and overwhelming features), then Yazio (which he actually liked... until they started showing ads after *every single meal log*). The ads broke his flow. Log breakfast, watch ad. Log lunch, watch ad. After three weeks of this, he uninstalled it in frustration. He wants something that *doesn't cost* but also doesn't interrupt him with ads every 30 seconds.
 
-One Tuesday morning, sitting in a Mensa bathroom stall between lectures, he spots a flyer: "Lost 60kg. You can too. No shame, just science." A QR code leads to w-diet. The landing page shows a roaring lion and promises "Just follow the app and not think further." Free tier listed: MATADOR cycling, calorie/macro tracking, streak tracking, manual meal entry. No "watch 3 ads to unlock" nonsense. Skeptical but intrigued, he downloads it during his next lecture break.
+One Tuesday morning, sitting in a Mensa bathroom stall between lectures, he spots a flyer: "Lost 60kg. You can too. No shame, just science." A QR code leads to w-diet. The landing page shows a roaring fire and promises "Just follow the app and not think further." Free tier listed: MATADOR cycling, calorie/macro tracking, streak tracking, manual meal entry. No "watch 3 ads to unlock" nonsense. Skeptical but intrigued, he downloads it during his next lecture break.
 
 Onboarding takes 3 minutes. Google Sign-In (he hates making new passwords). Goal: Weight Loss (Maintain/Bulk greyed out "Coming Soon" - fair enough). Calorie target: He enters his stats, app calculates 1900 kcal.
 
 **The app shows:** "Week 1: Maintenance Phase. Target: 2300 kcal today."
 
-Before he can react, a tooltip appears: **"🦁 Week 1 starts gentle. Why? [Tap to learn]"**
+Before he can react, a tooltip appears: **"🔥 Week 1 starts gentle. Why? [Tap to learn]"**
 
 He taps. Mini-explanation (30 seconds read):
 *"Most diet apps throw you into deficit on Day 1. You stress, you quit. We start Week 1 at maintenance. Build the habit first. Stress later. Trust the process."* [Start Day 1]
@@ -918,7 +918,7 @@ Day 14: The app switches to Diet Phase. "Target: 1900 kcal today." This time, Lu
 
 Day 19: Lukas has a late study session at a friend's dorm. They order pizza at 20:00 - two hours after his 18:00 eating window closes. He logs the meal anyway (650 kcal, pepperoni pizza). The app shows a gentle message: *"Noticed you ate at 20:00 (outside 12-18 window). Tomorrow's a new day. Back to 12-18?"* His streak isn't broken. No shame. He appreciates this.
 
-Day 28: First cycle complete. Triple roar vibration + badge: "First Cycle Warrior 🦁💪". Lukas looks in the mirror. His jeans fit better. The 7-day average is down 3.2kg. More importantly, he *trusts* the app. He's not thinking about macros or phases anymore - he just logs, weighs in, and follows.
+Day 28: First cycle complete. Triple roar vibration + badge: "First Cycle Warrior 🔥💪". Lukas looks in the mirror. His jeans fit better. The 7-day average is down 3.2kg. More importantly, he *trusts* the app. He's not thinking about macros or phases anymore - he just logs, weighs in, and follows.
 
 **POC Reality (Week 6):** Lukas is stressed about his algorithms exam. He sees a banner in the app: *"Coming Soon: AI meal recommendations optimized for mental focus during exams. Would you use this for €7/month?"* He taps "Yes, I'd pay for this." (Validation data collected)
 
@@ -980,7 +980,7 @@ Day 42 (6 weeks): Down 4.8kg. More importantly, Sarah has *energy* again. She's 
 
 Week 24 (Phase 3): Premium tier launches. Sarah upgrades immediately (€7/month). Mental Focus Mode suggests omega-3 meals, complex carbs, anti-inflammatory foods before big presentations. She orders similar options from client cafeterias. Feels sharper. Tells three more colleagues.
 
-Month 6 (Phase 4): Sarah's firm announces employee wellness partnership - w-diet logo. Company pays €5/employee/month for Pro access. She gets unlimited features free. She messages Kevin: "Your university project just became our company wellness program. That's insane. Congrats 🦁💪"
+Month 6 (Phase 4): Sarah's firm announces employee wellness partnership - w-diet logo. Company pays €5/employee/month for Pro access. She gets unlimited features free. She messages Kevin: "Your university project just became our company wellness program. That's insane. Congrats 🔥💪"
 
 Professional network effect compounds. Ten downloads from her Hamburg office in one month.
 
@@ -1006,7 +1006,7 @@ Both journeys will be tested simultaneously with separate cohorts to determine o
 **Student Cohort (Target: 20 users)**
 
 *Acquisition channels:*
-- **Direct recruitment:** 10-12 users (friends, roommates, Lion's Den early signups via Google Form)
+- **Direct recruitment:** 10-12 users (friends, roommates, Fire's Den early signups via Google Form)
 - **Guerrilla marketing:** 8-10 users from 1,000+ flyers
   - Realistic conversion: 1,000 flyers → 50 QR scans (5% scan rate) → 25 downloads (50% scan-to-install) → 8-10 active users (80% activation)
   - High-traffic placements: Mensa bathrooms, gym locker rooms, library study desks
@@ -1064,7 +1064,7 @@ Both journeys will be tested simultaneously with separate cohorts to determine o
 *Onboarding & Authentication:*
 - Google/Apple Sign-In (frictionless, no password creation)
 - <3-minute onboarding flow (5 steps: auth, goal, calorie, eating window, dashboard)
-- **Micro-intervention tooltip:** "🦁 Week 1 starts gentle. Why? [Tap to learn]" appears BEFORE user can close app in confusion
+- **Micro-intervention tooltip:** "🔥 Week 1 starts gentle. Why? [Tap to learn]" appears BEFORE user can close app in confusion
 - Mini-explanation (30-second read) addresses "Why maintenance calories?" question immediately
 - Instant dashboard load (<50ms, no loading spinners)
 
@@ -1088,7 +1088,7 @@ Both journeys will be tested simultaneously with separate cohorts to determine o
 *Educational Transparency:*
 - "Why Like This?" section (MATADOR study explanation, research links)
 - In-context tooltips (onboarding, phase switches, first 7-day average)
-- Lion with glasses 🦁🤓 character for education moments
+- Fire with glasses 🔥🤓 character for education moments
 - Just-in-time learning (explain concepts when user experiences them)
 
 *Trust Formation:*
@@ -1214,7 +1214,7 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
 **Behavioral Validation:**
 - Meal logging consistency: >70% of engaged users log 5+ meals/week (validates core loop stickiness)
 - Weight logging habit: >60% weigh in 4+ times/week (validates daily habit formation)
-- Qualitative feedback: "Does the lion character help or annoy?" / "Is the education valuable or overwhelming?"
+- Qualitative feedback: "Does the fire character help or annoy?" / "Is the education valuable or overwhelming?"
 
 **Future Innovation Validation (Phase 2+):**
 - Photo/Menu scanning added in Phase 2 once fundamentals validated
@@ -1229,18 +1229,18 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
 
 **Innovation Risk 2: Education Content Too Dense**
 - **Risk:** Students skip "Why Like This?" section, miss differentiator value
-- **Mitigation:** Just-in-time tooltips (contextual nudges when phase switches), lion with glasses character signals "learning moment"
+- **Mitigation:** Just-in-time tooltips (contextual nudges when phase switches), fire with glasses character signals "learning moment"
 - **Validation:** Track `why_like_this_opened` event, target >40% engagement in POC
 
 **Innovation Risk 3: Week 1 Maintenance Confuses Users**
 - **Risk:** Users expect immediate deficit, see "2300 kcal" and think app calculated wrong
-- **Mitigation:** Onboarding tooltip BEFORE entering dashboard: "🦁 Week 1 starts gentle. Why? [Tap to learn]"
+- **Mitigation:** Onboarding tooltip BEFORE entering dashboard: "🔥 Week 1 starts gentle. Why? [Tap to learn]"
 - **Validation:** A/B test in Week 9 TestFlight (10 users with tooltip, 10 without), measure Day 2 return rate
 
-**Innovation Risk 4: Lion Character Feels Childish**
+**Innovation Risk 4: Fire Character Feels Childish**
 - **Risk:** University students/professionals reject app as "too gamified" or "Duolingo ripoff"
 - **Mitigation:** Minimalist design (not cartoon), professional color palette, subtle coaching (not overbearing)
-- **Validation:** User interviews ask "Does the lion enhance or detract?" (target: >60% say "enhances")
+- **Validation:** User interviews ask "Does the fire enhance or detract?" (target: >60% say "enhances")
 
 **Innovation Risk 5: Manual Logging Too Tedious**
 - **Risk:** Without scanning features in POC, students abandon due to logging friction
@@ -1340,8 +1340,8 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
 
 **Future Notification Types:**
 - **Meal reminders:** "Haven't logged lunch yet. Quick scan?" (12:30, 18:30)
-- **Phase switches:** "Day 14 complete! Switching to Maintenance Phase 🦁💪" (midnight, cycle day 14/28)
-- **Streak milestones:** "7-day streak! Keep roaring 🦁" (achievement unlocked)
+- **Phase switches:** "Day 14 complete! Switching to Maintenance Phase 🔥💪" (midnight, cycle day 14/28)
+- **Streak milestones:** "7-day streak! Keep roaring 🔥" (achievement unlocked)
 - **Weight reminders:** "Morning weigh-in?" (07:00, configurable)
 
 **Rationale for deferral:** POC users are highly engaged beta testers, don't need nudges. Phase 2+ scales to less motivated users who benefit from reminders.
@@ -1405,7 +1405,7 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
 2. **MATADOR Cycling Automation** - 14-day phase switches, Week 1 maintenance strategy, zero user decisions
 3. **Weight Tracking** - Daily logging with 7-day rolling average, trend indicators
 4. **Dashboard** - Cycle timer, calorie progress, macro smileys, roar feedback
-5. **Lion Coach Character** - 4 variations (default, glasses, strong, gentle), haptic + sound roars
+5. **Fire Coach Character** - 4 variations (default, glasses, strong, gentle), haptic + sound roars
 6. **Authentication & Onboarding** - 5-step flow with micro-intervention tooltip
 7. **"Why Like This?" Education** - MATADOR study explanation, research links
 8. **Offline-First Implementation** - SQLite + Supabase sync, 100% core functionality works offline
@@ -1420,8 +1420,8 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
 - ❌ Advanced analytics (Phase 3 Pro) - 30/90-day trends
 - ❌ Photo progress tracking (Phase 4 Pro)
 - ❌ Social features / "Pride" system (Phase 4)
-- ❌ Gender-adaptive lion (Phase 4)
-- ❌ Lion roar animations (Phase 3 polish)
+- ❌ Gender-adaptive fire (Phase 4)
+- ❌ Fire roar animations (Phase 3 polish)
 - ❌ Push notifications (Phase 2+)
 - ❌ Apple Watch integration (Phase 4)
 
@@ -1477,7 +1477,7 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
   3. Calorie target (manual entry OR auto-calculated from user stats)
   4. Eating window setup (6-hour constraint, user-selected start time)
   5. Dashboard reveal with guided tour
-- System SHALL display micro-intervention tooltip at Step 4: "🦁 Week 1 starts gentle. Why? [Tap to learn]"
+- System SHALL display micro-intervention tooltip at Step 4: "🔥 Week 1 starts gentle. Why? [Tap to learn]"
 - System SHALL complete onboarding in <3 minutes average duration
 
 **FR-1.3: User Profile Management**
@@ -1559,14 +1559,14 @@ Both cohorts measured independently to determine optimal Phase 2 focus based on 
 - System SHALL render all UI at 60fps (no jank)
 - System SHALL display zero loading spinners on critical paths
 
-**FR-6.3: Lion Character Integration**
-- System SHALL display minimalist geometric lion face (4 variations):
-  - 🦁 Default (confident, calm)
-  - 🦁🤓 Glasses (educational content)
-  - 🦁💪 Strong (milestone celebrations)
-  - 🦁😌 Gentle (Week 1 supportive messaging)
+**FR-6.3: Fire Character Integration**
+- System SHALL display minimalist geometric fire face (4 variations):
+  - 🔥 Default (confident, calm)
+  - 🔥🤓 Glasses (educational content)
+  - 🔥💪 Strong (milestone celebrations)
+  - 🔥😌 Gentle (Week 1 supportive messaging)
 - POC: System SHALL use static images (no animations)
-- System SHALL select lion variant contextually (e.g., glasses for "Why Like This?")
+- System SHALL select fire variant contextually (e.g., glasses for "Why Like This?")
 
 ### FR-6: Education & Transparency
 

@@ -38,12 +38,14 @@ protocol TimeProvider {
 // MARK: - System Implementation (Production)
 
 /// Production implementation using real system time
-final class SystemTimeProvider: TimeProvider {
-    var now: Date {
+final class SystemTimeProvider: TimeProvider, @unchecked Sendable {
+    nonisolated init() {}
+
+    nonisolated var now: Date {
         Date()
     }
 
-    var calendar: Calendar {
+    nonisolated var calendar: Calendar {
         .current
     }
 }

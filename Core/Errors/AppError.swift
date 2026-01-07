@@ -24,6 +24,10 @@ import Sentry
 /// }
 /// ```
 enum AppError: Error, LocalizedError {
+    // MARK: - Authentication Errors
+
+    case auth(AuthError)
+
     // MARK: - Database Errors
 
     case databaseInitializationFailed(underlying: Error)
@@ -60,6 +64,10 @@ enum AppError: Error, LocalizedError {
 
     var userMessage: String {
         switch self {
+        // Authentication
+        case .auth(let authError):
+            return authError.userMessage
+
         // Database
         case .databaseInitializationFailed:
             return "Die App-Datenbank konnte nicht initialisiert werden. Bitte starte die App neu."
@@ -117,6 +125,9 @@ enum AppError: Error, LocalizedError {
 
     var errorDescription: String? {
         switch self {
+        case .auth(let authError):
+            return "Authentication error: \(authError.eventName) - \(authError.metadata)"
+
         case .databaseInitializationFailed(let error):
             return "Database initialization failed: \(error.localizedDescription)"
         case .databaseMigrationFailed(let version, let error):
@@ -163,6 +174,9 @@ enum AppError: Error, LocalizedError {
     /// Converts error to analytics event name (snake_case past tense)
     var analyticsEventName: String {
         switch self {
+        case .auth(let authError):
+            return authError.eventName
+
         case .databaseInitializationFailed:
             return "database_initialization_failed"
         case .databaseMigrationFailed:

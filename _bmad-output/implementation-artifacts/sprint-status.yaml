@@ -1,0 +1,85 @@
+# generated: 2026-01-06
+# project: w-diet
+# project_key: w-diet
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-01-06
+project: w-diet
+project_key: w-diet
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  # Epic 1: Get Started - Onboarding & First Login
+  epic-1: in-progress
+  1-1-user-authentication: done
+  1-2-5-step-onboarding-flow: in-progress
+  1-3-dashboard-shell-with-empty-state: backlog
+  1-4-cloud-sync-foundation: backlog
+  epic-1-retrospective: optional
+
+  # Epic 2: Understand My Journey - MATADOR Cycle Intelligence
+  epic-2: backlog
+  2-1-matador-cycle-engine: backlog
+  2-2-cycle-timer-dashboard-component: backlog
+  2-3-why-like-this-education-content: backlog
+  2-4-in-context-tooltips: backlog
+  2-5-fire-character-system: backlog
+  epic-2-retrospective: optional
+
+  # Epic 3: Track My Progress - Daily Logging
+  epic-3: backlog
+  3-1-manual-meal-entry: backlog
+  3-2-food-database-search: backlog
+  3-3-nutrition-label-ocr-scanner: backlog
+  3-4-weight-logging-with-ios-picker-wheel: backlog
+  3-5-real-time-dashboard-updates: backlog
+  3-6-sqlite-persistence-sync-queue: backlog
+  epic-3-retrospective: optional
+
+  # Epic 4: Celebrate Wins - Insights & Motivation
+  epic-4: backlog
+  4-1-7-day-rolling-average-calculation: backlog
+  4-2-trend-indicators: backlog
+  4-3-haptic-roar-feedback-system: backlog
+  4-4-streak-tracking: backlog
+  4-5-milestone-celebrations-ui: backlog
+  epic-4-retrospective: optional
+
+  # Epic 5: Validate & Learn - Analytics Infrastructure
+  epic-5: backlog
+  5-1-analytics-event-schema: backlog
+  5-2-event-tracking-integration: backlog
+  5-3-sqlite-supabase-analytics-pipeline: backlog
+  5-4-poc-metrics-dashboard: backlog
+  epic-5-retrospective: optional

@@ -22,7 +22,7 @@ _This document builds collaboratively through step-by-step discovery. Sections a
 
 **Functional Requirements:**
 
-w-diet is an iOS-native nutrition app implementing automated MATADOR metabolic cycling with empowering lion coach guidance. The core functional requirements center on three pillars:
+w-diet is an iOS-native nutrition app implementing automated MATADOR metabolic cycling with empowering fire coach guidance. The core functional requirements center on three pillars:
 
 1. **MATADOR Cycling Automation**
    - 14-day automated phase switching (diet ↔ maintenance)
@@ -46,8 +46,8 @@ w-diet is an iOS-native nutrition app implementing automated MATADOR metabolic c
    - Research citations (MATADOR study, intermittent fasting papers)
    - Info icons (ℹ️) on all calculated values for transparency
 
-4. **Lion Coach Character**
-   - 4 static minimalist variations (default 🦁, glasses 🦁🤓, strong 🦁💪, gentle 🦁😌)
+4. **Fire Coach Character**
+   - 4 static minimalist variations (default 🔥, glasses 🔥🤓, strong 🔥💪, gentle 🔥😌)
    - Supportive messaging (coach not judge, forgiving thresholds)
    - Roar celebration system (haptic + audio feedback)
 
@@ -107,7 +107,7 @@ Critical NFRs that will drive architectural decisions:
   - Data Sync Layer (offline queue → Supabase)
   - Analytics Event Tracking
   - Education Content Delivery
-  - Lion Character System
+  - Fire Character System
   - Settings & Profile
 
 **Component Implementation Phasing (10-Week Timeline):**
@@ -407,7 +407,7 @@ w-diet/
 ├── Shared/
 │   ├── UI/
 │   │   ├── Components/
-│   │   │   ├── LionCharacter.swift
+│   │   │   ├── FireCharacter.swift
 │   │   │   ├── MacroSmiley.swift
 │   │   │   └── ProgressBar.swift
 │   │   └── Styles/
@@ -425,15 +425,15 @@ w-diet/
     ├── Assets.xcassets
     │   ├── AppIcon
     │   ├── Colors/
-    │   │   ├── LionGold
+    │   │   ├── FireGold
     │   │   ├── MacroGreen
     │   │   ├── MacroOrange
     │   │   └── MacroRed
-    │   └── LionCharacters/
-    │       ├── lion-default.svg
-    │       ├── lion-glasses.svg
-    │       ├── lion-strong.svg
-    │       └── lion-gentle.svg
+    │   └── FireCharacters/
+    │       ├── fire-default.svg
+    │       ├── fire-glasses.svg
+    │       ├── fire-strong.svg
+    │       └── fire-gentle.svg
     │
     └── Sounds/
         ├── roar-single.mp3
@@ -1223,16 +1223,16 @@ func logMealLogged(calories: Int, protein: Int?, source: String) async {
 Assets.xcassets/
 ├── AppIcon.appiconset/
 ├── Colors/
-│   ├── LionGold.colorset/
+│   ├── FireGold.colorset/
 │   ├── MacroGreen.colorset/
 │   ├── MacroOrange.colorset/
 │   ├── MacroRed.colorset/
 │   └── BackgroundGray.colorset/
-├── LionCharacters/
-│   ├── lion-default.imageset/  (PDF vector)
-│   ├── lion-glasses.imageset/  (PDF vector)
-│   ├── lion-strong.imageset/   (PDF vector)
-│   └── lion-gentle.imageset/   (PDF vector)
+├── FireCharacters/
+│   ├── fire-default.imageset/  (PDF vector)
+│   ├── fire-glasses.imageset/  (PDF vector)
+│   ├── fire-strong.imageset/   (PDF vector)
+│   └── fire-gentle.imageset/   (PDF vector)
 ```
 
 **Sounds (Resources/Sounds/):**
@@ -1247,11 +1247,11 @@ Resources/
 **SwiftUI Usage:**
 ```swift
 // Colors
-Color("LionGold")
+Color("FireGold")
 Color("MacroGreen")
 
 // Images
-Image("lion-default")
+Image("fire-default")
     .resizable()
     .scaledToFit()
 
@@ -1267,11 +1267,11 @@ class AudioPlayer {
 
 **Rationale:**
 - SwiftUI has excellent Asset Catalog integration
-- Lion SVGs exported as PDF vectors (Xcode standard for vector assets)
+- Fire SVGs exported as PDF vectors (Xcode standard for vector assets)
 - No build complexity, no extra dependencies
 - Phase 2 can add SwiftGen if type-safety becomes critical
 
-**Affects:** UI components, Lion character system, Audio feedback
+**Affects:** UI components, Fire character system, Audio feedback
 
 ---
 
@@ -1428,7 +1428,7 @@ view.localized("dashboard.calories")
    - Dashboard + MealLogging ViewModels
    - Analytics events (Codable structs)
    - Error reporting (both analytics + Sentry)
-   - Asset Catalog (lion characters, colors, sounds)
+   - Asset Catalog (fire characters, colors, sounds)
 
 4. **Weeks 6-7: Trust Features**
    - Weight Tracking
@@ -1455,7 +1455,7 @@ view.localized("dashboard.calories")
 - **Analytics Event Structs** → requires Codable support in GRDB schema
 - **Navigation** → affects all feature views, tab bar structure
 - **Localization** → affects all UI text (JSON loading at app startup)
-- **Asset Management** → affects UI components (lion characters, colors), audio system
+- **Asset Management** → affects UI components (fire characters, colors), audio system
 - **Logging** → Error handling reports to both analytics + Sentry
 
 ---
@@ -1519,7 +1519,7 @@ view.localized("dashboard.calories")
 - Badge display in profile tab (Phase 2 feature)
 - Point counter in dashboard header (small, non-intrusive)
 - Streak flame icon next to cycle timer (shows current streak days)
-- Achievement unlock animations (confetti, lion character celebration)
+- Achievement unlock animations (confetti, fire character celebration)
 
 **Database Schema (Phase 2):**
 
@@ -1577,7 +1577,7 @@ CREATE TABLE user_streaks (
 
 **Design Notes:**
 - Keep badge UI subtle in POC (no gamification in Phase 1)
-- Lion character variations can celebrate badge unlocks (Phase 2)
+- Fire character variations can celebrate badge unlocks (Phase 2)
 - Forgiving design: 70% threshold applies to badge eligibility (consistent with core UX principle)
 
 
@@ -1737,8 +1737,8 @@ Resources/
       PrimaryBackground.colorset
       AccentGreen.colorset
     Icons/
-      LionHappy.imageset
-      LionConcerned.imageset
+      FireHappy.imageset
+      FireConcerned.imageset
   Localizations/
     de.json
     en.json (Phase 2)
@@ -2380,11 +2380,11 @@ w-diet/
 │   │   │       ├── AccountSection.swift
 │   │   │       └── DataExportSection.swift
 │   │   │
-│   │   └── Education/                              # Lion coach educational content
+│   │   └── Education/                              # Fire coach educational content
 │   │       ├── EducationView.swift
 │   │       ├── EducationViewModel.swift
 │   │       └── Components/
-│   │           ├── LionTipCard.swift
+│   │           ├── FireTipCard.swift
 │   │           └── MATADORExplainer.swift
 │   │
 │   └── Navigation/
@@ -2461,10 +2461,10 @@ w-diet/
 │
 ├── Shared/                                         # Shared UI components
 │   ├── Components/
-│   │   ├── LionCharacter/
-│   │   │   ├── LionCharacterView.swift             # Presentational only: takes LionVariation enum
-│   │   │   ├── LionCharacterView+Tests.swift
-│   │   │   └── LionVariation.swift                 # Enum: happy, concerned, celebrating, sleeping
+│   │   ├── FireCharacter/
+│   │   │   ├── FireCharacterView.swift             # Presentational only: takes FireVariation enum
+│   │   │   ├── FireCharacterView+Tests.swift
+│   │   │   └── FireVariation.swift                 # Enum: happy, concerned, celebrating, sleeping
 │   │   │
 │   │   ├── MacroProgressBar.swift                  # Reusable macro bar
 │   │   ├── MacroProgressBar+Tests.swift
@@ -2485,11 +2485,11 @@ w-diet/
 │   │   │   ├── AccentOrange.colorset              # Phase: Maintenance (orange)
 │   │   │   ├── TextPrimary.colorset
 │   │   │   └── TextSecondary.colorset
-│   │   └── Lions/
-│   │       ├── LionHappy.imageset/
-│   │       ├── LionConcerned.imageset/
-│   │       ├── LionCelebrating.imageset/
-│   │       └── LionSleeping.imageset/
+│   │   └── Fires/
+│   │       ├── FireHappy.imageset/
+│   │       ├── FireConcerned.imageset/
+│   │       ├── FireCelebrating.imageset/
+│   │       └── FireSleeping.imageset/
 │   │
 │   └── Localizations/
 │       ├── de.json                                 # German strings (POC)
@@ -2598,13 +2598,13 @@ struct DashboardView: View {
 }
 ```
 
-**Shared Component Contract (Lion Character):**
+**Shared Component Contract (Fire Character):**
 ```swift
-// ✅ Shared/Components/LionCharacter/LionCharacterView.swift
+// ✅ Shared/Components/FireCharacter/FireCharacterView.swift
 // PRESENTATIONAL ONLY - No business logic, just rendering
 
-struct LionCharacterView: View {
-    let variation: LionVariation
+struct FireCharacterView: View {
+    let variation: FireVariation
     let size: CGFloat
     
     var body: some View {
@@ -2616,16 +2616,16 @@ struct LionCharacterView: View {
 
 // Business logic stays in feature ViewModels
 class DashboardViewModel: ObservableObject {
-    @Published var lionVariation: LionVariation = .happy
+    @Published var fireVariation: FireVariation = .happy
     
-    func updateLionBasedOnProgress() {
-        // Calculate which lion to show based on macro progress
+    func updateFireBasedOnProgress() {
+        // Calculate which fire to show based on macro progress
         if macroProgress >= 0.7 {
-            lionVariation = .happy
+            fireVariation = .happy
         } else if macroProgress >= 0.4 {
-            lionVariation = .concerned
+            fireVariation = .concerned
         } else {
-            lionVariation = .sleeping
+            fireVariation = .sleeping
         }
     }
 }
@@ -2635,7 +2635,7 @@ struct DashboardView: View {
     @StateObject var viewModel = DashboardViewModel()
     
     var body: some View {
-        LionCharacterView(variation: viewModel.lionVariation, size: 120)
+        FireCharacterView(variation: viewModel.fireVariation, size: 120)
     }
 }
 ```
@@ -2758,7 +2758,7 @@ struct MealLog: Codable {
 
 **Components:**
 - `Features/Dashboard/DashboardView.swift` - Main screen (TabView root)
-- `Features/Dashboard/DashboardViewModel.swift` - Aggregates data from all sources, calculates lion variation
+- `Features/Dashboard/DashboardViewModel.swift` - Aggregates data from all sources, calculates fire variation
 - `Features/Dashboard/Components/CycleTimerCard.swift` - Cycle countdown (top 40% visual zone)
 - `Features/Dashboard/Components/WeightCard.swift` - Current weight + 7-day trend
 - `Features/Dashboard/Components/MacroTrackerCard.swift` - Daily macro progress bars
@@ -2767,14 +2767,14 @@ struct MealLog: Codable {
 - Reads from: `meal_logs`, `weight_entries`, `cycle_states`
 
 **Tests:**
-- `DashboardViewModel+Tests.swift` - Data aggregation, <50ms load target, lion variation logic
+- `DashboardViewModel+Tests.swift` - Data aggregation, <50ms load target, fire variation logic
 
 #### Epic 5: Onboarding
 
 **Components:**
 - `Features/Onboarding/OnboardingFlow.swift` - NavigationStack coordinator
 - `Features/Onboarding/OnboardingViewModel.swift` - Collects user input
-- `Features/Onboarding/Steps/WelcomeStep.swift` - Welcome screen with lion character
+- `Features/Onboarding/Steps/WelcomeStep.swift` - Welcome screen with fire character
 - `Features/Onboarding/Steps/GoalSelectionStep.swift` - Weight loss/gain goal
 - `Features/Onboarding/Steps/MacroInputStep.swift` - Target macros (calories, protein, carbs, fats)
 - `Features/Onboarding/Steps/CycleStartStep.swift` - Set cycle start date
@@ -3005,7 +3005,7 @@ On failure: log error, operation remains pending for retry
 - `Core/Utilities/` - Helpers (TimeProvider, LocalizationManager, Extensions)
 
 **Shared UI Components:**
-- `Shared/Components/` - Reusable UI components (LionCharacter is presentational only)
+- `Shared/Components/` - Reusable UI components (FireCharacter is presentational only)
 - `Shared/ViewModifiers/` - Reusable SwiftUI modifiers (ThumbZoneLayout, ForgivingThreshold)
 
 #### Test Organization
@@ -3036,7 +3036,7 @@ On failure: log error, operation remains pending for retry
 **Xcode Asset Catalog:**
 - `Resources/Assets.xcassets/AppIcon.appiconset/` - App icon variants (iPhone, iPad, App Store)
 - `Resources/Assets.xcassets/Colors/` - Color sets (supports dark mode)
-- `Resources/Assets.xcassets/Lions/` - Lion character image sets (4 variations)
+- `Resources/Assets.xcassets/Fires/` - Fire character image sets (4 variations)
 
 **Localization Files:**
 - `Resources/Localizations/de.json` - German strings (POC)
@@ -3269,7 +3269,7 @@ All implementation patterns align with architectural decisions:
 Project structure fully supports architectural patterns:
 - Feature-based organization enforces MVVM boundaries (View + ViewModel co-located with Components)
 - Core/ modules never import App/ features, ensuring proper dependency inversion
-- Shared/ components maintain presentational contract (LionCharacterView takes enum, no business logic)
+- Shared/ components maintain presentational contract (FireCharacterView takes enum, no business logic)
 - Versioned migration folders (v1.0-POC/, v1.1-Phase2/) prevent bloat and support DatabaseMigrator pattern
 - Co-located tests ({TypeName}+Tests.swift) prevent test rot and improve maintainability
 
@@ -3281,8 +3281,8 @@ All 7 epics from PRD are architecturally supported:
 1. **MATADOR Cycling Automation** → Core/CycleEngine/, CycleRecoveryProtocol (fail-safe), cycle_states table, midnight local notifications
 2. **Meal Logging** → Features/MealLogging/, meal_logs table, MacroPicker (iOS picker wheel), macro validation
 3. **Weight Tracking** → Features/WeightTracking/, weight_entries table, 7-day rolling average calculation, WeightHistoryChart
-4. **Dashboard** → Features/Dashboard/, GRDB data aggregation (<50ms P95), thumb-zone layout (60/40 split), lion variation logic
-5. **Lion Coach Character** → Shared/Components/LionCharacter/ (4 variations: happy, concerned, celebrating, sleeping)
+4. **Dashboard** → Features/Dashboard/, GRDB data aggregation (<50ms P95), thumb-zone layout (60/40 split), fire variation logic
+5. **Fire Coach Character** → Shared/Components/FireCharacter/ (4 variations: happy, concerned, celebrating, sleeping)
 6. **Onboarding** → Features/Onboarding/Steps/, user_profiles table, NavigationStack flow, permissions (notifications)
 7. **Profile & Settings** → Features/Profile/, account management, data export capability
 
@@ -3325,7 +3325,7 @@ Implementation patterns prevent AI agent conflicts:
 - 15 potential conflict points identified and resolved (naming, structure, format, communication, process)
 - Naming conventions cover all layers: DB (snake_case), Swift types (PascalCase), properties (camelCase), analytics (snake_case past tense)
 - Good examples + anti-patterns provided for each pattern category (prevents ambiguity)
-- Shared component contract enforced (LionCharacterView presentational only, business logic in ViewModels)
+- Shared component contract enforced (FireCharacterView presentational only, business logic in ViewModels)
 - Enforcement mechanisms: SwiftLint rules, test failures on wrong CodingKeys, PR template pattern checklist
 
 ### Gap Analysis Results
@@ -3374,7 +3374,7 @@ All validation checks passed:
 - ✅ Implementation readiness: AI agents have sufficient detail for consistent implementation
 
 **Minor Improvements Made During Validation:**
-1. Clarified shared component contract (LionCharacterView presentational only) → prevents business logic leakage
+1. Clarified shared component contract (FireCharacterView presentational only) → prevents business logic leakage
 2. Added versioned migration folders (v1.0-POC/, v1.1-Phase2/) → prevents folder bloat
 3. Added OfflineSyncRecoveryTests.swift E2E test → covers critical data integrity scenario
 4. Added CI integration test setup (Docker Compose PostgreSQL) → catches schema drift early
@@ -3424,7 +3424,7 @@ Rationale:
 1. **Offline-First Architecture** - GRDB primary source of truth with Supabase sync queue ensures data integrity even during crashes/network failures
 2. **Feature-Based Organization** - Prevents "hunt across 5 folders" problem, co-located tests prevent test rot
 3. **Testable Time Logic** - TimeProvider protocol enables reliable testing of MATADOR midnight transitions (Day 14 → Day 15)
-4. **Shared Component Contracts** - LionCharacterView presentational only prevents business logic leakage, keeps components reusable
+4. **Shared Component Contracts** - FireCharacterView presentational only prevents business logic leakage, keeps components reusable
 5. **Comprehensive Naming Patterns** - CodingKeys bridge snake_case (DB) ↔ camelCase (Swift) prevents serialization bugs
 6. **CI Integration Testing** - Docker Compose PostgreSQL catches schema drift between GRDB (SQLite) and Supabase (PostgreSQL) early
 7. **Migration Versioning** - v1.0-POC/ and v1.1-Phase2/ folders prevent migration file bloat, clear version boundaries
