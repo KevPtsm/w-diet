@@ -5,6 +5,7 @@
 //  Created by Kevin Pietschmann on 04.01.26.
 //
 
+import GRDB
 import SwiftUI
 
 /// Main dashboard view showing cycle status and macro progress
@@ -22,6 +23,27 @@ struct DashboardView: View {
 
     /// Show add food sheet
     @State private var showAddFood = false
+
+    /// Show camera directly for plate scanning
+    @State private var showCamera = false
+
+    /// Captured image from camera
+    @State private var capturedImage: UIImage?
+
+    /// Show analysis results after scanning
+    @State private var showAnalysisResults = false
+
+    /// Analysis result from Gemini
+    @State private var analysisResult: FoodAnalysisResponse?
+
+    /// Analysis in progress
+    @State private var isAnalyzing = false
+
+    /// Pre-filled data from plate scanner
+    @State private var scannedFoodPrefill: ManualEntryPrefill?
+
+    /// Show manual entry with pre-filled data from scan
+    @State private var showScannedEntry = false
 
     // MARK: - Tab enum
 
@@ -76,7 +98,7 @@ struct DashboardView: View {
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
-                            .background(Theme.fireGold)
+                            .background(Theme.fireGold.opacity(0.8))
                             .foregroundColor(.white)
                             .cornerRadius(10)
                             .overlay(
@@ -86,19 +108,19 @@ struct DashboardView: View {
                         }
                         .buttonStyle(.plain)
 
-                        // Right: Scan Food (Coming Soon)
+                        // Right: Scan Food with AI
                         Button {
-                            // Coming soon - no action
+                            showCamera = true
                         } label: {
                             HStack {
-                                Image(systemName: "barcode.viewfinder")
+                                Image(systemName: "camera.viewfinder")
                                 Text("Teller scannen")
                                     .font(.subheadline).fontWeight(.semibold)
                             }
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
-                            .background(Theme.disabled)
-                            .foregroundColor(.white.opacity(0.7))
+                            .background(Theme.fireGold.opacity(0.8))
+                            .foregroundColor(.white)
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
@@ -106,18 +128,6 @@ struct DashboardView: View {
                             )
                         }
                         .buttonStyle(.plain)
-                        .disabled(true)
-                        .overlay(alignment: .topTrailing) {
-                            Text("Soon")
-                                .font(.system(size: 10))
-                                .fontWeight(.semibold)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 3)
-                                .background(Theme.fireGold)
-                                .cornerRadius(4)
-                                .offset(x: 6, y: -6)
-                        }
                     }
                     .padding(.horizontal)
                     .padding(.bottom, 38)
@@ -218,6 +228,66 @@ struct DashboardView: View {
                     await viewModel.loadData()
                 }
             })
+        }
+        .sheet(isPresented: $showCamera) {
+            CameraView(image: $capturedImage)
+                .ignoresSafeArea()
+        }
+        .onChange(of: capturedImage) { _, newImage in
+            if let image = newImage {
+                // Analyze the captured image
+                isAnalyzing = true
+                showAnalysisResults = true
+                Task {
+                    do {
+                        let result = try await GeminiService.shared.analyzeFood(image: image)
+                        await MainActor.run {
+                            analysisResult = result
+                            isAnalyzing = false
+                        }
+                    } catch {
+                        await MainActor.run {
+                            isAnalyzing = false
+                            showAnalysisResults = false
+                            capturedImage = nil
+                            print("Analysis error: \(error)")
+                        }
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showAnalysisResults, onDismiss: {
+            // Clean up when results dismissed
+            capturedImage = nil
+            analysisResult = nil
+        }) {
+            PlateAnalysisResultsView(
+                image: capturedImage,
+                result: analysisResult,
+                isAnalyzing: isAnalyzing
+            ) { scannedItem in
+                scannedFoodPrefill = ManualEntryPrefill(from: scannedItem)
+                showAnalysisResults = false
+                showScannedEntry = true
+            }
+        }
+        .sheet(isPresented: $showScannedEntry) {
+            if let prefill = scannedFoodPrefill {
+                ManualEntryView(prefill: prefill) { meal in
+                    // Save the meal
+                    Task {
+                        do {
+                            try await GRDBManager.shared.write { db in
+                                var m = meal
+                                try m.insert(db)
+                            }
+                            await viewModel.loadData()
+                        } catch {
+                            print("Error saving scanned meal: \(error)")
+                        }
+                    }
+                }
+            }
         }
     }
 

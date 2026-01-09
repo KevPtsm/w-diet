@@ -49,4 +49,9 @@ struct AppConfiguration {
     static var isDevelopment: Bool {
         environment == "development"
     }
+
+    /// Gemini API key for food scanning (from GEMINI_API_KEY in .xcconfig)
+    static let geminiAPIKey: String = {
+        Bundle.main.infoDictionary?["GEMINI_API_KEY"] as? String ?? ""
+    }()
 }

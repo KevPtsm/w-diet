@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F8637E2CD02B05D06A46C6A /* NutritionLabelService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00D786836C4DC7736E792D71 /* NutritionLabelService.swift */; };
+		09B4A6519589EED2F625021D /* NutritionLabelResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28C83EDF4887EBBE3604931 /* NutritionLabelResultView.swift */; };
+		FF355F8C684E56BB6168ECE3 /* GeminiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1705BAEC678E228C5EF2BB25 /* GeminiService.swift */; };
+		D89893FA180D4050BFB63DED /* PlateScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1299C72D7C9484843E07598D /* PlateScannerView.swift */; };
 		D1LEGAL002 /* DatenschutzView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1LEGAL001 /* DatenschutzView.swift */; };
 		0AAB174A2F0AF100004D6216 /* w_dietApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAB17562F0AF0FF004D6216 /* w_dietApp.swift */; };
 		0AAB17502F0AEEE0004D6216 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 0AAB17532F0AEEE3004D6216 /* GRDB */; };
@@ -90,6 +94,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00D786836C4DC7736E792D71 /* NutritionLabelService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionLabelService.swift; sourceTree = "<group>"; };
+		D28C83EDF4887EBBE3604931 /* NutritionLabelResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionLabelResultView.swift; sourceTree = "<group>"; };
+		1705BAEC678E228C5EF2BB25 /* GeminiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiService.swift; sourceTree = "<group>"; };
+		1299C72D7C9484843E07598D /* PlateScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateScannerView.swift; sourceTree = "<group>"; };
 		D1LEGAL001 /* DatenschutzView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App/Features/Legal/DatenschutzView.swift"; name = DatenschutzView.swift; sourceTree = "<group>"; };
 		04791FF0452D4D04BC0CB6B5 /* App/Features/Onboarding/Views/Step5CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step5CompletionView.swift; sourceTree = SOURCE_ROOT; };
 		0626302F9BD54BE3A993A4AC /* App/Features/MealLogging/MealLoggingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/MealLogging/MealLoggingViewModel.swift; sourceTree = SOURCE_ROOT; };
@@ -234,6 +242,8 @@
 		0AAB172D2F0ADD00004D6216 /* MealLogging */ = {
 			isa = PBXGroup;
 			children = (
+				D28C83EDF4887EBBE3604931 /* NutritionLabelResultView.swift */,
+				1299C72D7C9484843E07598D /* PlateScannerView.swift */,
 				0ACDE58C2F0EFADB00DD43AA /* BarcodeScannerView.swift */,
 			);
 			path = MealLogging;
@@ -381,6 +391,8 @@
 		0ACDE59D2F0EFDF100DD43AA /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				00D786836C4DC7736E792D71 /* NutritionLabelService.swift */,
+				1705BAEC678E228C5EF2BB25 /* GeminiService.swift */,
 				0ACDE59A2F0EFDF100DD43AA /* AuthManager.swift */,
 				0ACDE59C2F0EFDF100DD43AA /* OpenFoodFactsService.swift */,
 			);
@@ -634,6 +646,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F8637E2CD02B05D06A46C6A /* NutritionLabelService.swift in Sources */,
+				09B4A6519589EED2F625021D /* NutritionLabelResultView.swift in Sources */,
+				FF355F8C684E56BB6168ECE3 /* GeminiService.swift in Sources */,
+				D89893FA180D4050BFB63DED /* PlateScannerView.swift in Sources */,
 				D1LEGAL002 /* DatenschutzView.swift in Sources */,
 				D96050317BE665943A260AC3 /* Step3AgeInputView.swift in Sources */,
 				41F09181DF6EB9BC9D772C45 /* LoginView.swift in Sources */,

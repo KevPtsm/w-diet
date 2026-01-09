@@ -89,7 +89,7 @@ struct MealLoggingView: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
-            .background(Theme.fireGold)
+            .background(Theme.fireGold.opacity(0.8))
             .foregroundColor(.white)
             .cornerRadius(10)
             .overlay(

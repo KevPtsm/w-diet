@@ -7,26 +7,66 @@
 
 import SwiftUI
 
+/// Pre-filled values for manual entry (from AI scan or other source)
+struct ManualEntryPrefill {
+    var name: String = ""
+    var calories: Int = 0
+    var protein: Double = 0
+    var carbs: Double = 0
+    var fat: Double = 0
+
+    static let empty = ManualEntryPrefill()
+
+    init(name: String = "", calories: Int = 0, protein: Double = 0, carbs: Double = 0, fat: Double = 0) {
+        self.name = name
+        self.calories = calories
+        self.protein = protein
+        self.carbs = carbs
+        self.fat = fat
+    }
+
+    init(from item: FoodAnalysisResponse.FoodItem) {
+        self.name = item.name
+        self.calories = item.calories
+        self.protein = item.proteinG
+        self.carbs = item.carbsG
+        self.fat = item.fatG
+    }
+}
+
 /// Manual entry form for logging meals without database search
 struct ManualEntryView: View {
     // MARK: - Properties
 
     @Environment(\.dismiss) private var dismiss
     var onSave: (MealLog) -> Void
+    var prefill: ManualEntryPrefill
     private let authManager: AuthManager
 
-    init(onSave: @escaping (MealLog) -> Void, authManager: AuthManager = .shared) {
+    init(
+        prefill: ManualEntryPrefill = .empty,
+        onSave: @escaping (MealLog) -> Void,
+        authManager: AuthManager = .shared
+    ) {
+        self.prefill = prefill
         self.onSave = onSave
         self.authManager = authManager
+
+        // Initialize state from prefill
+        _mealName = State(initialValue: prefill.name)
+        _calories = State(initialValue: prefill.calories > 0 ? String(prefill.calories) : "")
+        _protein = State(initialValue: prefill.protein > 0 ? String(format: "%.1f", prefill.protein) : "")
+        _carbs = State(initialValue: prefill.carbs > 0 ? String(format: "%.1f", prefill.carbs) : "")
+        _fat = State(initialValue: prefill.fat > 0 ? String(format: "%.1f", prefill.fat) : "")
     }
 
     // MARK: - State
 
-    @State private var mealName = ""
-    @State private var calories = ""
-    @State private var protein = ""
-    @State private var carbs = ""
-    @State private var fat = ""
+    @State private var mealName: String
+    @State private var calories: String
+    @State private var protein: String
+    @State private var carbs: String
+    @State private var fat: String
 
     @State private var showValidationError = false
     @State private var validationMessage = ""

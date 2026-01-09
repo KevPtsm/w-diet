@@ -35,6 +35,22 @@ struct FoodSearchView: View {
     @State private var isLoadingBarcode = false
     @State private var barcodeError: String?
 
+    // Plate scanner states
+    @State private var showPlateCamera = false
+    @State private var capturedPlateImage: UIImage?
+    @State private var showPlateAnalysisResults = false
+    @State private var plateAnalysisResult: FoodAnalysisResponse?
+    @State private var isAnalyzingPlate = false
+    @State private var scannedFoodPrefill: ManualEntryPrefill?
+    @State private var showScannedEntry = false
+
+    // Nutrition label scanner states
+    @State private var showNutritionCamera = false
+    @State private var capturedNutritionImage: UIImage?
+    @State private var showNutritionResults = false
+    @State private var nutritionLabelResult: NutritionLabelResult?
+    @State private var isAnalyzingNutrition = false
+
     // MARK: - Body
 
     var body: some View {
@@ -65,13 +81,13 @@ struct FoodSearchView: View {
                         showManualEntry = true
                     } label: {
                         HStack {
-                            Image(systemName: "pencil.line")
+                            Image(systemName: "plus.circle.fill")
                             Text("Manuell eingeben")
                                 .font(.headline)
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Theme.fireGold)
+                        .background(Theme.fireGold.opacity(0.8))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .overlay(
@@ -116,6 +132,93 @@ struct FoodSearchView: View {
                     lookupBarcode(barcode)
                 })
             }
+            .sheet(isPresented: $showPlateCamera) {
+                CameraView(image: $capturedPlateImage)
+                    .ignoresSafeArea()
+            }
+            .onChange(of: capturedPlateImage) { _, newImage in
+                if let image = newImage {
+                    isAnalyzingPlate = true
+                    showPlateAnalysisResults = true
+                    Task {
+                        do {
+                            let result = try await GeminiService.shared.analyzeFood(image: image)
+                            await MainActor.run {
+                                plateAnalysisResult = result
+                                isAnalyzingPlate = false
+                            }
+                        } catch {
+                            await MainActor.run {
+                                isAnalyzingPlate = false
+                                showPlateAnalysisResults = false
+                                capturedPlateImage = nil
+                                print("Plate analysis error: \(error)")
+                            }
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showPlateAnalysisResults, onDismiss: {
+                capturedPlateImage = nil
+                plateAnalysisResult = nil
+            }) {
+                PlateAnalysisResultsView(
+                    image: capturedPlateImage,
+                    result: plateAnalysisResult,
+                    isAnalyzing: isAnalyzingPlate
+                ) { scannedItem in
+                    scannedFoodPrefill = ManualEntryPrefill(from: scannedItem)
+                    showPlateAnalysisResults = false
+                    showScannedEntry = true
+                }
+            }
+            .sheet(isPresented: $showScannedEntry) {
+                if let prefill = scannedFoodPrefill {
+                    ManualEntryView(prefill: prefill) { meal in
+                        saveMeal(meal)
+                    }
+                }
+            }
+            .sheet(isPresented: $showNutritionCamera) {
+                CameraView(image: $capturedNutritionImage)
+                    .ignoresSafeArea()
+            }
+            .onChange(of: capturedNutritionImage) { _, newImage in
+                if let image = newImage {
+                    isAnalyzingNutrition = true
+                    showNutritionResults = true
+                    Task {
+                        do {
+                            let result = try await NutritionLabelService.shared.analyzeLabel(image: image)
+                            await MainActor.run {
+                                nutritionLabelResult = result
+                                isAnalyzingNutrition = false
+                            }
+                        } catch {
+                            await MainActor.run {
+                                isAnalyzingNutrition = false
+                                showNutritionResults = false
+                                capturedNutritionImage = nil
+                                print("Nutrition label error: \(error)")
+                            }
+                        }
+                    }
+                }
+            }
+            .sheet(isPresented: $showNutritionResults, onDismiss: {
+                capturedNutritionImage = nil
+                nutritionLabelResult = nil
+            }) {
+                NutritionLabelResultView(
+                    image: capturedNutritionImage,
+                    result: nutritionLabelResult,
+                    isAnalyzing: isAnalyzingNutrition
+                ) { meal in
+                    saveMeal(meal)
+                    onFoodAdded()
+                    dismiss()
+                }
+            }
             .alert("Produkt nicht gefunden", isPresented: .constant(barcodeError != nil)) {
                 Button("OK") {
                     barcodeError = nil
@@ -150,49 +253,39 @@ struct FoodSearchView: View {
 
     private var scanOptionsBar: some View {
         HStack(spacing: 0) {
-            // Plate Scan Button (Coming Soon)
+            // Plate Scan Button
             Button {
-                // Coming soon - AI plate recognition
+                showPlateCamera = true
             } label: {
                 VStack(spacing: 4) {
-                    ZStack(alignment: .topTrailing) {
-                        Image(systemName: "camera.viewfinder")
-                            .font(.system(size: 28))
-                            .foregroundColor(.secondary)
-                            .frame(width: 36, height: 36)
-                        soonBadge
-                            .offset(x: 8, y: -6)
-                    }
+                    Image(systemName: "camera.viewfinder")
+                        .font(.system(size: 28))
+                        .foregroundColor(Theme.fireGold)
+                        .frame(width: 36, height: 36)
                     Text("Teller")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity)
             }
-            .disabled(true)
 
-            // Nutrition Label Scan Button (Coming Soon)
+            // Nutrition Label Scan Button
             Button {
-                // Coming soon - OCR nutrition label
+                showNutritionCamera = true
             } label: {
                 VStack(spacing: 4) {
-                    ZStack(alignment: .topTrailing) {
-                        Image(systemName: "doc.viewfinder")
-                            .font(.system(size: 28))
-                            .foregroundColor(.secondary)
-                            .frame(width: 36, height: 36)
-                        soonBadge
-                            .offset(x: 8, y: -6)
-                    }
+                    Image(systemName: "doc.viewfinder")
+                        .font(.system(size: 28))
+                        .foregroundColor(Theme.fireGold)
+                        .frame(width: 36, height: 36)
                     Text("Nährwerte")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.primary)
                 }
                 .frame(maxWidth: .infinity)
             }
-            .disabled(true)
 
             // Barcode Scan Button
             Button {
