@@ -194,16 +194,58 @@ struct WeightLoggingSheet: View {
 
             // Calculate weight value
             let weightKg = Double(selectedWeightWhole) + Double(selectedWeightDecimal) / 10.0
+            let today = Date()
 
-            // Create new weight log entry
-            let newWeightLog = WeightLog(
-                userId: userId,
-                weightKg: weightKg,
-                loggedAt: Date()
-            )
+            // Use noon local time to avoid timezone day-boundary issues
+            let calendar = Calendar.current
+            var components = calendar.dateComponents([.year, .month, .day], from: today)
+            components.hour = 12
+            components.minute = 0
+            components.second = 0
+            let logDate = calendar.date(from: components) ?? today
 
-            try await dbManager.write { db in
-                try newWeightLog.insert(db)
+            // Check if there's already an entry for today
+            let existingLog = try await dbManager.read { db in
+                try WeightLog.fetchTodaysEntry(db, userId: userId, today: today)
+            }
+
+            // Calculate 7-day average (before adding/updating current weight)
+            let average7Days = try await dbManager.read { db in
+                try WeightLog.calculateAverage(db, userId: userId, days: 7)
+            }
+
+            if let existing = existingLog {
+                // Update existing entry for today
+                try await dbManager.write { db in
+                    let updated = WeightLog(
+                        id: existing.id,
+                        userId: existing.userId,
+                        weightKg: weightKg,
+                        loggedAt: logDate, // Use noon local time
+                        createdAt: existing.createdAt,
+                        updatedAt: Date(),
+                        syncedAt: nil,
+                        averageWeight7Days: average7Days
+                    )
+                    try updated.update(db)
+                }
+                #if DEBUG
+                print("✅ Weight updated: \(weightKg) kg (replaced existing entry)")
+                #endif
+            } else {
+                // Create new weight log entry
+                let newWeightLog = WeightLog(
+                    userId: userId,
+                    weightKg: weightKg,
+                    loggedAt: logDate, // Use noon local time
+                    averageWeight7Days: average7Days
+                )
+                try await dbManager.write { db in
+                    try newWeightLog.insert(db)
+                }
+                #if DEBUG
+                print("✅ Weight saved: \(weightKg) kg (new entry)")
+                #endif
             }
 
             // Update user profile with new weight
@@ -232,10 +274,6 @@ struct WeightLoggingSheet: View {
                     try updatedProfile.update(db)
                 }
             }
-
-            #if DEBUG
-            print("✅ Weight saved: \(weightKg) kg")
-            #endif
 
             // Dismiss sheet
             isPresented = false

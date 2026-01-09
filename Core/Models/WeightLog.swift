@@ -39,6 +39,9 @@ struct WeightLog: Codable, FetchableRecord, PersistableRecord {
     /// Timestamp when log was last synced to Supabase (NULL = not synced)
     let syncedAt: Date?
 
+    /// Snapshot of 7-day average weight at time of logging (NULL = not calculated)
+    let averageWeight7Days: Double?
+
     // MARK: - GRDB Configuration
 
     /// Database table name
@@ -54,6 +57,7 @@ struct WeightLog: Codable, FetchableRecord, PersistableRecord {
         case createdAt = "created_at"
         case updatedAt = "updated_at"
         case syncedAt = "synced_at"
+        case averageWeight7Days = "average_weight_7days"
     }
 
     // MARK: - Initialization
@@ -65,7 +69,8 @@ struct WeightLog: Codable, FetchableRecord, PersistableRecord {
         loggedAt: Date = Date(),
         createdAt: Date = Date(),
         updatedAt: Date = Date(),
-        syncedAt: Date? = nil
+        syncedAt: Date? = nil,
+        averageWeight7Days: Double? = nil
     ) {
         self.id = id
         self.userId = userId
@@ -74,6 +79,16 @@ struct WeightLog: Codable, FetchableRecord, PersistableRecord {
         self.createdAt = createdAt
         self.updatedAt = updatedAt
         self.syncedAt = syncedAt
+        self.averageWeight7Days = averageWeight7Days
+    }
+
+    // MARK: - Computed Properties
+
+    /// Returns true if entry was logged for a different day than when it was created
+    /// Used to exclude backdated entries from streak calculations
+    var isBackdated: Bool {
+        let calendar = Calendar.current
+        return !calendar.isDate(loggedAt, inSameDayAs: createdAt)
     }
 }
 
@@ -118,6 +133,20 @@ extension WeightLog {
             .fetchOne(db)
     }
 
+    /// Fetch today's weight entry (if exists) - returns the most recent entry for the day
+    static func fetchTodaysEntry(_ db: Database, userId: String, today: Date) throws -> WeightLog? {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: today)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+
+        return try WeightLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfDay)
+            .filter(Column("logged_at") < endOfDay)
+            .order(Column("logged_at").desc)
+            .fetchOne(db)
+    }
+
     /// Fetch weight logs for the last N days
     static func fetchLastNDays(_ db: Database, userId: String, days: Int, referenceDate: Date = Date()) throws -> [WeightLog] {
         let calendar = Calendar.current
@@ -145,7 +174,7 @@ extension WeightLog {
         return logs.count
     }
 
-    /// Check if weight was logged on a specific date
+    /// Check if weight was logged on a specific date (any entry)
     static func hasLoggedOnDate(_ db: Database, userId: String, date: Date) throws -> Bool {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
@@ -158,5 +187,23 @@ extension WeightLog {
             .fetchCount(db)
 
         return count > 0
+    }
+
+    /// Check if weight was logged on a specific date FOR STREAK (excludes backdated entries)
+    /// A valid streak entry is one where the entry was created on the same day it was logged for
+    static func hasLoggedOnDateForStreak(_ db: Database, userId: String, date: Date) throws -> Bool {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+
+        // Fetch entries for this date and check if any are non-backdated
+        let logs = try WeightLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfDay)
+            .filter(Column("logged_at") < endOfDay)
+            .fetchAll(db)
+
+        // Return true only if there's a non-backdated entry
+        return logs.contains { !$0.isBackdated }
     }
 }

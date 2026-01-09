@@ -45,6 +45,9 @@ struct DashboardView: View {
     /// Show manual entry with pre-filled data from scan
     @State private var showScannedEntry = false
 
+    /// Show weight history
+    @State private var showWeightHistory = false
+
     // MARK: - Tab enum
 
     enum Tab {
@@ -289,6 +292,9 @@ struct DashboardView: View {
                 }
             }
         }
+        .sheet(isPresented: $showWeightHistory) {
+            WeightHistoryView()
+        }
     }
 
     // MARK: - View Components
@@ -353,67 +359,86 @@ struct DashboardView: View {
     }
 
     private var weightStatsCard: some View {
-        HStack(spacing: 0) {
-            // Left: 7-Day Average + Trend (PRIMARY)
-            VStack(alignment: .leading, spacing: 4) {
-                Text("Ø 7 Tage")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                HStack(spacing: 6) {
-                    if let avg = viewModel.averageWeight7Days {
-                        Text("\(avg, specifier: "%.1f") kg")
-                            .font(.title2)
-                            .fontWeight(.bold)
-                            .foregroundColor(.primary)
-                    } else {
-                        Text("--")
-                            .font(.title2)
-                            .fontWeight(.bold)
+        Button {
+            showWeightHistory = true
+        } label: {
+            HStack(spacing: 0) {
+                // Left: 7-Day Average + Trend (PRIMARY)
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "chart.xyaxis.line")
+                            .font(.caption)
+                            .foregroundColor(Theme.fireGold)
+                            .padding(6)
+                            .background(Theme.fireGold.opacity(0.15))
+                            .cornerRadius(6)
+                        Text("Ø 7 Tage")
+                            .font(.caption)
                             .foregroundStyle(.secondary)
                     }
 
-                    Image(systemName: viewModel.weightTrend.icon)
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundColor(viewModel.weightTrend.color)
+                    HStack(spacing: 6) {
+                        if let avg = viewModel.averageWeight7Days {
+                            Text("\(avg, specifier: "%.1f") kg")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary)
+                        } else {
+                            Text("--")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Image(systemName: viewModel.weightTrend.icon)
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundColor(viewModel.weightTrend.color)
+                    }
                 }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
 
-            // Center: Streak Indicator
-            VStack(spacing: 2) {
-                Text("\(viewModel.streakDays)")
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
+                // Center: Streak Indicator
+                VStack(spacing: 2) {
+                    Text("\(viewModel.streakDays)")
+                        .font(.caption)
+                        .fontWeight(.bold)
+                        .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
 
-                Image(systemName: "flame.fill")
-                    .font(.system(size: 24))
-                    .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
-            }
-
-            // Right: Current Weight (SECONDARY)
-            VStack(alignment: .trailing, spacing: 4) {
-                Text("Heute")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-
-                if let weight = viewModel.currentWeight {
-                    Text("\(weight, specifier: "%.1f") kg")
-                        .font(.body)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.secondary)
-                } else {
-                    Text("--")
-                        .font(.body)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.secondary)
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 24))
+                        .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
                 }
+
+                // Right: Current Weight + Chevron (SECONDARY)
+                HStack(spacing: 8) {
+                    VStack(alignment: .trailing, spacing: 4) {
+                        Text("Heute")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+
+                        if let weight = viewModel.currentWeight {
+                            Text("\(weight, specifier: "%.1f") kg")
+                                .font(.body)
+                                .fontWeight(.semibold)
+                                .foregroundColor(.secondary)
+                        } else {
+                            Text("--")
+                                .font(.body)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption)
+                        .foregroundStyle(.tertiary)
+                }
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
+        .buttonStyle(.plain)
     }
 
     private var macroProgressSection: some View {

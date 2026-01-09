@@ -314,16 +314,17 @@ final class DashboardViewModel: ObservableObject {
             print("   Fat: \(Int(fatConsumed))g")
             #endif
 
-            // Calculate streak
-            let hasWeightToday = try await dbManager.read({ db in
-                try WeightLog.hasLoggedOnDate(db, userId: userId, date: today)
+            // Calculate streak (using streak-safe methods that exclude backdated entries)
+            let hasWeightTodayForStreak = try await dbManager.read({ db in
+                try WeightLog.hasLoggedOnDateForStreak(db, userId: userId, date: today)
             })
             let hasMealToday = !todaysMeals.isEmpty
 
-            // Today has activity if either weight OR meal was logged
-            todayHasActivity = hasWeightToday || hasMealToday
+            // Today has activity if either weight OR meal was logged (non-backdated)
+            todayHasActivity = hasWeightTodayForStreak || hasMealToday
 
             // Count consecutive days with activity (going backwards from today)
+            // NOTE: Backdated weight entries do NOT count toward streak
             var streak = 0
             let calendar = Calendar.current
 
@@ -335,8 +336,9 @@ final class DashboardViewModel: ObservableObject {
                 let maxDaysToCheck = 365  // Safety limit
 
                 for _ in 0..<maxDaysToCheck {
+                    // Use streak-safe method for weight (excludes backdated entries)
                     let hasWeight = try await dbManager.read({ db in
-                        try WeightLog.hasLoggedOnDate(db, userId: userId, date: checkDate)
+                        try WeightLog.hasLoggedOnDateForStreak(db, userId: userId, date: checkDate)
                     })
                     let hasMeal = try await dbManager.read({ db in
                         try MealLog.hasLoggedOnDate(db, userId: userId, date: checkDate)
@@ -355,8 +357,10 @@ final class DashboardViewModel: ObservableObject {
 
             #if DEBUG
             print("🔥 Streak Status:")
+            print("   Has weight today (streak-safe): \(hasWeightTodayForStreak)")
+            print("   Has meal today: \(hasMealToday)")
             print("   Today has activity: \(todayHasActivity)")
-            print("   Streak days: \(streakDays)")
+            print("   Final streak days: \(streakDays)")
             #endif
 
         } catch let error as AppError {

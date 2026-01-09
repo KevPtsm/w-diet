@@ -62,6 +62,7 @@
 		952C19390761406CB84ED900 /* App/Features/MealLogging/ManualEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BC3A5AE76C1464BAADB6958 /* App/Features/MealLogging/ManualEntryView.swift */; };
 		9761C843A6B74E7295DC93CA /* App/Features/Onboarding/Views/Step3EatingWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29C2561002C14D568FFB3F08 /* App/Features/Onboarding/Views/Step3EatingWindowView.swift */; };
 		980EE95DA848407291DBE3DB /* App/Features/Dashboard/DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694130F5D4B9483DBF1B8051 /* App/Features/Dashboard/DashboardView.swift */; };
+		E5A1B2C3D4E5F6A7B8C9D0E2 /* App/Features/Dashboard/WeightHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A1B2C3D4E5F6A7B8C9D0E1 /* App/Features/Dashboard/WeightHistoryView.swift */; };
 		9B3728A24B05955CAEE58AFB /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14A61AC055FEB4D7F6F696C /* LoginViewModel.swift */; };
 		AD0DAEB03DAC4F46BE156860 /* App/Features/Onboarding/Views/Step4MatadorExplainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FC37BA246C74EB38E753EFE /* App/Features/Onboarding/Views/Step4MatadorExplainerView.swift */; };
 		B0BA135409BD4667A1C99E69 /* App/Features/Onboarding/OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DFD6B75BED445CA76B28D5 /* App/Features/Onboarding/OnboardingContainerView.swift */; };
@@ -141,6 +142,7 @@
 		4E322C15023F4E47B41BB72D /* App/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/RootView.swift; sourceTree = SOURCE_ROOT; };
 		634D909C3B4046F280D423C3 /* App/Features/MealLogging/FoodSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/MealLogging/FoodSearchView.swift; sourceTree = SOURCE_ROOT; };
 		694130F5D4B9483DBF1B8051 /* App/Features/Dashboard/DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Dashboard/DashboardView.swift; sourceTree = SOURCE_ROOT; };
+		E5A1B2C3D4E5F6A7B8C9D0E1 /* App/Features/Dashboard/WeightHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Dashboard/WeightHistoryView.swift; sourceTree = SOURCE_ROOT; };
 		79F4AFA4EE024F688AE9385F /* App/Features/Onboarding/Views/Step2CalorieTargetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step2CalorieTargetView.swift; sourceTree = SOURCE_ROOT; };
 		8344B76BC4754CA683934B97 /* App/Features/Settings/SettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Settings/SettingsViewModel.swift; sourceTree = SOURCE_ROOT; };
 		8FC37BA246C74EB38E753EFE /* App/Features/Onboarding/Views/Step4MatadorExplainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step4MatadorExplainerView.swift; sourceTree = SOURCE_ROOT; };
@@ -439,6 +441,7 @@
 				8344B76BC4754CA683934B97 /* App/Features/Settings/SettingsViewModel.swift */,
 				2D8D2FA69AE348B28474FA86 /* App/Features/Dashboard/WeightLoggingSheet.swift */,
 				694130F5D4B9483DBF1B8051 /* App/Features/Dashboard/DashboardView.swift */,
+				E5A1B2C3D4E5F6A7B8C9D0E1 /* App/Features/Dashboard/WeightHistoryView.swift */,
 				244C5016594C4E418F00C650 /* App/Features/Dashboard/DashboardViewModel.swift */,
 				17D63A960BD949869C46651F /* App/Features/Dashboard/MatadorCycleCalendar.swift */,
 				35EBE4C688B64D3885773CFE /* App/Features/MealLogging/MealLoggingView.swift */,
@@ -687,6 +690,7 @@
 				78616F2FF229443EB247BDDB /* App/Features/Settings/SettingsViewModel.swift in Sources */,
 				46AF9ED131D64C2D8C343438 /* App/Features/Dashboard/WeightLoggingSheet.swift in Sources */,
 				980EE95DA848407291DBE3DB /* App/Features/Dashboard/DashboardView.swift in Sources */,
+				E5A1B2C3D4E5F6A7B8C9D0E2 /* App/Features/Dashboard/WeightHistoryView.swift in Sources */,
 				74648A59857248E78D15BE35 /* App/Features/Dashboard/DashboardViewModel.swift in Sources */,
 				10F4979572B54379B839177E /* App/Features/Dashboard/MatadorCycleCalendar.swift in Sources */,
 				ED316BDE08F5465E9BBAF5AF /* App/Features/MealLogging/MealLoggingView.swift in Sources */,

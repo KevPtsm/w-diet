@@ -230,6 +230,13 @@ final class GRDBManager: @unchecked Sendable {
             }
         }
 
+        // Migration 10: Add 7-day average snapshot to weight logs
+        migrator.registerMigration("v5_add_weight_average_snapshot") { db in
+            try db.alter(table: "weight_logs") { t in
+                t.add(column: "average_weight_7days", .double) // Snapshot of 7-day average at time of logging - NULL = not calculated
+            }
+        }
+
         return migrator
     }
 
