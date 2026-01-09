@@ -64,46 +64,6 @@ enum CalorieCalculator {
         return Int(tdee.rounded())
     }
 
-    /// Calculate recommended calorie target based on goal
-    ///
-    /// **Calculation Logic:**
-    /// 1. Round TDEE down to nearest 100 (e.g., 2832 → 2800)
-    /// 2. Apply goal-based adjustment:
-    ///    - Weight Loss: -700 kcal (e.g., 2800 → 2100)
-    ///    - Maintenance: no change
-    ///    - Muscle Gain: +300 kcal
-    /// 3. Ensure minimum of 1500 kcal for health and sustainability
-    ///
-    /// - Parameters:
-    ///   - tdee: Total Daily Energy Expenditure
-    ///   - goal: User's fitness goal ("lose_weight", "maintain_weight", "gain_muscle")
-    /// - Returns: Recommended calorie target
-    static func calculateTargetCalories(tdee: Int, goal: String) -> Int {
-        // Absolute minimum for health (WHO recommendation)
-        let minimumCalories = 1500
-
-        // Round down to nearest 100
-        let roundedTDEE = (tdee / 100) * 100
-
-        let targetCalories: Int
-        switch goal {
-        case "lose_weight":
-            // 700 calorie deficit for healthy weight loss (~0.7 kg/week)
-            targetCalories = roundedTDEE - 700
-        case "maintain_weight":
-            // Maintain at rounded TDEE
-            targetCalories = roundedTDEE
-        case "gain_muscle":
-            // 300 calorie surplus for muscle gain
-            targetCalories = roundedTDEE + 300
-        default:
-            targetCalories = roundedTDEE
-        }
-
-        // Ensure we never go below minimum
-        return max(targetCalories, minimumCalories)
-    }
-
     /// Get activity factor multiplier for TDEE calculation
     ///
     /// - Parameter activityLevel: Activity level identifier
@@ -118,31 +78,41 @@ enum CalorieCalculator {
             return 1.55
         case "very_active":
             return 1.725
-        case "extra_active":
+        case "extra_active", "extremely_active":
             return 1.9
         default:
             return nil
         }
     }
 
-    /// Get display name for activity level
+    // MARK: - MATADOR Protocol
+
+    /// MATADOR diet phase calorie factor (67% of TDEE = 33% deficit)
+    static let matadorDietFactor: Double = 0.67
+
+    /// Calculate MATADOR phase-adjusted calories
     ///
-    /// - Parameter activityLevel: Activity level identifier
-    /// - Returns: Human-readable name
-    static func getActivityLevelName(for activityLevel: String) -> String {
-        switch activityLevel {
-        case "sedentary":
-            return "Sedentary"
-        case "lightly_active":
-            return "Lightly Active"
-        case "moderately_active":
-            return "Moderately Active"
-        case "very_active":
-            return "Very Active"
-        case "extra_active":
-            return "Extra Active"
-        default:
-            return "Unknown"
+    /// **MATADOR Protocol (Byrne et al., 2017):**
+    /// - Diet phase (Days 1-14): 67% of TDEE (33% energy restriction)
+    /// - Maintenance phase (Days 15-28): 100% of TDEE (energy balance)
+    ///
+    /// The 2-week "metabolic rest periods" at energy balance reverse
+    /// adaptive thermogenesis within 10-14 days.
+    ///
+    /// - Parameters:
+    ///   - tdee: Total Daily Energy Expenditure
+    ///   - isDietPhase: True if in diet phase (days 1-14), false for maintenance (days 15-28)
+    /// - Returns: Phase-adjusted calorie target
+    static func calculateMatadorCalories(tdee: Int, isDietPhase: Bool) -> Int {
+        if isDietPhase {
+            // Diet phase: 67% of TDEE (33% deficit)
+            let dietCalories = Int(Double(tdee) * matadorDietFactor)
+            // Ensure minimum 1200 kcal for safety
+            return max(dietCalories, 1200)
+        } else {
+            // Maintenance phase: 100% of TDEE
+            return tdee
         }
     }
+
 }

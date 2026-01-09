@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
+	<key>SUPABASE_URL</key>
+	<string>$(SUPABASE_URL)</string>
+	<key>SUPABASE_ANON_KEY</key>
+	<string>$(SUPABASE_ANON_KEY)</string>
+	<key>SENTRY_DSN</key>
+	<string>$(SENTRY_DSN)</string>
+	<key>APP_ENVIRONMENT</key>
+	<string>$(APP_ENVIRONMENT)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.w-diet.auth</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>w-diet</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

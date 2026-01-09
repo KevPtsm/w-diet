@@ -2,15 +2,16 @@
 //  RootView.swift
 //  w-diet
 //
-//  Root view that determines whether to show onboarding or dashboard
+//  Root view that determines whether to show login, onboarding, or dashboard
 //
 
-import SwiftUI
 import Combine
 import GRDB
+import SwiftUI
 
 struct RootView: View {
     @StateObject private var viewModel = RootViewModel()
+    @ObservedObject private var authManager = AuthManager.shared
     @State private var refreshTrigger = false
 
     var body: some View {
@@ -19,6 +20,9 @@ struct RootView: View {
                 // Loading state
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if !authManager.isAuthenticated {
+                // Show login
+                LoginView()
             } else if viewModel.needsOnboarding {
                 // Show onboarding
                 OnboardingContainerView()
@@ -31,11 +35,23 @@ struct RootView: View {
             }
         }
         .task {
-            await viewModel.checkOnboardingStatus()
+            await viewModel.checkAuthAndOnboarding()
         }
         .onChange(of: refreshTrigger) { _, _ in
             Task {
-                await viewModel.checkOnboardingStatus()
+                await viewModel.checkAuthAndOnboarding()
+            }
+        }
+        .onChange(of: authManager.isAuthenticated) { _, isAuthenticated in
+            if isAuthenticated {
+                Task {
+                    await viewModel.checkAuthAndOnboarding()
+                }
+            }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .profileDidReset)) { _ in
+            Task {
+                await viewModel.checkAuthAndOnboarding()
             }
         }
     }
@@ -59,14 +75,20 @@ final class RootViewModel: ObservableObject {
     @Published var needsOnboarding = true
 
     private let dbManager: GRDBManager
+    private let authManager: AuthManager
 
-    init(dbManager: GRDBManager = .shared) {
+    init(dbManager: GRDBManager = .shared, authManager: AuthManager = .shared) {
         self.dbManager = dbManager
+        self.authManager = authManager
     }
 
-    func checkOnboardingStatus() async {
-        // TEMPORARY: Use mock user ID until auth is set up
-        let userId = "mock-user-id"
+    func checkAuthAndOnboarding() async {
+        // Get user ID from AuthManager
+        guard let userId = authManager.currentUserId else {
+            // Not authenticated - will show login
+            isLoading = false
+            return
+        }
 
         do {
             // Check if user profile exists and onboarding is completed

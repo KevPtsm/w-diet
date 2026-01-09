@@ -13,6 +13,12 @@ struct ManualEntryView: View {
 
     @Environment(\.dismiss) private var dismiss
     var onSave: (MealLog) -> Void
+    private let authManager: AuthManager
+
+    init(onSave: @escaping (MealLog) -> Void, authManager: AuthManager = .shared) {
+        self.onSave = onSave
+        self.authManager = authManager
+    }
 
     // MARK: - State
 
@@ -174,8 +180,9 @@ struct ManualEntryView: View {
             finalCalories = Int(proteinValue * 4 + carbsValue * 4 + fatValue * 9)
         }
 
+        let userId = authManager.currentUserId ?? "unknown"
         let meal = MealLog(
-            userId: "mock-user-id", // TODO: Get from auth manager
+            userId: userId,
             mealName: mealName,
             caloriesKcal: finalCalories,
             proteinG: proteinValue,

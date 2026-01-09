@@ -14,10 +14,14 @@ import SwiftUI
 /// - Week 1-2: Fire Gold (diet phase)
 /// - Week 3-4: Gray (maintenance phase)
 /// - Current day: Highlighted with ring
-/// - Completed days: Checkmark
+/// - Completed days: Show date number faded
+/// - Future days: Show date number
 struct MatadorCycleCalendar: View {
     /// Current day in cycle (1-28), 0 if no active cycle
     let currentDay: Int
+
+    /// Start date of the cycle (for displaying actual calendar dates)
+    let cycleStartDate: Date?
 
     /// Whether to show template (no active cycle) or progress
     var isTemplate: Bool {
@@ -26,6 +30,7 @@ struct MatadorCycleCalendar: View {
 
     private let daysPerWeek = 7
     private let totalWeeks = 4
+    private let calendar = Calendar.current
 
     var body: some View {
         VStack(spacing: 12) {
@@ -40,11 +45,22 @@ struct MatadorCycleCalendar: View {
 
     private func weekRow(week: Int) -> some View {
         HStack(spacing: 8) {
-            // Phase label (Diät for weeks 1-2, Erhalt for weeks 3-4)
-            Text(week < 2 ? "Diät" : "Erhalt")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-                .frame(width: 60, alignment: .leading)
+            // Phase label (only show on first week of each phase)
+            if week == 0 {
+                Text("Diät")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 50, alignment: .leading)
+            } else if week == 2 {
+                Text("Erhalt")
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .frame(width: 50, alignment: .leading)
+            } else {
+                // Empty space for alignment
+                Spacer()
+                    .frame(width: 50)
+            }
 
             // 7 day circles
             ForEach(1...daysPerWeek, id: \.self) { dayInWeek in
@@ -54,49 +70,76 @@ struct MatadorCycleCalendar: View {
         }
     }
 
+    // MARK: - Helper Functions
+
+    /// Get the calendar day number (1-31) for a given day in the cycle
+    private func calendarDayNumber(forCycleDay dayNumber: Int) -> Int {
+        guard let startDate = cycleStartDate else { return dayNumber }
+        guard let date = calendar.date(byAdding: .day, value: dayNumber - 1, to: startDate) else { return dayNumber }
+        return calendar.component(.day, from: date)
+    }
+
     // MARK: - Day Circle
 
     private func dayCircle(dayNumber: Int, week: Int) -> some View {
         let isDietPhase = week < 2  // Week 1-2 are diet phase
         let isCurrentDay = dayNumber == currentDay
         let isCompleted = !isTemplate && dayNumber < currentDay
+        let calendarDay = calendarDayNumber(forCycleDay: dayNumber)
 
         return ZStack {
-            // Background circle
-            Circle()
-                .fill(isCompleted ? Color.clear : (isDietPhase ? Theme.fireGold.opacity(0.2) : Theme.maintenancePhase))
-                .frame(width: 28, height: 28)
+            // Background circle - only for non-completed days
+            if !isCompleted {
+                Circle()
+                    .fill(isDietPhase ? Theme.fireGold.opacity(0.2) : Theme.maintenancePhase)
 
-            // Border for current day
+                // Light mode border for visibility
+                Circle()
+                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+            }
+
+            // Border for current day (on top of light mode border)
             if isCurrentDay {
                 Circle()
                     .strokeBorder(Theme.fireGold, lineWidth: 2)
-                    .frame(width: 28, height: 28)
             }
 
-            // Content
+            // Content - icons for completed/current, numbers for future
             if isCompleted {
-                // Ashes/smoke for completed days (burned out, no background)
-                Image(systemName: "smoke.fill")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(.secondary.opacity(0.5))
+                // Completed day - dimmed ember with black outline for visibility
+                ZStack {
+                    // Black outline/stroke effect
+                    Image(systemName: "smoke.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                        .offset(x: 0.5, y: 0.5)
+                    Image(systemName: "smoke.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                        .offset(x: -0.5, y: -0.5)
+                    // Main icon
+                    Image(systemName: "smoke.fill")
+                        .font(.system(size: 12))
+                        .foregroundColor(Theme.fireGold.opacity(0.6))
+                }
             } else if isCurrentDay {
-                // Fire icon for current day
+                // Current day - fire icon (active burn)
                 Image(systemName: "flame.fill")
-                    .font(.system(size: 12, weight: .bold))
+                    .font(.system(size: 14))
                     .foregroundColor(Theme.fireGold)
             } else if isTemplate {
-                // Empty circle for template
-                Circle()
-                    .fill(isDietPhase ? Theme.fireGold : Theme.maintenanceAccent)
-                    .frame(width: 8, height: 8)
+                // Template mode - show day numbers
+                Text("\(calendarDay)")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.primary)
             } else {
-                // Future day - smaller dot
-                Circle()
-                    .fill(isDietPhase ? Theme.fireGold.opacity(0.4) : Theme.maintenanceAccent)
-                    .frame(width: 6, height: 6)
+                // Future day - normal number
+                Text("\(calendarDay)")
+                    .font(.system(size: 11, weight: .medium))
+                    .foregroundColor(.primary)
             }
         }
+        .frame(width: 28, height: 28) // Fixed frame for consistent spacing
     }
 }
 
@@ -104,7 +147,8 @@ struct MatadorCycleCalendar: View {
 
 #Preview("Active Cycle - Day 5") {
     VStack {
-        MatadorCycleCalendar(currentDay: 5)
+        // Start date: Jan 4, 2026 -> Day 5 = Jan 8
+        MatadorCycleCalendar(currentDay: 5, cycleStartDate: Calendar.current.date(from: DateComponents(year: 2026, month: 1, day: 4)))
             .padding()
             .background(Theme.backgroundSecondary)
             .cornerRadius(16)
@@ -114,7 +158,7 @@ struct MatadorCycleCalendar: View {
 
 #Preview("No Active Cycle") {
     VStack {
-        MatadorCycleCalendar(currentDay: 0)
+        MatadorCycleCalendar(currentDay: 0, cycleStartDate: nil)
             .padding()
             .background(Theme.backgroundSecondary)
             .cornerRadius(16)
@@ -124,7 +168,8 @@ struct MatadorCycleCalendar: View {
 
 #Preview("Maintenance Phase - Day 18") {
     VStack {
-        MatadorCycleCalendar(currentDay: 18)
+        // Start date: Dec 22, 2025 -> Day 18 = Jan 8
+        MatadorCycleCalendar(currentDay: 18, cycleStartDate: Calendar.current.date(from: DateComponents(year: 2025, month: 12, day: 22)))
             .padding()
             .background(Theme.backgroundSecondary)
             .cornerRadius(16)

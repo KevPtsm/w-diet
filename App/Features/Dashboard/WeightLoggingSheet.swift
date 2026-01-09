@@ -21,17 +21,20 @@ struct WeightLoggingSheet: View {
     @State private var errorMessage: String?
 
     private let dbManager: GRDBManager
+    private let authManager: AuthManager
 
     // MARK: - Initialization
 
     init(
         isPresented: Binding<Bool>,
         onWeightSaved: @escaping () -> Void,
-        dbManager: GRDBManager = .shared
+        dbManager: GRDBManager = .shared,
+        authManager: AuthManager = .shared
     ) {
         self._isPresented = isPresented
         self.onWeightSaved = onWeightSaved
         self.dbManager = dbManager
+        self.authManager = authManager
     }
 
     // MARK: - Body
@@ -159,8 +162,7 @@ struct WeightLoggingSheet: View {
     /// Load current weight to pre-fill pickers
     private func loadCurrentWeight() async {
         do {
-            // TEMPORARY: Use mock user ID until auth is set up
-            let userId = "mock-user-id"
+            guard let userId = authManager.currentUserId else { return }
 
             // Load latest weight
             let latestWeight = try await dbManager.read { db in
@@ -185,8 +187,10 @@ struct WeightLoggingSheet: View {
         defer { isLoading = false }
 
         do {
-            // TEMPORARY: Use mock user ID until auth is set up
-            let userId = "mock-user-id"
+            guard let userId = authManager.currentUserId else {
+                errorMessage = "Nicht angemeldet"
+                return
+            }
 
             // Calculate weight value
             let weightKg = Double(selectedWeightWhole) + Double(selectedWeightDecimal) / 10.0

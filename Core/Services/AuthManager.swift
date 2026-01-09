@@ -51,6 +51,10 @@ final class AuthManager: ObservableObject {
 
     // MARK: - Initialization
 
+    // MARK: - Constants
+
+    private static let redirectURL = URL(string: "w-diet://auth-callback")!
+
     private init() {
         // Initialize Supabase client with configuration
         // Use placeholder URL if configuration is not set up yet
@@ -60,7 +64,12 @@ final class AuthManager: ObservableObject {
 
         self.supabaseClient = SupabaseClient(
             supabaseURL: supabaseURL,
-            supabaseKey: AppConfiguration.supabaseAnonKey.isEmpty ? "placeholder-key" : AppConfiguration.supabaseAnonKey
+            supabaseKey: AppConfiguration.supabaseAnonKey.isEmpty ? "placeholder-key" : AppConfiguration.supabaseAnonKey,
+            options: SupabaseClientOptions(
+                auth: SupabaseClientOptions.AuthOptions(
+                    redirectToURL: Self.redirectURL
+                )
+            )
         )
 
         // Only restore session if Supabase is properly configured
@@ -73,17 +82,19 @@ final class AuthManager: ObservableObject {
 
     // MARK: - Authentication Methods
 
-    /// Sign in with Apple OAuth
-    func signInWithApple() async throws {
+    /// Sign in with Apple using ID token from native ASAuthorizationController
+    func signInWithAppleToken(idToken: String) async throws {
         do {
-            // Supabase Auth SDK handles Apple OAuth flow
-            let session = try await supabaseClient.auth.signInWithOAuth(provider: .apple)
+            // Use Supabase Auth with Apple ID token
+            let session = try await supabaseClient.auth.signInWithIdToken(
+                credentials: .init(provider: .apple, idToken: idToken)
+            )
 
             // Store session in Keychain
             try storeSession(session)
 
             // Update published state
-            await updateAuthState(session: session)
+            updateAuthState(session: session)
 
         } catch {
             let authError = AppError.auth(.signInFailed("Apple Sign-In failed: \(error.localizedDescription)"))
@@ -92,17 +103,19 @@ final class AuthManager: ObservableObject {
         }
     }
 
-    /// Sign in with Google OAuth
+    /// Sign in with Google OAuth (requires Google Cloud Console setup)
     func signInWithGoogle() async throws {
         do {
-            // Supabase Auth SDK handles Google OAuth flow
-            let session = try await supabaseClient.auth.signInWithOAuth(provider: .google)
+            // Supabase Auth SDK handles Google OAuth flow via web redirect
+            // NOTE: Requires Google OAuth configured in Supabase dashboard
+            try await supabaseClient.auth.signInWithOAuth(provider: .google)
 
-            // Store session in Keychain
-            try storeSession(session)
-
-            // Update published state
-            await updateAuthState(session: session)
+            // Session will be handled by URL callback
+            // Check for active session after redirect
+            if let session = try? await supabaseClient.auth.session {
+                try storeSession(session)
+                updateAuthState(session: session)
+            }
 
         } catch {
             let authError = AppError.auth(.signInFailed("Google Sign-In failed: \(error.localizedDescription)"))
@@ -126,13 +139,44 @@ final class AuthManager: ObservableObject {
             try storeSession(session)
 
             // Update published state
-            await updateAuthState(session: session)
+            updateAuthState(session: session)
 
         } catch let error as AppError {
             error.report()
             throw error
         } catch {
             let authError = AppError.auth(.signInFailed("Email Sign-In failed: \(error.localizedDescription)"))
+            authError.report()
+            throw authError
+        }
+    }
+
+    /// Sign up with Email/Password (creates new account)
+    func signUpWithEmail(email: String, password: String) async throws {
+        do {
+            // Validate inputs (10 char minimum per industry standard)
+            guard !email.isEmpty, password.count >= 10 else {
+                throw AppError.auth(.invalidCredentials)
+            }
+
+            // Supabase Auth SDK handles email/password registration
+            let response = try await supabaseClient.auth.signUp(email: email, password: password)
+
+            // Check if email confirmation is required
+            if let session = response.session {
+                // Auto-confirmed - store session
+                try storeSession(session)
+                updateAuthState(session: session)
+            } else {
+                // Email confirmation required - throw informational error
+                throw AppError.auth(.signInFailed("Bitte bestätige deine E-Mail-Adresse."))
+            }
+
+        } catch let error as AppError {
+            error.report()
+            throw error
+        } catch {
+            let authError = AppError.auth(.signInFailed("Registration failed: \(error.localizedDescription)"))
             authError.report()
             throw authError
         }
@@ -156,6 +200,21 @@ final class AuthManager: ObservableObject {
             let authError = AppError.auth(.signInFailed("Sign out failed: \(error.localizedDescription)"))
             authError.report()
             throw authError
+        }
+    }
+
+    // MARK: - OAuth Callback
+
+    /// Handle OAuth callback URL from external browser
+    func handleOAuthCallback(url: URL) async {
+        do {
+            let session = try await supabaseClient.auth.session(from: url)
+            try storeSession(session)
+            updateAuthState(session: session)
+        } catch {
+            #if DEBUG
+            print("⚠️ OAuth callback failed: \(error)")
+            #endif
         }
     }
 
@@ -256,6 +315,51 @@ final class AuthManager: ObservableObject {
 
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw AppError.auth(.tokenClearFailed)
+        }
+    }
+
+    // MARK: - Supabase Sync
+
+    /// Sync user profile to Supabase database
+    func syncUserProfile(_ profile: UserProfile) async throws {
+        guard isAuthenticated else {
+            throw AppError.auth(.notAuthenticated)
+        }
+
+        do {
+            // Prepare profile data for Supabase (using snake_case keys)
+            let profileData: [String: AnyJSON] = [
+                "user_id": .string(profile.userId),
+                "email": .string(profile.email),
+                "goal": profile.goal.map { .string($0) } ?? .null,
+                "calorie_target": profile.calorieTarget.map { .integer($0) } ?? .null,
+                "eating_window_start": profile.eatingWindowStart.map { .string($0) } ?? .null,
+                "eating_window_end": profile.eatingWindowEnd.map { .string($0) } ?? .null,
+                "onboarding_completed": .bool(profile.onboardingCompleted),
+                "gender": profile.gender.map { .string($0) } ?? .null,
+                "age": profile.age.map { .integer($0) } ?? .null,
+                "height_cm": profile.heightCm.map { .double($0) } ?? .null,
+                "weight_kg": profile.weightKg.map { .double($0) } ?? .null,
+                "activity_level": profile.activityLevel.map { .string($0) } ?? .null,
+                "calculated_calories": profile.calculatedCalories.map { .integer($0) } ?? .null,
+                "updated_at": .string(ISO8601DateFormatter().string(from: Date()))
+            ]
+
+            // Upsert to Supabase (insert or update based on user_id)
+            try await supabaseClient
+                .from("user_profiles")
+                .upsert(profileData, onConflict: "user_id")
+                .execute()
+
+            #if DEBUG
+            print("✅ User profile synced to Supabase")
+            #endif
+
+        } catch {
+            #if DEBUG
+            print("⚠️ Failed to sync profile to Supabase: \(error)")
+            #endif
+            // Don't throw - sync failure shouldn't break the app (offline-first)
         }
     }
 }

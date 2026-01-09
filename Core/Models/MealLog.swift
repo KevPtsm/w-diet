@@ -154,6 +154,21 @@ extension MealLog {
             .filter(Column("synced_at") == nil || Column("synced_at") < Column("updated_at"))
             .fetchAll(db)
     }
+
+    /// Check if any meal was logged on a specific date
+    static func hasLoggedOnDate(_ db: Database, userId: String, date: Date) throws -> Bool {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+
+        let count = try MealLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfDay)
+            .filter(Column("logged_at") < endOfDay)
+            .fetchCount(db)
+
+        return count > 0
+    }
 }
 
 // MARK: - Validation

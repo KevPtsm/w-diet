@@ -223,6 +223,13 @@ final class GRDBManager: @unchecked Sendable {
             }
         }
 
+        // Migration 9: Add age field
+        migrator.registerMigration("v4_add_age") { db in
+            try db.alter(table: "user_profiles") { t in
+                t.add(column: "age", .integer) // User's age in years - NULL = not set yet
+            }
+        }
+
         return migrator
     }
 

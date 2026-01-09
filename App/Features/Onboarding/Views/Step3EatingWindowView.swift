@@ -2,113 +2,109 @@
 //  Step3EatingWindowView.swift
 //  w-diet
 //
-//  Created by Kevin Pietschmann on 06.01.26.
+//  Step 9: Intermittent Fasting - Eating Window Selection
 //
 
 import SwiftUI
 
-/// Step 3: Intermittent Fasting - Eating Window Selection
+/// Step 9: Intermittent Fasting - Eating Window Selection
 struct Step3EatingWindowView: View {
     @ObservedObject var viewModel: OnboardingViewModel
-    @State private var showTooltip = false
     @State private var selectedStartHour: Int = 12 // Default 12:00
-    @State private var selectedEndHour: Int = 18   // Default 18:00 (6 hour window)
+
+    private var selectedEndHour: Int {
+        (selectedStartHour + 6) % 24
+    }
+
+    private var isRecommendedTime: Bool {
+        selectedStartHour >= 11 && selectedStartHour <= 13
+    }
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                // Header
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Intervallfasten")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 20)
 
-                    Text("Iss innerhalb deines 6-Stunden-Fensters. Außerhalb solltest du Kalorien vermeiden, um die Fettverbrennung zu maximieren.")
+                // Mascot with speech bubble (consistent with MATADOR)
+                VStack(spacing: 12) {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(Theme.fireGold)
+
+                    Text("Das ist Intervallfasten")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.medium)
+                        .foregroundColor(.primary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Theme.gray100)
+                        .cornerRadius(16)
                 }
-                .padding(.horizontal)
+                .padding(.bottom, 20)
 
-                // Eating Window Picker (MOVED TO TOP)
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Wähle dein Essfenster")
-                        .font(.headline)
-                        .padding(.horizontal)
+                // Time Window Card
+                VStack(spacing: 16) {
+                    Text("Wähle dein 6 Stunden Essensfenster")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
 
-                    // Time Window Display
-                    HStack {
-                        Spacer()
-                        VStack(spacing: 8) {
-                            Text(formattedTimeRange)
-                                .font(.system(size: 32, weight: .bold))
-                                .foregroundColor(selectedStartHour >= 11 && selectedStartHour <= 13 ? Theme.fireGold : .primary)
-                        }
-                        Spacer()
+                    Text(formattedTimeRange)
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(isRecommendedTime ? Theme.fireGold : .primary)
+
+                    // Always reserve space for badge to prevent layout shifts
+                    HStack(spacing: 6) {
+                        Image(systemName: "checkmark.circle.fill")
+                        Text("Empfohlene Zeit")
                     }
-                    .padding()
-                    .background(Theme.gray100)
-                    .cornerRadius(12)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(selectedStartHour >= 11 && selectedStartHour <= 13 ? Theme.fireGold : Color.clear, lineWidth: 2)
-                    )
-                    .padding(.horizontal)
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(Theme.fireGold)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 6)
+                    .background(Theme.fireGold.opacity(0.15))
+                    .cornerRadius(16)
+                    .opacity(isRecommendedTime ? 1 : 0)
 
-                    // Start Time Slider with Enhanced Markers
-                    VStack(alignment: .leading, spacing: 8) {
-                        // Enhanced slider with visible hour markers
-                        VStack(spacing: 0) {
-                            // Hour marker dots (positioned above slider)
-                            GeometryReader { geometry in
-                                let sliderWidth = geometry.size.width
-
-                                // Background recommended range
-                                let startPosition = (11.0 / 23.0) * sliderWidth
-                                let endPosition = (13.0 / 23.0) * sliderWidth
-                                let width = endPosition - startPosition
-
-                                Rectangle()
-                                    .fill(Theme.fireGold.opacity(0.15))
-                                    .frame(width: width, height: 12)
-                                    .offset(x: startPosition, y: 0)
-                                    .cornerRadius(6)
-
-                                // Hour marker dots
-                                ForEach(0..<24, id: \.self) { hour in
-                                    let position = (Double(hour) / 23.0) * sliderWidth
-                                    let isRecommended = hour >= 11 && hour <= 13
-
-                                    Circle()
-                                        .fill(isRecommended ? Theme.fireGold : Color.gray.opacity(0.4))
-                                        .frame(width: isRecommended ? 10 : 6, height: isRecommended ? 10 : 6)
-                                        .offset(x: position - (isRecommended ? 5 : 3), y: isRecommended ? 1 : 3)
-                                }
+                    Slider(
+                        value: Binding(
+                            get: { Double(selectedStartHour) },
+                            set: { newValue in
+                                selectedStartHour = Int(newValue)
+                                updateViewModel()
                             }
-                            .frame(height: 12)
-                            .padding(.bottom, 8)
-
-                            // Slider
-                            Slider(
-                                value: Binding(
-                                    get: { Double(selectedStartHour) },
-                                    set: { newValue in
-                                        selectedStartHour = Int(newValue)
-                                        // Automatically set end to 6 hours later
-                                        selectedEndHour = (selectedStartHour + 6) % 24
-                                        updateViewModel()
-                                    }
-                                ),
-                                in: 0...23,
-                                step: 1
-                            )
-                            .tint(selectedStartHour >= 11 && selectedStartHour <= 13 ? Theme.fireGold : Color.gray)
-                        }
-                    }
-                    .padding(.horizontal)
+                        ),
+                        in: 6...18,
+                        step: 1
+                    )
+                    .tint(isRecommendedTime ? Theme.fireGold : Color.gray)
                 }
-                .padding(.vertical)
+                .padding()
+                .background(Theme.backgroundSecondary)
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Theme.gray300, lineWidth: 1)
+                )
+                .padding(.horizontal, 32)
 
-                // Tip Box
+                // Benefits Card
+                VStack(alignment: .leading, spacing: 10) {
+                    benefitRow(icon: "flame.fill", text: "Maximiert Fettverbrennung")
+                    benefitRow(icon: "heart.fill", text: "Verbessert Stoffwechsel")
+                }
+                .padding(14)
+                .background(Theme.backgroundSecondary)
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Theme.gray300, lineWidth: 1)
+                )
+                .padding(.top, 12)
+                .padding(.horizontal, 32)
+
+                // Tip card
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: "lightbulb.fill")
                         .font(.title3)
@@ -119,45 +115,19 @@ struct Step3EatingWindowView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
 
-                        Text("Kalorienfreie Getränke sind außerhalb des Essfensters erlaubt. Das Essfenster morgens einzuhalten ist wichtiger als abends.")
+                        Text("Kalorienfreie Getränke sind außerhalb des Essfensters erlaubt.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                    Spacer()
                 }
                 .padding()
                 .background(Color.yellow.opacity(0.1))
-                .cornerRadius(8)
-                .padding(.horizontal)
+                .cornerRadius(12)
+                .padding(.top, 12)
+                .padding(.horizontal, 32)
 
-                // Benefits
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Hauptvorteile")
-                        .font(.headline)
-
-                    benefitRow(
-                        icon: "flame.fill",
-                        title: "Fettverbrennung",
-                        description: "Längere Fastenphasen erhöhen die Fettverbrennung"
-                    )
-
-                    benefitRow(
-                        icon: "heart.text.square.fill",
-                        title: "Stoffwechselgesundheit",
-                        description: "Senkt Blutdruck und Stress, verbessert Insulinempfindlichkeit"
-                    )
-
-                    benefitRow(
-                        icon: "brain.head.profile",
-                        title: "Mentale Klarheit",
-                        description: "Fördert Konzentration und kognitive Leistung"
-                    )
-                }
-                .padding()
-                .background(Color(.systemGray6).opacity(0.5))
-                .cornerRadius(8)
-                .padding(.horizontal)
-
-                // IF Study Link
+                // Study Link
                 Link(destination: URL(string: "https://pubmed.ncbi.nlm.nih.gov/29754952/")!) {
                     HStack {
                         Image(systemName: "doc.text.magnifyingglass")
@@ -170,45 +140,41 @@ struct Step3EatingWindowView: View {
                             .font(.caption)
                     }
                     .foregroundColor(.blue)
-                    .padding()
-                    .background(Color(.systemGray6).opacity(0.3))
-                    .cornerRadius(8)
+                    .padding(14)
+                    .background(Theme.backgroundSecondary)
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Theme.gray300, lineWidth: 1)
+                    )
                 }
-                .padding(.horizontal)
+                .padding(.top, 12)
+                .padding(.horizontal, 32)
 
                 Spacer()
+                    .frame(height: 100)
             }
-            .padding(.vertical)
         }
         .onAppear {
-            // Initialize sliders with existing values if available
             let calendar = Calendar.current
             selectedStartHour = calendar.component(.hour, from: viewModel.eatingWindowStart)
-            selectedEndHour = calendar.component(.hour, from: viewModel.eatingWindowEnd)
-        }
-        .sheet(isPresented: $showTooltip) {
-            tooltipView
         }
     }
 
     // MARK: - Components
 
-    private func benefitRow(icon: String, title: String, description: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
+    private func benefitRow(icon: String, text: String) -> some View {
+        HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(.body)
                 .foregroundColor(Theme.fireGold)
-                .frame(width: 30)
+                .frame(width: 24)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.primary)
 
-                Text(description)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Spacer()
         }
     }
 
@@ -223,7 +189,6 @@ struct Step3EatingWindowView: View {
     }
 
     private func updateViewModel() {
-        // Update ViewModel with selected times
         var startComponents = DateComponents()
         startComponents.hour = selectedStartHour
         startComponents.minute = 0
@@ -237,37 +202,6 @@ struct Step3EatingWindowView: View {
             viewModel.eatingWindowStart = startDate
             viewModel.eatingWindowEnd = endDate
         }
-    }
-
-    // MARK: - Tooltip
-
-    private var tooltipView: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Warum funktioniert das?")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Text("Forschungen zeigen, dass Intervallfasten mit einem begrenzten Essfenster die Fettverbrennung fördert und den Stoffwechsel verbessert.")
-                        .font(.body)
-
-                    Text("Ein 6-Stunden-Fenster bietet eine gute Balance zwischen Effektivität und Alltagstauglichkeit.")
-                        .font(.body)
-                }
-                .padding()
-            }
-            .navigationTitle("Die Wissenschaft")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Fertig") {
-                        showTooltip = false
-                    }
-                }
-            }
-        }
-        .presentationDetents([.medium])
     }
 }
 

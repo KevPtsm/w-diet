@@ -14,6 +14,12 @@ struct FoodSearchView: View {
 
     @Environment(\.dismiss) private var dismiss
     var onFoodAdded: () -> Void
+    private let authManager: AuthManager
+
+    init(onFoodAdded: @escaping () -> Void, authManager: AuthManager = .shared) {
+        self.onFoodAdded = onFoodAdded
+        self.authManager = authManager
+    }
 
     // MARK: - State
 
@@ -61,13 +67,19 @@ struct FoodSearchView: View {
                         HStack {
                             Image(systemName: "pencil.line")
                             Text("Manuell eingeben")
-                                .fontWeight(.semibold)
+                                .font(.headline)
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, 4)
+                        .padding(.vertical, 12)
+                        .background(Theme.fireGold)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+                        )
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(Theme.fireGold)
+                    .buttonStyle(.plain)
                     .padding(.horizontal)
                     .padding(.bottom, 20)
 
@@ -77,6 +89,7 @@ struct FoodSearchView: View {
             }
             .navigationTitle("Essen hinzufügen")
             .navigationBarTitleDisplayMode(.inline)
+            .tint(.primary) // Ensure consistent button colors regardless of parent tint
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") {
@@ -141,22 +154,19 @@ struct FoodSearchView: View {
             Button {
                 // Coming soon - AI plate recognition
             } label: {
-                VStack(spacing: 6) {
-                    Image(systemName: "camera.viewfinder")
-                        .font(.system(size: 28))
-                        .foregroundColor(Theme.fireGold)
+                VStack(spacing: 4) {
+                    ZStack(alignment: .topTrailing) {
+                        Image(systemName: "camera.viewfinder")
+                            .font(.system(size: 28))
+                            .foregroundColor(.secondary)
+                            .frame(width: 36, height: 36)
+                        soonBadge
+                            .offset(x: 8, y: -6)
+                    }
                     Text("Teller")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.primary)
-                    Text("Soon")
-                        .font(.system(size: 9))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 1)
-                        .background(Theme.gray400)
-                        .cornerRadius(3)
+                        .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -166,22 +176,19 @@ struct FoodSearchView: View {
             Button {
                 // Coming soon - OCR nutrition label
             } label: {
-                VStack(spacing: 6) {
-                    Image(systemName: "doc.viewfinder")
-                        .font(.system(size: 28))
-                        .foregroundColor(Theme.fireGold)
+                VStack(spacing: 4) {
+                    ZStack(alignment: .topTrailing) {
+                        Image(systemName: "doc.viewfinder")
+                            .font(.system(size: 28))
+                            .foregroundColor(.secondary)
+                            .frame(width: 36, height: 36)
+                        soonBadge
+                            .offset(x: 8, y: -6)
+                    }
                     Text("Nährwerte")
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(.primary)
-                    Text("Soon")
-                        .font(.system(size: 9))
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 5)
-                        .padding(.vertical, 1)
-                        .background(Theme.gray400)
-                        .cornerRadius(3)
+                        .foregroundColor(.secondary)
                 }
                 .frame(maxWidth: .infinity)
             }
@@ -191,10 +198,11 @@ struct FoodSearchView: View {
             Button {
                 showBarcodeScanner = true
             } label: {
-                VStack(spacing: 6) {
+                VStack(spacing: 4) {
                     Image(systemName: "barcode.viewfinder")
                         .font(.system(size: 28))
                         .foregroundColor(Theme.fireGold)
+                        .frame(width: 36, height: 36)
                     Text("Barcode")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -204,14 +212,25 @@ struct FoodSearchView: View {
             }
         }
         .padding(.horizontal)
-        .padding(.vertical, 12)
+        .padding(.vertical, 8)
         .background(Theme.backgroundSecondary)
+    }
+
+    private var soonBadge: some View {
+        Text("Soon")
+            .font(.system(size: 8))
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .padding(.horizontal, 4)
+            .padding(.vertical, 2)
+            .background(Theme.gray400)
+            .cornerRadius(3)
     }
 
     private var searchBar: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-                .foregroundStyle(.secondary)
+                .foregroundColor(Theme.fireGold)
 
             TextField("Lebensmittel suchen...", text: $searchQuery)
                 .textFieldStyle(.plain)
@@ -420,8 +439,9 @@ struct FoodSearchView: View {
     }
 
     private func saveFoodFromSearch(product: OpenFoodFactsService.FoodProduct, servings: Double) {
+        let userId = authManager.currentUserId ?? "unknown"
         let meal = MealLog(
-            userId: "mock-user-id",
+            userId: userId,
             mealName: product.brand != nil ? "\(product.name) (\(product.brand!))" : product.name,
             caloriesKcal: Int(Double(product.caloriesKcal ?? 0) * servings / 100),
             proteinG: (product.proteinG ?? 0) * servings / 100,
@@ -557,18 +577,28 @@ struct ProductDetailSheet: View {
                     Button {
                         onConfirm()
                     } label: {
-                        Text("Hinzufügen")
-                            .fontWeight(.semibold)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 4)
+                        HStack {
+                            Image(systemName: "plus.circle.fill")
+                            Text("Mahlzeit hinzufügen")
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 12)
+                        .background(Theme.fireGold)
+                        .foregroundColor(.white)
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+                        )
                     }
-                    .buttonStyle(.borderedProminent)
-                    .tint(Theme.fireGold)
+                    .buttonStyle(.plain)
                 }
                 .padding()
             }
             .navigationTitle("Details")
             .navigationBarTitleDisplayMode(.inline)
+            .tint(.primary) // Ensure consistent button colors
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Abbrechen") {

@@ -46,6 +46,8 @@ final class DashboardViewModel: ObservableObject {
     @Published var cyclePhase: String = "Kein aktiver Zyklus"
     @Published var currentDay: Int = 0
     @Published var daysRemaining: Int = 0
+    @Published var isDietPhase: Bool = true  // True = Diet (days 1-14), False = Maintenance (days 15-28)
+    @Published var cycleStartDate: Date?  // Start date of current cycle for calendar display
 
     // Weight reminder
     @Published var showWeightReminder: Bool = false
@@ -54,6 +56,10 @@ final class DashboardViewModel: ObservableObject {
     @Published var currentWeight: Double?
     @Published var averageWeight7Days: Double?
     @Published var weightTrend: WeightTrend = .down
+
+    // Streak tracking
+    @Published var streakDays: Int = 0
+    @Published var todayHasActivity: Bool = false
 
     // Today's macros (will be calculated from user profile + meal logs)
     @Published var caloriesConsumed: Int = 0
@@ -69,15 +75,18 @@ final class DashboardViewModel: ObservableObject {
 
     private nonisolated(unsafe) let timeProvider: TimeProvider
     private let dbManager: GRDBManager
+    private let authManager: AuthManager
 
     // MARK: - Initialization
 
     nonisolated init(
         timeProvider: TimeProvider = SystemTimeProvider(),
-        dbManager: GRDBManager = .shared
+        dbManager: GRDBManager = .shared,
+        authManager: AuthManager = .shared
     ) {
         self.timeProvider = timeProvider
         self.dbManager = dbManager
+        self.authManager = authManager
     }
 
     // MARK: - Actions
@@ -88,8 +97,11 @@ final class DashboardViewModel: ObservableObject {
         defer { isLoading = false }
 
         do {
-            // TEMPORARY: Use mock user ID until auth is set up
-            let userId = "mock-user-id"
+            // Get user ID from AuthManager
+            guard let userId = authManager.currentUserId else {
+                errorMessage = "Nicht angemeldet"
+                return
+            }
 
             // Load user profile to get weight and calorie target
             guard let profile = try await dbManager.read({ db in
@@ -102,8 +114,46 @@ final class DashboardViewModel: ObservableObject {
                 return
             }
 
-            // Set calorie target from profile
-            caloriesTarget = profile.calorieTarget ?? 2000
+            // Calculate TDEE for MATADOR phase adjustment
+            var tdee: Int = 2000
+            if let gender = profile.gender,
+               let height = profile.heightCm,
+               let weight = profile.weightKg,
+               let activity = profile.activityLevel {
+                let age = profile.age ?? 30
+                if let calculatedTDEE = CalorieCalculator.calculateTDEE(
+                    gender: gender,
+                    heightCm: height,
+                    weightKg: weight,
+                    age: age,
+                    activityLevel: activity
+                ) {
+                    tdee = calculatedTDEE
+                }
+            }
+
+            // Determine MATADOR phase and set calorie target accordingly
+            var currentIsDietPhase = true
+            if let cycleStart = profile.cycleStartDate {
+                let calendar = Calendar.current
+                // Use startOfDay for timezone-safe day comparison
+                let cycleStartDay = calendar.startOfDay(for: cycleStart)
+                let todayStart = calendar.startOfDay(for: timeProvider.now)
+                let daysSinceStart = calendar.dateComponents([.day], from: cycleStartDay, to: todayStart).day ?? 0
+                let dayInCycle = (daysSinceStart % 28) + 1
+                currentIsDietPhase = dayInCycle <= 14
+            }
+
+            // Apply MATADOR calorie adjustment based on phase
+            caloriesTarget = CalorieCalculator.calculateMatadorCalories(tdee: tdee, isDietPhase: currentIsDietPhase)
+            isDietPhase = currentIsDietPhase
+
+            #if DEBUG
+            print("🔥 MATADOR Calorie Adjustment:")
+            print("   TDEE: \(tdee) kcal")
+            print("   Phase: \(currentIsDietPhase ? "Diet (67%)" : "Maintenance (100%)")")
+            print("   Target: \(caloriesTarget) kcal")
+            #endif
 
             // Calculate macro targets if we have weight
             if let weightKg = profile.weightKg {
@@ -132,14 +182,22 @@ final class DashboardViewModel: ObservableObject {
             // Calculate MATADOR cycle status from cycle start date
             if let cycleStart = profile.cycleStartDate {
                 let calendar = Calendar.current
-                let daysSinceStart = calendar.dateComponents([.day], from: cycleStart, to: timeProvider.now).day ?? 0
+
+                // Use startOfDay for both dates to ensure timezone-safe day comparison
+                // This compares calendar days in user's local timezone, not UTC timestamps
+                let cycleStartDay = calendar.startOfDay(for: cycleStart)
+                let todayStart = calendar.startOfDay(for: timeProvider.now)
+                let daysSinceStart = calendar.dateComponents([.day], from: cycleStartDay, to: todayStart).day ?? 0
 
                 // Calculate current day within the 28-day cycle (1-28)
                 let dayInCycle = (daysSinceStart % 28) + 1
                 currentDay = dayInCycle
 
-                // Determine phase (Days 1-14: Diet, Days 15-28: Maintenance)
-                if dayInCycle <= 14 {
+                // Store cycle start date for calendar display
+                cycleStartDate = cycleStart
+
+                // Set phase name and days remaining (isDietPhase already set above)
+                if isDietPhase {
                     cyclePhase = "Diätphase"
                     daysRemaining = 14 - dayInCycle + 1
                 } else {
@@ -160,6 +218,7 @@ final class DashboardViewModel: ObservableObject {
                 cyclePhase = "Kein aktiver Zyklus"
                 currentDay = 0
                 daysRemaining = 0
+                cycleStartDate = nil
             }
 
             // Check if weight was logged today (skip Day 1 since onboarding captures it)
@@ -253,6 +312,51 @@ final class DashboardViewModel: ObservableObject {
             print("   Protein: \(Int(proteinConsumed))g")
             print("   Carbs: \(Int(carbsConsumed))g")
             print("   Fat: \(Int(fatConsumed))g")
+            #endif
+
+            // Calculate streak
+            let hasWeightToday = try await dbManager.read({ db in
+                try WeightLog.hasLoggedOnDate(db, userId: userId, date: today)
+            })
+            let hasMealToday = !todaysMeals.isEmpty
+
+            // Today has activity if either weight OR meal was logged
+            todayHasActivity = hasWeightToday || hasMealToday
+
+            // Count consecutive days with activity (going backwards from today)
+            var streak = 0
+            let calendar = Calendar.current
+
+            if todayHasActivity {
+                streak = 1  // Today counts as day 1
+
+                // Check previous days
+                var checkDate = calendar.date(byAdding: .day, value: -1, to: today)!
+                let maxDaysToCheck = 365  // Safety limit
+
+                for _ in 0..<maxDaysToCheck {
+                    let hasWeight = try await dbManager.read({ db in
+                        try WeightLog.hasLoggedOnDate(db, userId: userId, date: checkDate)
+                    })
+                    let hasMeal = try await dbManager.read({ db in
+                        try MealLog.hasLoggedOnDate(db, userId: userId, date: checkDate)
+                    })
+
+                    if hasWeight || hasMeal {
+                        streak += 1
+                        checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
+                    } else {
+                        break  // Streak broken
+                    }
+                }
+            }
+
+            streakDays = streak
+
+            #if DEBUG
+            print("🔥 Streak Status:")
+            print("   Today has activity: \(todayHasActivity)")
+            print("   Streak days: \(streakDays)")
             #endif
 
         } catch let error as AppError {

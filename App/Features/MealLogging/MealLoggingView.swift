@@ -26,13 +26,19 @@ struct MealLoggingView: View {
                     } else {
                         mealsListSection
                     }
-
-                    // Add Food Button (same position as Dashboard)
-                    addFoodButton
-
-                    Spacer()
                 }
                 .padding()
+                .padding(.bottom, 70) // Space for fixed button
+            }
+            .safeAreaInset(edge: .bottom) {
+                // Fixed Add Food Button (same as Dashboard)
+                addFoodButton
+                    .padding(.horizontal)
+                    .padding(.bottom, 38)
+                    .background(
+                        Theme.backgroundPrimary
+                            .ignoresSafeArea()
+                    )
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -82,17 +88,23 @@ struct MealLoggingView: View {
                     .font(.headline)
             }
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 4)
+            .padding(.vertical, 12)
+            .background(Theme.fireGold)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+            )
         }
-        .buttonStyle(.borderedProminent)
-        .tint(Theme.fireGold)
+        .buttonStyle(.plain)
     }
 
     private var emptyStateView: some View {
         VStack(spacing: 16) {
             Image(systemName: "fork.knife.circle")
                 .font(.system(size: 48))
-                .foregroundStyle(.secondary)
+                .foregroundColor(Theme.fireGold)
 
             Text("Noch keine Mahlzeiten")
                 .font(.headline)

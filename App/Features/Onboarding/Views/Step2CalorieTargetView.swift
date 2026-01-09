@@ -2,127 +2,60 @@
 //  Step2CalorieTargetView.swift
 //  w-diet
 //
-//  Created by Kevin Pietschmann on 06.01.26.
+//  Step 7: Calorie Target - shows calculated calorie goal
 //
 
 import SwiftUI
 
-/// Step 2: Calorie Target Input
+/// Step 7: Calorie Target - displays calculated calorie goal based on user data
 struct Step2CalorieTargetView: View {
     @ObservedObject var viewModel: OnboardingViewModel
-    @State private var showTooltip = false
-    @FocusState private var isInputFocused: Bool
-    @State private var debouncedCalorieValue: Int = 0
-    @State private var debounceTask: Task<Void, Never>?
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                // Header
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Dein Kalorienziel")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+        VStack(spacing: 0) {
+            Spacer()
 
-                    Text("Basierend auf deinem Profil haben wir ein personalisiertes Ziel berechnet. Du kannst es bei Bedarf anpassen.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.horizontal)
+            // Mascot with speech bubble
+            VStack(spacing: 12) {
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 50))
+                    .foregroundColor(Theme.fireGold)
 
-                // Calorie Input
-                VStack(alignment: .leading, spacing: 12) {
-                    HStack {
-                        TextField("2000", text: $viewModel.calorieTargetInput)
-                            .keyboardType(.numberPad)
-                            .font(.system(size: 48, weight: .bold))
-                            .multilineTextAlignment(.center)
-                            .focused($isInputFocused)
-                            .onChange(of: viewModel.calorieTargetInput) { oldValue, newValue in
-                                // Filter to only allow digits
-                                let filtered = newValue.filter { $0.isNumber }
+                Text("Dein persönliches Ziel")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Theme.gray100)
+                    .cornerRadius(16)
+            }
+            .padding(.bottom, 32)
 
-                                // Limit to 4 digits (max 9999)
-                                if filtered.count > 4 {
-                                    viewModel.calorieTargetInput = String(filtered.prefix(4))
-                                } else if filtered != newValue {
-                                    viewModel.calorieTargetInput = filtered
-                                }
-                            }
+            // Large calorie display
+            VStack(spacing: 8) {
+                HStack(alignment: .lastTextBaseline, spacing: 4) {
+                    Text("\(viewModel.calculatedCalorieTarget)")
+                        .font(.system(size: 64, weight: .bold))
+                        .foregroundColor(Theme.fireGold)
 
-                        Text("kcal")
-                            .font(.title2)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding()
-                    .background(Color(.systemGray6))
-                    .cornerRadius(12)
-
-                    if let error = viewModel.calorieInputError {
-                        Text(error)
-                            .font(.caption)
-                            .foregroundColor(.red)
-                    }
-                }
-                .padding(.horizontal)
-                .onChange(of: viewModel.calorieTargetInput) { _, newValue in
-                    // Cancel previous debounce task
-                    debounceTask?.cancel()
-
-                    // Create new debounce task
-                    debounceTask = Task {
-                        try? await Task.sleep(nanoseconds: 400_000_000) // 400ms
-                        if !Task.isCancelled {
-                            if let value = Int(newValue) {
-                                debouncedCalorieValue = value
-                            }
-                        }
-                    }
-
-                    // Real-time validation to clear error when input becomes valid
-                    let minThreshold = viewModel.calculatedCalorieTarget > 0 ? viewModel.calculatedCalorieTarget - 200 : 1400
-                    if let calories = Int(newValue), calories >= minThreshold, calories <= 9999 {
-                        viewModel.calorieInputError = nil
-                    } else if newValue.count >= 4, let calories = Int(newValue) {
-                        // Set error if 4 digits entered and invalid
-                        if calories < minThreshold {
-                            viewModel.calorieInputError = "Kalorienziel muss mindestens \(minThreshold) kcal betragen"
-                        } else if calories > 9999 {
-                            viewModel.calorieInputError = "Kalorienziel darf maximal 9999 kcal betragen"
-                        }
-                    }
+                    Text("kcal")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(Theme.textSecondary)
                 }
 
-                // Low Calorie Warning (only show after 4 digits entered)
-                if viewModel.calorieTargetInput.count >= 4,
-                   let calories = Int(viewModel.calorieTargetInput),
-                   calories > 0,
-                   viewModel.calculatedCalorieTarget > 0,
-                   calories < viewModel.calculatedCalorieTarget - 200 {
-                    let minThreshold = viewModel.calculatedCalorieTarget - 200
-                    HStack(alignment: .top, spacing: 12) {
-                        Image(systemName: "exclamationmark.triangle.fill")
-                            .font(.title3)
-                            .foregroundColor(.orange)
+                Text("pro Tag")
+                    .font(.subheadline)
+                    .foregroundColor(Theme.textSecondary)
+            }
+            .frame(height: 150)
 
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Warnung")
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
+            Spacer()
 
-                            Text("Ein Kalorienziel unter \(String(format: "%d", minThreshold)) kcal ist sehr niedrig und nicht nachhaltig.")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                    }
-                    .padding()
-                    .background(Color.orange.opacity(0.1))
-                    .cornerRadius(8)
-                    .padding(.horizontal)
-                }
-
-                // Tip Box 1 - Flexibility (moved to top)
+            // Tips at bottom
+            VStack(spacing: 12) {
+                // Green tip - Flexibility
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.title3)
@@ -139,12 +72,11 @@ struct Step2CalorieTargetView: View {
                     }
                     Spacer()
                 }
-                .padding()
+                .padding(14)
                 .background(Color.green.opacity(0.1))
-                .cornerRadius(8)
-                .padding(.horizontal)
+                .cornerRadius(12)
 
-                // Tip Box 2 - Protein
+                // Yellow tip - Adjustable
                 HStack(alignment: .top, spacing: 12) {
                     Image(systemName: "lightbulb.fill")
                         .font(.title3)
@@ -155,78 +87,35 @@ struct Step2CalorieTargetView: View {
                             .font(.subheadline)
                             .fontWeight(.semibold)
 
-                        Text("Der Fokus auf Protein ist wichtiger als die Kalorien selbst.")
+                        Text("Du kannst dein Kalorienziel jederzeit in den Einstellungen anpassen.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
                 }
-                .padding()
+                .padding(14)
                 .background(Color.yellow.opacity(0.1))
-                .cornerRadius(8)
-                .padding(.horizontal)
+                .cornerRadius(12)
+            }
+            .padding(.horizontal, 32)
 
-                Spacer()
-            }
-            .padding(.vertical)
-        }
-        .onAppear {
-            isInputFocused = true
-            // Initialize debounced value
-            if let initialValue = Int(viewModel.calorieTargetInput) {
-                debouncedCalorieValue = initialValue
-            }
-        }
-        .sheet(isPresented: $showTooltip) {
-            tooltipView
+            Spacer()
         }
     }
 
     // MARK: - Computed Properties
 
     private var flexibilityText: String {
-        // Use debounced value to avoid flickering during typing
-        guard debouncedCalorieValue > 0 else {
-            return "Es ist völlig in Ordnung, wenn du dein Kalorienziel etwas überschreitest."
+        let calories = viewModel.calculatedCalorieTarget
+        guard calories > 0 else {
+            return "Bis zu 200 kcal drüber ist völlig in Ordnung"
         }
 
-        // Calculate 10% over
-        let tenPercent = Double(debouncedCalorieValue) * 0.10
-        // Round to nearest 100
+        // Calculate 10% over, round to nearest 100
+        let tenPercent = Double(calories) * 0.10
         let roundedBuffer = Int((tenPercent / 100.0).rounded()) * 100
 
-        return "Es ist völlig in Ordnung, bis zu \(roundedBuffer) kcal über dein Ziel zu gehen."
-    }
-
-    // MARK: - Tooltip
-
-    private var tooltipView: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Warum Kalorien wichtig sind")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Text("An Feeding-Tagen im MATADOR-Zyklus hilft das Erreichen deines Kalorienziels, Muskelmasse zu erhalten und deinen Stoffwechsel aufrechtzuerhalten.")
-                        .font(.body)
-
-                    Text("Die App berechnet automatisch deine Protein-, Kohlenhydrat- und Fettziele basierend auf dieser Zahl.")
-                        .font(.body)
-                }
-                .padding()
-            }
-            .navigationTitle("Kalorienziel")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Fertig") {
-                        showTooltip = false
-                    }
-                }
-            }
-        }
-        .presentationDetents([.medium])
+        return "Bis zu \(roundedBuffer) kcal drüber ist völlig in Ordnung"
     }
 }
 

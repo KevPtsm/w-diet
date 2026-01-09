@@ -10,6 +10,11 @@ import Foundation
 import GRDB
 import SwiftUI
 
+/// Notification posted when profile is reset, triggering navigation to onboarding
+extension Notification.Name {
+    static let profileDidReset = Notification.Name("profileDidReset")
+}
+
 @MainActor
 final class SettingsViewModel: ObservableObject {
     // MARK: - Published Properties
@@ -19,6 +24,8 @@ final class SettingsViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     // Editable fields
+    @Published var editGoal: String = "lose_weight"
+    @Published var editGender: String = "male"
     @Published var editHeight: Double = 170
     @Published var editWeight: Double = 70
     @Published var editActivityLevel: String = "moderately_active"
@@ -28,11 +35,13 @@ final class SettingsViewModel: ObservableObject {
     // MARK: - Dependencies
 
     private let dbManager: GRDBManager
+    private let authManager: AuthManager
 
     // MARK: - Initialization
 
-    init(dbManager: GRDBManager = .shared) {
+    init(dbManager: GRDBManager = .shared, authManager: AuthManager = .shared) {
         self.dbManager = dbManager
+        self.authManager = authManager
     }
 
     // MARK: - Computed Properties
@@ -44,21 +53,21 @@ final class SettingsViewModel: ObservableObject {
 
     static func activityLevelName(_ level: String) -> String {
         switch level {
-        case "sedentary": return "Sitzend"
+        case "sedentary": return "Wenig aktiv"
         case "lightly_active": return "Leicht aktiv"
-        case "moderately_active": return "Moderat aktiv"
+        case "moderately_active": return "Mäßig aktiv"
         case "very_active": return "Sehr aktiv"
-        case "extremely_active": return "Extrem aktiv"
+        case "extra_active": return "Extrem aktiv"
         default: return level
         }
     }
 
-    static let activityLevels = [
-        ("sedentary", "Sitzend"),
-        ("lightly_active", "Leicht aktiv"),
-        ("moderately_active", "Moderat aktiv"),
-        ("very_active", "Sehr aktiv"),
-        ("extremely_active", "Extrem aktiv")
+    static let activityLevels: [(key: String, title: String, description: String)] = [
+        ("sedentary", "Wenig aktiv", "Bürojob, wenig Bewegung"),
+        ("lightly_active", "Leicht aktiv", "Bürojob + leichter Sport"),
+        ("moderately_active", "Mäßig aktiv", "Aktiver Alltag + Sport"),
+        ("very_active", "Sehr aktiv", "Sehr aktiver Alltag + Sport"),
+        ("extra_active", "Extrem aktiv", "Körperliche Arbeit + Sport")
     ]
 
     // MARK: - Actions
@@ -68,13 +77,19 @@ final class SettingsViewModel: ObservableObject {
         defer { isLoading = false }
 
         do {
-            let userId = "mock-user-id"
+            guard let userId = authManager.currentUserId else {
+                errorMessage = "Nicht angemeldet"
+                return
+            }
+
             profile = try await dbManager.read { db in
                 try UserProfile.fetchByUserId(db, userId: userId)
             }
 
             // Populate edit fields with current values
             if let p = profile {
+                editGoal = p.goal ?? "lose_weight"
+                editGender = p.gender ?? "male"
                 editHeight = p.heightCm ?? 170
                 editWeight = p.weightKg ?? 70
                 editActivityLevel = p.activityLevel ?? "moderately_active"
@@ -93,28 +108,35 @@ final class SettingsViewModel: ObservableObject {
         defer { isLoading = false }
 
         do {
-            // Recalculate calories based on new values
-            let newCalories = calculateCalories(
-                weightKg: editWeight,
+            // Recalculate TDEE using CalorieCalculator
+            guard let tdee = CalorieCalculator.calculateTDEE(
+                gender: editGender,
                 heightCm: editHeight,
-                activityLevel: editActivityLevel,
-                gender: currentProfile.gender ?? "male"
-            )
+                weightKg: editWeight,
+                age: 30,
+                activityLevel: editActivityLevel
+            ) else {
+                errorMessage = "Fehler bei der Kalorienberechnung"
+                return
+            }
+
+            // Store TDEE as reference; actual target is calculated dynamically by phase
+            let dietCalories = CalorieCalculator.calculateMatadorCalories(tdee: tdee, isDietPhase: true)
 
             let updatedProfile = UserProfile(
                 id: currentProfile.id,
                 userId: currentProfile.userId,
                 email: currentProfile.email,
-                goal: currentProfile.goal,
-                calorieTarget: newCalories,
+                goal: editGoal,
+                calorieTarget: dietCalories,
                 eatingWindowStart: editEatingWindowStart,
                 eatingWindowEnd: editEatingWindowEnd,
                 onboardingCompleted: currentProfile.onboardingCompleted,
-                gender: currentProfile.gender,
+                gender: editGender,
                 heightCm: editHeight,
                 weightKg: editWeight,
                 activityLevel: editActivityLevel,
-                calculatedCalories: newCalories,
+                calculatedCalories: tdee,  // Store TDEE for reference
                 cycleStartDate: currentProfile.cycleStartDate,
                 createdAt: currentProfile.createdAt,
                 updatedAt: Date(),
@@ -128,6 +150,44 @@ final class SettingsViewModel: ObservableObject {
             profile = updatedProfile
         } catch {
             errorMessage = "Fehler beim Speichern des Profils"
+        }
+    }
+
+    /// Reset MATADOR cycle to Day 1 (today)
+    func resetCycle() async {
+        guard let currentProfile = profile else { return }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            let updatedProfile = UserProfile(
+                id: currentProfile.id,
+                userId: currentProfile.userId,
+                email: currentProfile.email,
+                goal: currentProfile.goal,
+                calorieTarget: currentProfile.calorieTarget,
+                eatingWindowStart: currentProfile.eatingWindowStart,
+                eatingWindowEnd: currentProfile.eatingWindowEnd,
+                onboardingCompleted: currentProfile.onboardingCompleted,
+                gender: currentProfile.gender,
+                heightCm: currentProfile.heightCm,
+                weightKg: currentProfile.weightKg,
+                activityLevel: currentProfile.activityLevel,
+                calculatedCalories: currentProfile.calculatedCalories,
+                cycleStartDate: Date(),  // Reset to today = Day 1
+                createdAt: currentProfile.createdAt,
+                updatedAt: Date(),
+                syncedAt: nil
+            )
+
+            try await dbManager.write { db in
+                try updatedProfile.update(db)
+            }
+
+            profile = updatedProfile
+        } catch {
+            errorMessage = "Fehler beim Zurücksetzen des Zyklus"
         }
     }
 
@@ -163,40 +223,172 @@ final class SettingsViewModel: ObservableObject {
             }
 
             profile = resetProfile
+
+            // Notify RootView to navigate to onboarding
+            NotificationCenter.default.post(name: .profileDidReset, object: nil)
         } catch {
             errorMessage = "Fehler beim Zurücksetzen des Profils"
         }
     }
 
-    // MARK: - Calorie Calculation (Mifflin-St Jeor)
+    // MARK: - GDPR Features
 
-    private func calculateCalories(weightKg: Double, heightCm: Double, activityLevel: String, gender: String) -> Int {
-        // Assuming age ~25 for simplicity (could be added to profile later)
-        let age = 25.0
-
-        // BMR using Mifflin-St Jeor
-        let bmr: Double
-        if gender == "male" {
-            bmr = 10 * weightKg + 6.25 * heightCm - 5 * age + 5
-        } else {
-            bmr = 10 * weightKg + 6.25 * heightCm - 5 * age - 161
+    /// Delete all user data (DSGVO Art. 17 - Recht auf Löschung)
+    func deleteAccount() async -> Bool {
+        guard let userId = authManager.currentUserId else {
+            errorMessage = "Nicht angemeldet"
+            return false
         }
 
-        // Activity multiplier
-        let multiplier: Double
-        switch activityLevel {
-        case "sedentary": multiplier = 1.2
-        case "lightly_active": multiplier = 1.375
-        case "moderately_active": multiplier = 1.55
-        case "very_active": multiplier = 1.725
-        case "extremely_active": multiplier = 1.9
-        default: multiplier = 1.55
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            // Delete all user data from local database
+            try await dbManager.write { db in
+                // Delete meal logs
+                try db.execute(sql: "DELETE FROM meal_logs WHERE user_id = ?", arguments: [userId])
+                // Delete weight logs
+                try db.execute(sql: "DELETE FROM weight_logs WHERE user_id = ?", arguments: [userId])
+                // Delete cycle state
+                try db.execute(sql: "DELETE FROM cycle_state WHERE user_id = ?", arguments: [userId])
+                // Delete user profile
+                try db.execute(sql: "DELETE FROM user_profiles WHERE user_id = ?", arguments: [userId])
+                // Clear sync queue for this user
+                try db.execute(sql: "DELETE FROM sync_queue")
+            }
+
+            // Sign out from auth
+            try await authManager.signOut()
+
+            return true
+        } catch {
+            errorMessage = "Fehler beim Löschen des Kontos"
+            return false
         }
-
-        // TDEE with 20% deficit for weight loss
-        let tdee = bmr * multiplier
-        let deficit = tdee * 0.8
-
-        return Int(deficit)
     }
+
+    /// Export all user data as JSON (DSGVO Art. 20 - Recht auf Datenübertragbarkeit)
+    func exportUserData() async -> URL? {
+        guard let userId = authManager.currentUserId else {
+            errorMessage = "Nicht angemeldet"
+            return nil
+        }
+
+        isLoading = true
+        defer { isLoading = false }
+
+        do {
+            // Fetch all user data
+            let profile = try await dbManager.read { db in
+                try UserProfile.fetchByUserId(db, userId: userId)
+            }
+
+            let mealLogs = try await dbManager.read { db -> [MealLogExport] in
+                let rows = try Row.fetchAll(db, sql: """
+                    SELECT meal_name, calories_kcal, protein_g, carbs_g, fat_g, logged_at
+                    FROM meal_logs WHERE user_id = ? ORDER BY logged_at DESC
+                """, arguments: [userId])
+                return rows.map { row in
+                    MealLogExport(
+                        mealName: row["meal_name"],
+                        caloriesKcal: row["calories_kcal"],
+                        proteinG: row["protein_g"],
+                        carbsG: row["carbs_g"],
+                        fatG: row["fat_g"],
+                        loggedAt: row["logged_at"]
+                    )
+                }
+            }
+
+            let weightLogs = try await dbManager.read { db -> [WeightLogExport] in
+                let rows = try Row.fetchAll(db, sql: """
+                    SELECT weight_kg, logged_at FROM weight_logs
+                    WHERE user_id = ? ORDER BY logged_at DESC
+                """, arguments: [userId])
+                return rows.map { row in
+                    WeightLogExport(
+                        weightKg: row["weight_kg"],
+                        loggedAt: row["logged_at"]
+                    )
+                }
+            }
+
+            // Create export structure
+            let exportData = UserDataExport(
+                exportDate: ISO8601DateFormatter().string(from: Date()),
+                profile: profile.map { ProfileExport(from: $0) },
+                mealLogs: mealLogs,
+                weightLogs: weightLogs
+            )
+
+            // Encode to JSON
+            let encoder = JSONEncoder()
+            encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+            encoder.dateEncodingStrategy = .iso8601
+            let jsonData = try encoder.encode(exportData)
+
+            // Write to temporary file
+            let tempDir = FileManager.default.temporaryDirectory
+            let fileName = "w-diet-export-\(Date().timeIntervalSince1970).json"
+            let fileURL = tempDir.appendingPathComponent(fileName)
+            try jsonData.write(to: fileURL)
+
+            return fileURL
+        } catch {
+            errorMessage = "Fehler beim Exportieren der Daten"
+            return nil
+        }
+    }
+}
+
+// MARK: - Export Data Structures
+
+struct UserDataExport: Codable {
+    let exportDate: String
+    let profile: ProfileExport?
+    let mealLogs: [MealLogExport]
+    let weightLogs: [WeightLogExport]
+}
+
+struct ProfileExport: Codable {
+    let email: String
+    let goal: String?
+    let calorieTarget: Int?
+    let eatingWindowStart: String?
+    let eatingWindowEnd: String?
+    let gender: String?
+    let age: Int?
+    let heightCm: Double?
+    let weightKg: Double?
+    let activityLevel: String?
+    let createdAt: String
+
+    init(from profile: UserProfile) {
+        self.email = profile.email
+        self.goal = profile.goal
+        self.calorieTarget = profile.calorieTarget
+        self.eatingWindowStart = profile.eatingWindowStart
+        self.eatingWindowEnd = profile.eatingWindowEnd
+        self.gender = profile.gender
+        self.age = profile.age
+        self.heightCm = profile.heightCm
+        self.weightKg = profile.weightKg
+        self.activityLevel = profile.activityLevel
+        self.createdAt = ISO8601DateFormatter().string(from: profile.createdAt)
+    }
+}
+
+struct MealLogExport: Codable {
+    let mealName: String
+    let caloriesKcal: Int
+    let proteinG: Double
+    let carbsG: Double
+    let fatG: Double
+    let loggedAt: Date
+}
+
+struct WeightLogExport: Codable {
+    let weightKg: Double
+    let loggedAt: Date
 }

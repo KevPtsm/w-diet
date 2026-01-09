@@ -27,14 +27,14 @@ enum Theme {
 
     // MARK: - Text Colors
 
-    /// Primary text color - Dark gray for main content
-    static let textPrimary = Color(hex: "2D2D2D")
+    /// Primary text color - Adapts to dark mode
+    static let textPrimary = Color(UIColor.label)
 
-    /// Secondary text color - Medium gray for supporting text
-    static let textSecondary = Color(hex: "757575")
+    /// Secondary text color - Adapts to dark mode
+    static let textSecondary = Color(UIColor.secondaryLabel)
 
-    /// Tertiary text color - Light gray for disabled/placeholder (same as gray400)
-    static let textTertiary = Color(hex: "BDBDBD")
+    /// Tertiary text color - Light gray for disabled/placeholder (adapts to dark mode)
+    static let textTertiary = Color(UIColor.tertiaryLabel)
 
     // MARK: - Background Colors
 
@@ -66,14 +66,14 @@ enum Theme {
     /// Fat color - Light warm peach (brighter than carbs gold)
     static let macroFat = Color(hex: "FFCC80")
 
-    // MARK: - Neutral Grays
+    // MARK: - Neutral Grays (all adaptive for dark mode)
 
     /// Light gray - borders, dividers, disabled states (adapts to dark mode)
     static let gray100 = Color(UIColor.systemGray6)
-    static let gray200 = Color(hex: "EEEEEE")
-    static let gray300 = Color(hex: "E0E0E0")
-    static let gray400 = textTertiary  // Same as textTertiary
-    static let gray500 = Color(hex: "9E9E9E")
+    static let gray200 = Color(UIColor.systemGray5)
+    static let gray300 = Color(UIColor.systemGray4)
+    static let gray400 = Color(UIColor.systemGray3)
+    static let gray500 = Color(UIColor.systemGray2)
 
     // MARK: - Component-Specific Colors (Aliases)
 
@@ -83,13 +83,16 @@ enum Theme {
     /// Divider lines - alias for gray300
     static let divider = gray300
 
+    /// Light mode border - subtle gray for element separation
+    static let lightModeBorder = Color(UIColor.separator)
+
     // MARK: - MATADOR Cycle Colors (for visualization)
 
-    /// Maintenance phase - Soft mint (fresh, rejuvenating recovery phase)
-    static let maintenancePhase = Color(hex: "B8E0D2")
+    /// Maintenance phase - Same as protein color with opacity (for consistency)
+    static let maintenancePhase = macroProtein.opacity(0.25)
 
-    /// Maintenance phase accent - Darker mint for dots/indicators
-    static let maintenanceAccent = Color(hex: "8FCDB8")
+    /// Maintenance phase accent - Protein color for dots/indicators
+    static let maintenanceAccent = macroProtein
 
     /// Deficit phase - Orange/Gold for calorie deficit weeks
     static let deficitPhase = fireGold

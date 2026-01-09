@@ -18,32 +18,16 @@ final class MealLoggingViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
 
-    // MARK: - Computed Properties
-
-    var totalCalories: Int {
-        todaysMeals.reduce(0) { $0 + $1.caloriesKcal }
-    }
-
-    var totalProtein: Double {
-        todaysMeals.reduce(0) { $0 + $1.proteinG }
-    }
-
-    var totalCarbs: Double {
-        todaysMeals.reduce(0) { $0 + $1.carbsG }
-    }
-
-    var totalFat: Double {
-        todaysMeals.reduce(0) { $0 + $1.fatG }
-    }
-
     // MARK: - Dependencies
 
     private let dbManager: GRDBManager
+    private let authManager: AuthManager
 
     // MARK: - Initialization
 
-    init(dbManager: GRDBManager = .shared) {
+    init(dbManager: GRDBManager = .shared, authManager: AuthManager = .shared) {
         self.dbManager = dbManager
+        self.authManager = authManager
     }
 
     // MARK: - Actions
@@ -52,12 +36,7 @@ final class MealLoggingViewModel: ObservableObject {
         isLoading = true
         defer { isLoading = false }
 
-        let userId = "mock-user-id" // TODO: Get from auth manager
-
-        // Get start and end of today
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: Date())
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        guard let userId = authManager.currentUserId else { return }
 
         do {
             // Run database query on background thread
@@ -90,24 +69,6 @@ final class MealLoggingViewModel: ObservableObject {
         } catch {
             errorMessage = "Fehler beim Löschen der Mahlzeit"
             AppError.databaseWriteFailed(operation: "delete_meal", underlying: error).report()
-        }
-    }
-
-    func addMeal(_ meal: MealLog) async {
-        do {
-            // Run database operation on background thread
-            try await Task.detached { [dbManager] in
-                var mutableMeal = meal
-                try dbManager.write { db in
-                    try mutableMeal.insert(db)
-                }
-            }.value
-
-            // Reload to get updated list
-            await loadTodaysMeals()
-        } catch {
-            errorMessage = "Fehler beim Speichern der Mahlzeit"
-            AppError.databaseWriteFailed(operation: "insert_meal", underlying: error).report()
         }
     }
 }

@@ -2,156 +2,183 @@
 //  Step4MatadorExplainerView.swift
 //  w-diet
 //
-//  Created by Kevin Pietschmann on 06.01.26.
+//  Step 8: MATADOR Cycle Explainer
 //
 
 import SwiftUI
 
-/// Step 4: MATADOR Cycle Explainer
+/// Step 8: MATADOR Cycle Explainer
 struct Step4MatadorExplainerView: View {
     @ObservedObject var viewModel: OnboardingViewModel
-    @State private var showTooltip = false
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                // Header
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Was ist MATADOR?")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
+            VStack(spacing: 0) {
+                Spacer()
+                    .frame(height: 20)
 
-                    Text("Der MATADOR-Zyklus wechselt 2 Wochen Kaloriendefizit mit 2 Wochen Erhaltungskalorien. Dieser Rhythmus verhindert den Stoffwechsel-Crash und führt zu mehr Gewichtsverlust als kontinuierliches Diäten.")
+                // Mascot with speech bubble (consistent with other screens)
+                VStack(spacing: 12) {
+                    Image(systemName: "flame.fill")
+                        .font(.system(size: 50))
+                        .foregroundColor(Theme.fireGold)
+
+                    Text("Das ist MATADOR")
                         .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.medium)
+                        .foregroundColor(.primary)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Theme.gray100)
+                        .cornerRadius(16)
                 }
-                .padding(.horizontal)
+                .padding(.bottom, 20)
 
-                // Visual Diagram
-                VStack(spacing: 16) {
-                    Text("Der 4-Wochen-Zyklus")
-                        .font(.headline)
+                // Comparison Card
+                HStack(alignment: .top, spacing: 12) {
+                    // Normal Diet Column
+                    VStack(spacing: 12) {
+                        Text("Normale Diät")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.secondary)
+                            .frame(height: 16)
 
-                    VStack(spacing: 8) {
-                        // Week 1: Deficit Phase
-                        VStack(spacing: 4) {
-                            HStack(spacing: 4) {
-                                ForEach(1...7, id: \.self) { day in
-                                    cycleDayBox(phase: .deficit, isLarge: false)
-                                }
-                            }
-                            HStack {
-                                Text("Woche 1")
-                                    .font(.caption2)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                Text("Kaloriendefizit")
-                                    .font(.caption2)
-                                    .foregroundColor(Theme.deficitPhase)
+                        // Visual: all same color = constant deficit
+                        HStack(spacing: 3) {
+                            ForEach(0..<4, id: \.self) { _ in
+                                RoundedRectangle(cornerRadius: 4)
+                                    .fill(Color.gray.opacity(0.4))
+                                    .frame(height: 24)
                             }
                         }
 
-                        // Week 2: Deficit Phase
-                        VStack(spacing: 4) {
-                            HStack(spacing: 4) {
-                                ForEach(1...7, id: \.self) { day in
-                                    cycleDayBox(phase: .deficit, isLarge: false)
-                                }
-                            }
-                            HStack {
-                                Text("Woche 2")
-                                    .font(.caption2)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                Text("Kaloriendefizit")
-                                    .font(.caption2)
-                                    .foregroundColor(Theme.deficitPhase)
-                            }
+                        // Match 2-line height of right side
+                        VStack(spacing: 2) {
+                            Text("Konstantes")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            Text("Defizit")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
                         }
 
-                        // Week 3: Maintenance Phase
-                        VStack(spacing: 4) {
-                            HStack(spacing: 4) {
-                                ForEach(1...7, id: \.self) { day in
-                                    cycleDayBox(phase: .maintenance, isLarge: false)
-                                }
-                            }
-                            HStack {
-                                Text("Woche 3")
-                                    .font(.caption2)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                Text("Erhalt")
-                                    .font(.caption2)
-                                    .foregroundColor(Theme.maintenancePhase)
-                            }
-                        }
+                        VStack(spacing: 6) {
+                            Image(systemName: "arrow.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
 
-                        // Week 4: Maintenance Phase
-                        VStack(spacing: 4) {
-                            HStack(spacing: 4) {
-                                ForEach(1...7, id: \.self) { day in
-                                    cycleDayBox(phase: .maintenance, isLarge: false)
-                                }
-                            }
-                            HStack {
-                                Text("Woche 4")
-                                    .font(.caption2)
-                                    .fontWeight(.semibold)
-                                Spacer()
-                                Text("Erhalt")
-                                    .font(.caption2)
-                                    .foregroundColor(Theme.maintenancePhase)
-                            }
+                            Text("Stoffwechsel\ncrashed")
+                                .font(.caption2)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.secondary)
+
+                            Image(systemName: "arrow.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+
+                            Image(systemName: "xmark.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(.red.opacity(0.7))
+
+                            Text("Jojo-Effekt")
+                                .font(.caption2)
+                                .fontWeight(.medium)
+                                .foregroundColor(.red.opacity(0.8))
                         }
                     }
+                    .frame(maxWidth: .infinity)
+
+                    // Divider
+                    Rectangle()
+                        .fill(Theme.gray300)
+                        .frame(width: 1)
+
+                    // MATADOR Column
+                    VStack(spacing: 12) {
+                        Text("MATADOR")
+                            .font(.caption)
+                            .fontWeight(.bold)
+                            .foregroundColor(Theme.fireGold)
+                            .frame(height: 16)
+
+                        // Visual: 4 weeks (2 diet + 2 maintenance)
+                        HStack(spacing: 3) {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Theme.deficitPhase)
+                                .frame(height: 24)
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Theme.deficitPhase)
+                                .frame(height: 24)
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Theme.maintenancePhase)
+                                .frame(height: 24)
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Theme.maintenancePhase)
+                                .frame(height: 24)
+                        }
+
+                        VStack(spacing: 2) {
+                            Text("2 Wochen Defizit")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                            Text("2 Wochen Erhalt")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+                        }
+
+                        VStack(spacing: 6) {
+                            Image(systemName: "arrow.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+
+                            Text("Stoffwechsel\nbleibt aktiv")
+                                .font(.caption2)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(.secondary)
+
+                            Image(systemName: "arrow.down")
+                                .font(.caption2)
+                                .foregroundColor(.secondary)
+
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.title2)
+                                .foregroundColor(.green)
+
+                            Text("Gewichtsverlust")
+                                .font(.caption2)
+                                .fontWeight(.medium)
+                                .foregroundColor(.green)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
                 }
                 .padding()
-                .background(Theme.gray100)
-                .cornerRadius(12)
-                .padding(.horizontal)
+                .background(Theme.backgroundSecondary)
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Theme.gray300, lineWidth: 1)
+                )
+                .padding(.horizontal, 32)
 
-                // Benefits
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Hauptvorteile")
-                        .font(.headline)
-
-                    benefitRow(
-                        icon: "chart.line.uptrend.xyaxis",
-                        title: "Stoffwechsel",
-                        description: "Kein Stoffwechsel-Crash durch regelmäßige Erholungsphasen"
-                    )
-
-                    benefitRow(
-                        icon: "bolt.fill",
-                        title: "Mehr Gewichtsverlust",
-                        description: "Durch stabilen Stoffwechsel verlierst du mehr Gewicht"
-                    )
-
-                    benefitRow(
-                        icon: "checkmark.shield.fill",
-                        title: "Gewichtsverlust bewahren",
-                        description: "Das verlorene Gewicht bleibt auch langfristig weg"
-                    )
-
-                    benefitRow(
-                        icon: "figure.strengthtraining.traditional",
-                        title: "Muskeln erhalten",
-                        description: "Du verlierst Fett, nicht deine Muskelmasse"
-                    )
-
-                    benefitRow(
-                        icon: "heart.fill",
-                        title: "Lebensqualität",
-                        description: "Höhere Lebensqualität durch den nachhaltigen Zyklus"
-                    )
+                // Benefits Card
+                VStack(alignment: .leading, spacing: 10) {
+                    benefitRow(icon: "bolt.fill", text: "47% mehr Gewichtsverlust")
+                    benefitRow(icon: "chart.line.uptrend.xyaxis", text: "Stoffwechsel bleibt aktiv")
+                    benefitRow(icon: "checkmark.shield.fill", text: "Gewicht bleibt weg")
                 }
-                .padding()
-                .background(Color(.systemGray6).opacity(0.5))
-                .cornerRadius(8)
-                .padding(.horizontal)
+                .padding(14)
+                .background(Theme.backgroundSecondary)
+                .cornerRadius(16)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .strokeBorder(Theme.gray300, lineWidth: 1)
+                )
+                .padding(.top, 12)
+                .padding(.horizontal, 32)
 
-                // MATADOR Study Link
+                // Study Link
                 Link(destination: URL(string: "https://www.nature.com/articles/ijo2017206")!) {
                     HStack {
                         Image(systemName: "doc.text.magnifyingglass")
@@ -164,83 +191,38 @@ struct Step4MatadorExplainerView: View {
                             .font(.caption)
                     }
                     .foregroundColor(.blue)
-                    .padding()
-                    .background(Color(.systemGray6).opacity(0.3))
-                    .cornerRadius(8)
+                    .padding(14)
+                    .background(Theme.backgroundSecondary)
+                    .cornerRadius(12)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12)
+                            .strokeBorder(Theme.gray300, lineWidth: 1)
+                    )
                 }
-                .padding(.horizontal)
+                .padding(.top, 12)
+                .padding(.horizontal, 32)
 
                 Spacer()
+                    .frame(height: 100)
             }
-            .padding(.vertical)
-        }
-        .sheet(isPresented: $showTooltip) {
-            tooltipView
         }
     }
 
     // MARK: - Components
 
-    private enum CyclePhase {
-        case deficit
-        case maintenance
-    }
-
-    private func cycleDayBox(phase: CyclePhase, isLarge: Bool) -> some View {
-        Rectangle()
-            .fill(phase == .deficit ? Theme.deficitPhase : Theme.maintenancePhase)
-            .frame(height: isLarge ? 60 : 30)
-            .cornerRadius(3)
-    }
-
-    private func benefitRow(icon: String, title: String, description: String) -> some View {
-        HStack(alignment: .top, spacing: 12) {
+    private func benefitRow(icon: String, text: String) -> some View {
+        HStack(spacing: 12) {
             Image(systemName: icon)
-                .font(.title2)
+                .font(.body)
                 .foregroundColor(Theme.fireGold)
-                .frame(width: 30)
+                .frame(width: 24)
 
-            VStack(alignment: .leading, spacing: 4) {
-                Text(title)
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
+            Text(text)
+                .font(.subheadline)
+                .foregroundColor(.primary)
 
-                Text(description)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
+            Spacer()
         }
-    }
-
-    // MARK: - Tooltip
-
-    private var tooltipView: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("Warum funktioniert das?")
-                        .font(.title2)
-                        .fontWeight(.bold)
-
-                    Text("Forschungen zeigen, dass der Wechsel zwischen Essens- und Fastenphasen hilft, die Stoffwechselrate besser aufrechtzuerhalten als kontinuierliches Diäten.")
-                        .font(.body)
-
-                    Text("Der MATADOR-Ansatz wurde wissenschaftlich untersucht und verbessert nachweislich die Diättreue und langfristiges Gewichtsmanagement.")
-                        .font(.body)
-                }
-                .padding()
-            }
-            .navigationTitle("Die Wissenschaft")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Fertig") {
-                        showTooltip = false
-                    }
-                }
-            }
-        }
-        .presentationDetents([.medium])
     }
 }
 

@@ -144,4 +144,19 @@ extension WeightLog {
         let logs = try fetchLastNDays(db, userId: userId, days: days, referenceDate: referenceDate)
         return logs.count
     }
+
+    /// Check if weight was logged on a specific date
+    static func hasLoggedOnDate(_ db: Database, userId: String, date: Date) throws -> Bool {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+
+        let count = try WeightLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfDay)
+            .filter(Column("logged_at") < endOfDay)
+            .fetchCount(db)
+
+        return count > 0
+    }
 }

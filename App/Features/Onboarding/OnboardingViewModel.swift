@@ -26,14 +26,22 @@ import GRDB
 final class OnboardingViewModel: ObservableObject {
     // MARK: - Published Properties
 
-    /// Current step in onboarding flow (1-9)
-    @Published var currentStep: Int = 1
+    /// Current step in onboarding flow (0 = consent, 1-10 = onboarding steps)
+    @Published var currentStep: Int = 0
 
     /// Loading state for async operations
     @Published var isLoading = false
 
     /// Error message to display
     @Published var errorMessage: String?
+
+    // MARK: - Step 0: GDPR Consent (Required for German apps)
+
+    /// Whether user has consented to health data processing (DSGVO Art. 9)
+    @Published var healthDataConsentGiven = false
+
+    /// Whether user has accepted the privacy policy
+    @Published var privacyPolicyAccepted = false
 
     // MARK: - Step 1: Goal Selection
 
@@ -45,28 +53,68 @@ final class OnboardingViewModel: ObservableObject {
     /// Selected gender ("male", "female")
     @Published var selectedGender: String?
 
-    // MARK: - Step 3: Height Input (NEW - Story 1.3)
+    // MARK: - Step 3: Birthdate Input (NEW)
 
-    /// Height input in cm (as string for Picker binding)
-    @Published var heightInput: String = ""
+    /// Selected birth day (1-31)
+    @Published var selectedBirthDay: Int = 15
+
+    /// Selected birth month (1-12)
+    @Published var selectedBirthMonth: Int = 6
+
+    /// Selected birth year (default 2000 = age 26, middle of 18-34 target demographic)
+    @Published var selectedBirthYear: Int = 2000
+
+    /// Computed age from birthdate
+    var selectedAge: Int {
+        let calendar = Calendar.current
+        var birthComponents = DateComponents()
+        birthComponents.day = selectedBirthDay
+        birthComponents.month = selectedBirthMonth
+        birthComponents.year = selectedBirthYear
+
+        guard let birthDate = calendar.date(from: birthComponents) else {
+            return 28 // fallback
+        }
+
+        let ageComponents = calendar.dateComponents([.year], from: birthDate, to: Date())
+        return ageComponents.year ?? 28
+    }
+
+    // MARK: - Step 4: Height Input (NEW - Story 1.3)
+
+    /// Selected height in cm (direct picker binding for state persistence)
+    @Published var selectedHeight: Int = 175
 
     /// Validation error for height input
     @Published var heightInputError: String?
 
-    // MARK: - Step 4: Weight Input (NEW - Story 1.3)
+    /// Height as string for validation/saving compatibility
+    var heightInput: String {
+        "\(selectedHeight)"
+    }
 
-    /// Weight input in kg (as string for Picker binding)
-    @Published var weightInput: String = ""
+    // MARK: - Step 5: Weight Input (NEW - Story 1.3)
+
+    /// Selected weight whole number (direct picker binding)
+    @Published var selectedWeightWhole: Int = 75
+
+    /// Selected weight decimal (direct picker binding)
+    @Published var selectedWeightDecimal: Int = 0
 
     /// Validation error for weight input
     @Published var weightInputError: String?
 
-    // MARK: - Step 5: Activity Level (NEW - Story 1.3)
+    /// Weight as string for validation/saving compatibility
+    var weightInput: String {
+        String(format: "%.1f", Double(selectedWeightWhole) + Double(selectedWeightDecimal) / 10.0)
+    }
+
+    // MARK: - Step 6: Activity Level (NEW - Story 1.3)
 
     /// Selected activity level ("sedentary", "lightly_active", "moderately_active", "very_active", "extra_active")
     @Published var selectedActivityLevel: String?
 
-    // MARK: - Step 6: Calorie Target (was Step 2)
+    // MARK: - Step 7: Calorie Target
 
     /// Daily calorie target (as string for TextField binding)
     @Published var calorieTargetInput: String = ""
@@ -132,8 +180,8 @@ final class OnboardingViewModel: ObservableObject {
             return
         }
 
-        // Calculate and pre-fill calorie target after activity level (Step 5 -> Step 6)
-        if currentStep == 5 {
+        // Calculate and pre-fill calorie target after activity level (Step 6 -> Step 7)
+        if currentStep == 6 {
             calculateAndSetCalorieTarget()
         }
 
@@ -160,7 +208,7 @@ final class OnboardingViewModel: ObservableObject {
             gender: gender,
             heightCm: heightCm,
             weightKg: weightKg,
-            age: 30, // Default age assumption
+            age: selectedAge,
             activityLevel: activityLevel
         ) else {
             // Fallback if calculation fails
@@ -169,20 +217,20 @@ final class OnboardingViewModel: ObservableObject {
             return
         }
 
-        // Calculate target based on goal
-        let targetCalories = CalorieCalculator.calculateTargetCalories(tdee: tdee, goal: goal)
+        // Calculate MATADOR diet phase calories (67% of TDEE)
+        // User starts on Day 1 of diet phase after onboarding
+        let targetCalories = CalorieCalculator.calculateMatadorCalories(tdee: tdee, isDietPhase: true)
         calorieTargetInput = "\(targetCalories)"
         calculatedCalorieTarget = targetCalories // Store for dynamic warning threshold
 
         #if DEBUG
-        print("📊 Calorie Calculation:")
+        print("📊 MATADOR Calorie Calculation:")
         print("   Gender: \(gender)")
         print("   Height: \(heightCm) cm")
         print("   Weight: \(weightKg) kg")
         print("   Activity: \(activityLevel)")
-        print("   TDEE: \(tdee) kcal")
-        print("   Goal: \(goal)")
-        print("   Target: \(targetCalories) kcal")
+        print("   TDEE: \(tdee) kcal (100% Maintenance)")
+        print("   Diet Target: \(targetCalories) kcal (67% Diet Phase)")
         #endif
     }
 
@@ -202,18 +250,12 @@ final class OnboardingViewModel: ObservableObject {
         defer { isLoading = false }
 
         do {
-            // TEMPORARY: Use mock user ID until auth is set up
-            let userId = "mock-user-id"
-            let email = "mock@example.com"
+            // Get user ID from AuthManager
+            guard let userId = authManager.currentUserId else {
+                throw AppError.auth(.notAuthenticated)
+            }
 
-            // TODO: Uncomment when AuthManager is properly configured
-            // guard let userId = authManager.currentUserId else {
-            //     throw AppError.auth(.notAuthenticated)
-            // }
-            //
-            // guard let email = authManager.currentUserEmail else {
-            //     throw AppError.auth(.notAuthenticated)
-            // }
+            let email = authManager.currentUserEmail ?? "unknown@example.com"
 
             // Convert calorie input to integer
             guard let calorieTarget = Int(calorieTargetInput) else {
@@ -229,8 +271,16 @@ final class OnboardingViewModel: ObservableObject {
             let windowEnd = timeFormatter.string(from: eatingWindowEnd)
 
             // Fetch existing user profile or create new one
-            let existingProfile = try await dbManager.read { db in
+            // First try by user_id, then fallback to email (handles auth provider changes)
+            var existingProfile = try await dbManager.read { db in
                 try UserProfile.fetchByUserId(db, userId: userId)
+            }
+
+            // Fallback: check by email if user_id not found (e.g., auth provider changed)
+            if existingProfile == nil {
+                existingProfile = try await dbManager.read { db in
+                    try UserProfile.fetchByEmail(db, email: email)
+                }
             }
 
             // Convert inputs to proper types for saving
@@ -243,16 +293,18 @@ final class OnboardingViewModel: ObservableObject {
             let updatedProfile: UserProfile
             if let existing = existingProfile {
                 // Update existing profile with onboarding data
+                // Use current userId (may differ from existing if auth provider changed)
                 updatedProfile = UserProfile(
                     id: existing.id,
-                    userId: existing.userId,
-                    email: existing.email,
+                    userId: userId,
+                    email: email,
                     goal: selectedGoal,
                     calorieTarget: calorieTarget,
                     eatingWindowStart: windowStart,
                     eatingWindowEnd: windowEnd,
                     onboardingCompleted: true,
                     gender: selectedGender,
+                    age: selectedAge,
                     heightCm: heightCmValue,
                     weightKg: weightKgValue,
                     activityLevel: selectedActivityLevel,
@@ -277,6 +329,7 @@ final class OnboardingViewModel: ObservableObject {
                     eatingWindowEnd: windowEnd,
                     onboardingCompleted: true,
                     gender: selectedGender,
+                    age: selectedAge,
                     heightCm: heightCmValue,
                     weightKg: weightKgValue,
                     activityLevel: selectedActivityLevel,
@@ -310,12 +363,16 @@ final class OnboardingViewModel: ObservableObject {
             print("✅ Onboarding completed for user \(userId)")
             print("   Goal: \(selectedGoal ?? "none")")
             print("   Gender: \(selectedGender ?? "none")")
+            print("   Age: \(selectedAge)")
             print("   Height: \(heightInput) cm")
             print("   Weight: \(weightInput) kg")
             print("   Activity: \(selectedActivityLevel ?? "none")")
             print("   Calorie Target: \(calorieTarget) kcal")
             print("   Eating Window: \(windowStart) - \(windowEnd)")
             #endif
+
+            // Sync to Supabase (non-blocking, offline-first)
+            try? await authManager.syncUserProfile(updatedProfile)
 
         } catch let error as AppError {
             error.report()
@@ -332,68 +389,62 @@ final class OnboardingViewModel: ObservableObject {
     /// Validate current step before allowing navigation
     private func validateCurrentStep() -> Bool {
         switch currentStep {
+        case 0: // GDPR Consent
+            guard healthDataConsentGiven else {
+                errorMessage = "Bitte stimme der Datenverarbeitung zu"
+                return false
+            }
+            return true
+
         case 1: // Goal Selection
             guard selectedGoal != nil else {
-                errorMessage = "Please select a goal"
+                errorMessage = "Bitte wähle ein Ziel"
                 return false
             }
             return true
 
         case 2: // Gender Selection
             guard selectedGender != nil else {
-                errorMessage = "Please select your gender"
+                errorMessage = "Bitte wähle dein Geschlecht"
                 return false
             }
             return true
 
-        case 3: // Height Input
-            guard !heightInput.isEmpty else {
-                heightInputError = "Please enter your height"
+        case 3: // Age Input
+            // Age is always valid (picker-based, 18-99 range)
+            guard selectedAge >= 18 && selectedAge <= 99 else {
+                errorMessage = "Alter muss zwischen 18 und 99 Jahren liegen"
                 return false
             }
+            return true
 
-            guard let height = Double(heightInput) else {
-                heightInputError = "Please enter a valid number"
-                return false
-            }
-
-            // Validate range (100-220 cm)
-            guard height >= 100 && height <= 220 else {
+        case 4: // Height Input
+            // Height is always valid (picker-based, 100-220 range enforced by picker)
+            guard selectedHeight >= 100 && selectedHeight <= 220 else {
                 heightInputError = "Height must be between 100-220 cm"
                 return false
             }
-
             heightInputError = nil
             return true
 
-        case 4: // Weight Input
-            guard !weightInput.isEmpty else {
-                weightInputError = "Please enter your weight"
-                return false
-            }
-
-            guard let weight = Double(weightInput) else {
-                weightInputError = "Please enter a valid number"
-                return false
-            }
-
-            // Validate range (kg only)
+        case 5: // Weight Input
+            // Weight is always valid (picker-based, 40-200 range enforced by picker)
+            let weight = Double(selectedWeightWhole) + Double(selectedWeightDecimal) / 10.0
             guard weight >= 40 && weight <= 200 else {
                 weightInputError = "Weight must be between 40-200 kg"
                 return false
             }
-
             weightInputError = nil
             return true
 
-        case 5: // Activity Level
+        case 6: // Activity Level
             guard selectedActivityLevel != nil else {
                 errorMessage = "Please select your activity level"
                 return false
             }
             return true
 
-        case 6: // Calorie Target
+        case 7: // Calorie Target
             // Validate calorie input
             guard !calorieTargetInput.isEmpty else {
                 calorieInputError = "Please enter a calorie target"
@@ -420,15 +471,15 @@ final class OnboardingViewModel: ObservableObject {
             calorieInputError = nil
             return true
 
-        case 7: // Eating Window
+        case 8: // Eating Window
             // Validate eating window (no validation needed, time pickers always valid)
             return true
 
-        case 8: // MATADOR Explainer
+        case 9: // MATADOR Explainer
             // No input required, always valid
             return true
 
-        case 9: // Completion
+        case 10: // Completion
             // Final step, no validation needed
             return true
 
@@ -440,23 +491,27 @@ final class OnboardingViewModel: ObservableObject {
     /// Check if continue button should be enabled for current step
     var canContinue: Bool {
         switch currentStep {
+        case 0:
+            return healthDataConsentGiven
         case 1:
             return selectedGoal != nil
         case 2:
             return selectedGender != nil
         case 3:
-            return !heightInput.isEmpty && heightInputError == nil
+            return selectedAge >= 18 && selectedAge <= 99
         case 4:
-            return !weightInput.isEmpty && weightInputError == nil
+            return selectedHeight >= 100 && selectedHeight <= 220
         case 5:
-            return selectedActivityLevel != nil
+            return selectedWeightWhole >= 40 && selectedWeightWhole <= 200
         case 6:
-            return !calorieTargetInput.isEmpty && calorieInputError == nil
+            return selectedActivityLevel != nil
         case 7:
-            return true
+            return !calorieTargetInput.isEmpty && calorieInputError == nil
         case 8:
             return true
         case 9:
+            return true
+        case 10:
             return true
         default:
             return false

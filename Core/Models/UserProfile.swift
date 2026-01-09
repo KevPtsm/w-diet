@@ -62,6 +62,9 @@ struct UserProfile: Codable, FetchableRecord, PersistableRecord {
     /// User's gender ("male", "female", "other")
     let gender: String?
 
+    /// User's age in years
+    let age: Int?
+
     /// User's height in centimeters
     let heightCm: Double?
 
@@ -107,6 +110,7 @@ struct UserProfile: Codable, FetchableRecord, PersistableRecord {
         case eatingWindowEnd = "eating_window_end"     // Database: eating_window_end, Swift: eatingWindowEnd
         case onboardingCompleted = "onboarding_completed" // Database: onboarding_completed, Swift: onboardingCompleted
         case gender                     // Database: gender, Swift: gender
+        case age                        // Database: age, Swift: age
         case heightCm = "height_cm"     // Database: height_cm, Swift: heightCm
         case weightKg = "weight_kg"     // Database: weight_kg, Swift: weightKg
         case activityLevel = "activity_level" // Database: activity_level, Swift: activityLevel
@@ -129,6 +133,7 @@ struct UserProfile: Codable, FetchableRecord, PersistableRecord {
         eatingWindowEnd: String? = nil,
         onboardingCompleted: Bool = false,
         gender: String? = nil,
+        age: Int? = nil,
         heightCm: Double? = nil,
         weightKg: Double? = nil,
         activityLevel: String? = nil,
@@ -147,6 +152,7 @@ struct UserProfile: Codable, FetchableRecord, PersistableRecord {
         self.eatingWindowEnd = eatingWindowEnd
         self.onboardingCompleted = onboardingCompleted
         self.gender = gender
+        self.age = age
         self.heightCm = heightCm
         self.weightKg = weightKg
         self.activityLevel = activityLevel
@@ -171,6 +177,7 @@ struct UserProfile: Codable, FetchableRecord, PersistableRecord {
             eatingWindowEnd: eatingWindowEnd,
             onboardingCompleted: onboardingCompleted,
             gender: gender,
+            age: age,
             heightCm: heightCm,
             weightKg: weightKg,
             activityLevel: activityLevel,

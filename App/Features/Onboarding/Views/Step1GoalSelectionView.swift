@@ -10,149 +10,132 @@ import SwiftUI
 /// Step 1: Goal Selection - allows user to choose fitness goal
 struct Step1GoalSelectionView: View {
     @ObservedObject var viewModel: OnboardingViewModel
-    @State private var showTooltip = false
+    @Environment(\.isConfirmingSelection) private var isConfirming
 
     var body: some View {
+        let _ = preSelectGoal()
         VStack(spacing: 0) {
-            // Header at top
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Was ist dein Ziel?")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-
-                Text("Wähle das Ziel, das am besten zu dir passt")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-            .padding(.top, 20)
-
             Spacer()
 
-            // Goal Cards centered
+            // Mascot with speech bubble
+            VStack(spacing: 12) {
+                // Flame mascot
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 50))
+                    .foregroundColor(Theme.fireGold)
+
+                // Speech bubble with question
+                Text("Was ist dein Ziel?")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Theme.gray100)
+                    .cornerRadius(16)
+            }
+            .offset(y: -7) // Fine-tune mascot position to match other screens
+            .padding(.bottom, 24)
+
+            // Goal Cards
             VStack(spacing: 16) {
                 goalCard(
                     goal: "lose_weight",
-                    title: "Gewicht verlieren",
-                    icon: "arrow.down.circle.fill",
-                    description: "Körpergewicht reduzieren und Muskeln erhalten",
+                    title: "Abnehmen",
+                    icon: "flame.fill",
                     isEnabled: true
                 )
 
                 goalCard(
                     goal: "maintain_weight",
                     title: "Gewicht halten",
-                    icon: "equal.circle.fill",
-                    description: "Aktuelles Gewicht halten und Körperkomposition verbessern",
+                    icon: "scalemass.fill",
                     isEnabled: false
                 )
 
                 goalCard(
                     goal: "gain_muscle",
                     title: "Muskeln aufbauen",
-                    icon: "arrow.up.circle.fill",
-                    description: "Muskelmasse und Kraft aufbauen",
+                    icon: "dumbbell.fill",
                     isEnabled: false
                 )
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 32)
 
             Spacer()
-        }
-        .sheet(isPresented: $showTooltip) {
-            tooltipView
+            Spacer()
         }
     }
 
     // MARK: - Goal Card
 
-    private func goalCard(goal: String, title: String, icon: String, description: String, isEnabled: Bool) -> some View {
-        Button(action: {
+    private func goalCard(goal: String, title: String, icon: String, isEnabled: Bool) -> some View {
+        let isSelected = viewModel.selectedGoal == goal && isEnabled
+
+        return Button(action: {
             if isEnabled {
                 viewModel.selectedGoal = goal
             }
         }) {
-            HStack(alignment: .top, spacing: 16) {
+            HStack(spacing: 16) {
                 Image(systemName: icon)
-                    .font(.system(size: 40))
-                    .foregroundColor(isEnabled ? (viewModel.selectedGoal == goal ? .white : Theme.fireGold) : Theme.disabled)
-                    .frame(width: 60, height: 60)
+                    .font(.system(size: 28))
+                    .foregroundColor(isEnabled ? (isSelected ? .white : Theme.fireGold) : Theme.disabled)
+                    .frame(width: 40)
 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(title)
-                        .font(.headline)
-                        .foregroundColor(isEnabled ? (viewModel.selectedGoal == goal ? .white : Theme.textPrimary) : Theme.disabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-
-                    Text(description)
-                        .font(.caption)
-                        .foregroundColor(isEnabled ? (viewModel.selectedGoal == goal ? .white.opacity(0.9) : Theme.textSecondary) : Theme.disabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .multilineTextAlignment(.leading)
-                }
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(isEnabled ? (isSelected ? .white : .primary) : Theme.disabled)
 
                 Spacer()
 
-                if !isEnabled {
-                    Text("Bald verfügbar")
-                        .font(.caption2)
+                if isSelected {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.white)
                         .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Theme.energyOrange)
-                        .cornerRadius(8)
-                } else if viewModel.selectedGoal == goal {
-                    Image(systemName: "checkmark.circle.fill")
-                        .foregroundColor(.white)
-                        .font(.title2)
                 }
             }
-            .padding()
-            .background(viewModel.selectedGoal == goal && isEnabled ? Theme.fireGold : Theme.gray100)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .frame(maxWidth: .infinity)
+            .frame(height: 60)
+            .background(isSelected ? Theme.fireGold : Theme.backgroundSecondary)
             .cornerRadius(12)
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(isSelected ? Color.clear : Theme.gray300, lineWidth: 1)
+            )
+            .overlay(alignment: .topTrailing) {
+                if !isEnabled {
+                    soonBadge
+                        .offset(x: 8, y: -8)
+                }
+            }
+            .scaleEffect(isSelected && isConfirming ? 0.95 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: isConfirming)
         }
         .disabled(!isEnabled)
     }
 
-    // MARK: - Tooltip
+    // MARK: - Soon Badge
 
-    private var tooltipView: some View {
-        NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    Text("MATADOR funktioniert für alle Ziele")
-                        .font(.title2)
-                        .fontWeight(.bold)
+    private var soonBadge: some View {
+        Text("Soon")
+            .font(.system(size: 11))
+            .fontWeight(.semibold)
+            .foregroundColor(.white)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(Theme.fireGold)
+            .cornerRadius(6)
+    }
 
-                    Text("Der MATADOR-Zyklus ist darauf ausgelegt, deinen Stoffwechsel unabhängig von deinem Ziel zu erhalten.")
-                        .font(.body)
+    // MARK: - Pre-select Default
 
-                    VStack(alignment: .leading, spacing: 12) {
-                        Label("Gewicht verlieren: Minimiert metabolische Anpassung im Kaloriendefizit", systemImage: "arrow.down.circle")
-                        Label("Gewicht halten: Aktuelles Gewicht mit flexibler Ernährung halten", systemImage: "equal.circle")
-                        Label("Muskeln aufbauen: Masse aufbauen bei optimaler Körperkomposition", systemImage: "arrow.up.circle")
-                    }
-                    .font(.subheadline)
-
-                    Text("Dein Ziel hilft uns, passende Kalorienziele und Tracking-Metriken festzulegen.")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .padding()
-            }
-            .navigationTitle("Über Ziele")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Fertig") {
-                        showTooltip = false
-                    }
-                }
-            }
+    private func preSelectGoal() {
+        if viewModel.selectedGoal == nil {
+            viewModel.selectedGoal = "lose_weight"
         }
-        .presentationDetents([.medium])
     }
 }
 

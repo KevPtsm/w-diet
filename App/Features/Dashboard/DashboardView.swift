@@ -28,6 +28,8 @@ struct DashboardView: View {
     enum Tab {
         case home
         case logging
+        case learning
+        case community
         case settings
     }
 
@@ -39,41 +41,90 @@ struct DashboardView: View {
             NavigationStack {
                 ScrollView {
                     VStack(spacing: 32) {
-                        // Weight Reminder Card (shown daily until weight logged)
+                        // Weight Reminder Card (top priority - shown daily until weight logged)
                         if viewModel.showWeightReminder {
                             weightReminderCard
                         }
-
-                        // Cycle Status Card
-                        cycleStatusCard
 
                         // Weight Stats Card
                         if viewModel.currentWeight != nil {
                             weightStatsCard
                         }
 
-                        // Macro Progress
+                        // Macro Progress (Hero element - shows daily progress)
                         macroProgressSection
-                            .padding(.bottom, 8)
+                            .padding(.top, 10)
 
-                        // Quick Meal Add Button
+                        // Cycle Status Card (MATADOR Calendar - secondary navigation)
+                        cycleStatusCard
+                            .padding(.top, 10)
+                    }
+                    .padding()
+                    .padding(.bottom, 70) // Space for fixed button
+                }
+                .safeAreaInset(edge: .bottom) {
+                    // Fixed Add Food Buttons
+                    HStack(spacing: 12) {
+                        // Left: Add Food manually
                         Button {
                             showAddFood = true
                         } label: {
                             HStack {
                                 Image(systemName: "plus.circle.fill")
                                 Text("Essen hinzufügen")
-                                    .font(.headline)
+                                    .font(.subheadline).fontWeight(.semibold)
                             }
                             .frame(maxWidth: .infinity)
-                            .padding(.vertical, 4)
+                            .padding(.vertical, 12)
+                            .background(Theme.fireGold)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+                            )
                         }
-                        .buttonStyle(.borderedProminent)
-                        .tint(Theme.fireGold)
+                        .buttonStyle(.plain)
 
-                        Spacer()
+                        // Right: Scan Food (Coming Soon)
+                        Button {
+                            // Coming soon - no action
+                        } label: {
+                            HStack {
+                                Image(systemName: "barcode.viewfinder")
+                                Text("Teller scannen")
+                                    .font(.subheadline).fontWeight(.semibold)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 12)
+                            .background(Theme.disabled)
+                            .foregroundColor(.white.opacity(0.7))
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+                            )
+                        }
+                        .buttonStyle(.plain)
+                        .disabled(true)
+                        .overlay(alignment: .topTrailing) {
+                            Text("Soon")
+                                .font(.system(size: 10))
+                                .fontWeight(.semibold)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 3)
+                                .background(Theme.fireGold)
+                                .cornerRadius(4)
+                                .offset(x: 6, y: -6)
+                        }
                     }
-                    .padding()
+                    .padding(.horizontal)
+                    .padding(.bottom, 38)
+                    .background(
+                        Theme.backgroundPrimary
+                            .ignoresSafeArea()
+                    )
                 }
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
@@ -111,6 +162,32 @@ struct DashboardView: View {
             }
             .tag(Tab.logging)
 
+            // Learning Tab (Coming Soon)
+            NavigationStack {
+                ComingSoonView(
+                    title: "Lernen",
+                    icon: "book.fill",
+                    description: "Tipps und Wissen rund um Ernährung und MATADOR"
+                )
+            }
+            .tabItem {
+                Image(systemName: selectedTab == .learning ? "book.fill" : "book")
+            }
+            .tag(Tab.learning)
+
+            // Community Tab (Coming Soon)
+            NavigationStack {
+                ComingSoonView(
+                    title: "Community",
+                    icon: "bubble.left.and.bubble.right.fill",
+                    description: "Tausche dich mit anderen aus"
+                )
+            }
+            .tabItem {
+                Image(systemName: selectedTab == .community ? "bubble.left.and.bubble.right.fill" : "bubble.left.and.bubble.right")
+            }
+            .tag(Tab.community)
+
             // Settings Tab
             NavigationStack {
                 SettingsView()
@@ -121,6 +198,8 @@ struct DashboardView: View {
             .tag(Tab.settings)
         }
         .tint(Theme.fireGold)
+        .toolbarBackground(.visible, for: .tabBar)
+        .toolbarBackground(Theme.backgroundSecondary, for: .tabBar)
         .sheet(isPresented: $showWeightLogging) {
             WeightLoggingSheet(
                 isPresented: $showWeightLogging,
@@ -187,7 +266,7 @@ struct DashboardView: View {
     private var cycleStatusCard: some View {
         VStack(spacing: 16) {
             // MATADOR Cycle Calendar
-            MatadorCycleCalendar(currentDay: viewModel.currentDay)
+            MatadorCycleCalendar(currentDay: viewModel.currentDay, cycleStartDate: viewModel.cycleStartDate)
 
             // Status text below calendar
             if viewModel.currentDay == 0 {
@@ -204,7 +283,7 @@ struct DashboardView: View {
     }
 
     private var weightStatsCard: some View {
-        HStack(spacing: 16) {
+        HStack(spacing: 0) {
             // Left: 7-Day Average + Trend (PRIMARY)
             VStack(alignment: .leading, spacing: 4) {
                 Text("Ø 7 Tage")
@@ -230,8 +309,19 @@ struct DashboardView: View {
                         .foregroundColor(viewModel.weightTrend.color)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
 
-            Spacer()
+            // Center: Streak Indicator
+            VStack(spacing: 2) {
+                Text("\(viewModel.streakDays)")
+                    .font(.caption)
+                    .fontWeight(.bold)
+                    .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
+
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 24))
+                    .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
+            }
 
             // Right: Current Weight (SECONDARY)
             VStack(alignment: .trailing, spacing: 4) {
@@ -251,12 +341,13 @@ struct DashboardView: View {
                         .foregroundStyle(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .padding(.horizontal)
     }
 
     private var macroProgressSection: some View {
-        VStack(spacing: 32) {
+        VStack(spacing: 35) {
             // Circular Progress Ring
             ZStack {
                 // Center text
@@ -344,6 +435,11 @@ struct DashboardView: View {
                     RoundedRectangle(cornerRadius: 3)
                         .fill(color)
                         .frame(width: geometry.size.width * progress, height: 6)
+
+                    // Border for light mode visibility
+                    RoundedRectangle(cornerRadius: 3)
+                        .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
+                        .frame(height: 6)
                 }
             }
             .frame(height: 6)
@@ -388,9 +484,19 @@ struct CircularMacroRing: View {
 
     var body: some View {
         ZStack {
+            // Outer border for light mode visibility
+            Circle()
+                .stroke(Theme.lightModeBorder, lineWidth: 1)
+                .padding(-10)  // Position at outer edge of ring
+
             // Background ring (full circle)
             Circle()
                 .stroke(Theme.gray100, lineWidth: 20)
+
+            // Inner border for light mode visibility
+            Circle()
+                .stroke(Theme.lightModeBorder, lineWidth: 1)
+                .padding(10)  // Position at inner edge of ring
 
             // Protein segment
             Circle()
@@ -409,6 +515,54 @@ struct CircularMacroRing: View {
                 .trim(from: 0, to: min(fatPercentage, 1.0))
                 .stroke(Theme.macroFat, style: StrokeStyle(lineWidth: 20, lineCap: .butt))
                 .rotationEffect(.degrees(-90 + (proteinPercentage + carbsPercentage) * 360))
+
+            // Separator lines between segments
+            // Line between Protein and Carbs
+            if proteinPercentage > 0.01 && carbsPercentage > 0.01 {
+                SeparatorLine(angle: -90 + proteinPercentage * 360)
+            }
+
+            // Line between Carbs and Fat
+            if carbsPercentage > 0.01 && fatPercentage > 0.01 {
+                SeparatorLine(angle: -90 + (proteinPercentage + carbsPercentage) * 360)
+            }
+
+            // Line between Fat and remaining/start (if fat exists)
+            if fatPercentage > 0.01 && remainingPercentage > 0.01 {
+                SeparatorLine(angle: -90 + (proteinPercentage + carbsPercentage + fatPercentage) * 360)
+            }
+        }
+    }
+}
+
+// MARK: - Separator Line Component
+
+struct SeparatorLine: View {
+    let angle: Double
+
+    var body: some View {
+        GeometryReader { geometry in
+            let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
+            let radius = min(geometry.size.width, geometry.size.height) / 2
+
+            Path { path in
+                let radians = angle * .pi / 180
+                let innerRadius = radius - 12 // Inside the ring
+                let outerRadius = radius + 12 // Outside the ring
+
+                let innerPoint = CGPoint(
+                    x: center.x + innerRadius * cos(radians),
+                    y: center.y + innerRadius * sin(radians)
+                )
+                let outerPoint = CGPoint(
+                    x: center.x + outerRadius * cos(radians),
+                    y: center.y + outerRadius * sin(radians)
+                )
+
+                path.move(to: innerPoint)
+                path.addLine(to: outerPoint)
+            }
+            .stroke(Color(UIColor.systemBackground), style: StrokeStyle(lineWidth: 2, lineCap: .round))
         }
     }
 }

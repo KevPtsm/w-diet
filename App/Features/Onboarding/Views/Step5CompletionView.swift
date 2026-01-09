@@ -2,84 +2,79 @@
 //  Step5CompletionView.swift
 //  w-diet
 //
-//  Created by Kevin Pietschmann on 06.01.26.
+//  Step 10: Completion - celebration and start button
 //
 
 import SwiftUI
 
-/// Step 5: Completion and Dashboard Reveal
+/// Step 10: Completion - celebratory screen with start button
 struct Step5CompletionView: View {
     @ObservedObject var viewModel: OnboardingViewModel
     let onComplete: () -> Void
+    @State private var isAnimating = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 32) {
-                Spacer()
+        VStack(spacing: 0) {
+            Spacer()
 
-                // Fire Character
-                Image(systemName: "flame.circle.fill")
-                    .font(.system(size: 100))
+            // Celebratory mascot
+            VStack(spacing: 16) {
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 80))
                     .foregroundColor(Theme.fireGold)
-                    .symbolEffect(.bounce, options: .repeating)
+                    .scaleEffect(isAnimating ? 1.1 : 1.0)
+                    .animation(
+                        .easeInOut(duration: 0.6)
+                        .repeatForever(autoreverses: true),
+                        value: isAnimating
+                    )
 
-                // Success Message
-                VStack(spacing: 16) {
-                    Text("Alles klar!")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-
-                    Text("Lass uns mit deiner Reise starten")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
-
-                // Summary
-                VStack(alignment: .leading, spacing: 16) {
-                    summaryRow(label: "Ziel", value: viewModel.goalDisplayName)
-                    Divider()
-                    summaryRow(label: "Tagesziel", value: "\(viewModel.calorieTargetInput) kcal")
-                    Divider()
-                    summaryRow(label: "Essfenster", value: viewModel.formattedEatingWindow)
-                }
-                .padding()
-                .background(Theme.gray100)
-                .cornerRadius(12)
-                .padding(.horizontal)
-
-                // Start Button
-                Button(action: {
-                    onComplete()
-                }) {
-                    Text("Los geht's")
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(Theme.fireGold)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal)
-
-                Spacer()
+                Text("Bereit!")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 10)
+                    .background(Theme.gray100)
+                    .cornerRadius(20)
             }
-            .padding(.vertical)
-        }
-    }
-
-    // MARK: - Components
-
-    private func summaryRow(label: String, value: String) -> some View {
-        HStack {
-            Text(label)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
 
             Spacer()
 
-            Text(value)
-                .font(.subheadline)
-                .fontWeight(.semibold)
+            // Calorie summary (minimal)
+            VStack(spacing: 8) {
+                Text("\(viewModel.calculatedCalorieTarget)")
+                    .font(.system(size: 48, weight: .bold))
+                    .foregroundColor(Theme.fireGold)
+
+                Text("kcal pro Tag")
+                    .font(.subheadline)
+                    .foregroundColor(Theme.textSecondary)
+            }
+            .frame(height: 100)
+
+            Spacer()
+
+            // Start Button
+            Button(action: {
+                onComplete()
+            }) {
+                Text("Los geht's")
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+                    .background(Theme.fireGold)
+                    .cornerRadius(14)
+            }
+            .padding(.horizontal, 32)
+            .padding(.bottom, 16)
+
+            Spacer()
+        }
+        .onAppear {
+            isAnimating = true
         }
     }
 }

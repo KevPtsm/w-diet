@@ -2,107 +2,105 @@
 //  Step4WeightInputView.swift
 //  w-diet
 //
-//  Created for Story 1.3 - Enhanced Onboarding
+//  Step 5: Weight Input - collects user's weight for calorie calculation
 //
 
 import SwiftUI
 
-/// Step 4: Weight Input - collects user's weight for calorie calculation
+/// Step 5: Weight Input - collects user's weight for calorie calculation
 struct Step4WeightInputView: View {
     @ObservedObject var viewModel: OnboardingViewModel
-    @State private var selectedWeightWhole: Int = 70 // Whole kg
-    @State private var selectedWeightDecimal: Int = 0 // Decimal (0-9)
 
     var body: some View {
         VStack(spacing: 0) {
-            // Header at top
-            VStack(alignment: .leading, spacing: 8) {
-                Text("Wie viel wiegst du aktuell?")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
+            Spacer()
+
+            // Mascot with speech bubble
+            VStack(spacing: 12) {
+                Image(systemName: "flame.fill")
+                    .font(.system(size: 50))
+                    .foregroundColor(Theme.fireGold)
+
+                Text("Wieviel wiegst du?")
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundColor(.primary)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Theme.gray100)
+                    .cornerRadius(16)
+            }
+            .padding(.bottom, 24)
+
+            // Weight Pickers (consistent 150pt height)
+            HStack(spacing: 0) {
+                Picker("Weight", selection: $viewModel.selectedWeightWhole) {
+                    ForEach(40...200, id: \.self) { weight in
+                        Text("\(weight)")
+                            .font(.system(size: 28, weight: .semibold))
+                            .tag(weight)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(width: 80, height: 150)
+                .clipped()
+                .onChange(of: viewModel.selectedWeightWhole) { _, _ in
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
+                }
+
+                Text(",")
+                    .font(.system(size: 28, weight: .semibold))
                     .foregroundColor(Theme.textPrimary)
 
-                Text("Wir nutzen dies für deine Kalorienberechnung")
-                    .font(.subheadline)
-                    .foregroundColor(Theme.textSecondary)
+                Picker("Decimal", selection: $viewModel.selectedWeightDecimal) {
+                    ForEach(0...9, id: \.self) { decimal in
+                        Text("\(decimal)")
+                            .font(.system(size: 28, weight: .semibold))
+                            .tag(decimal)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(width: 50, height: 150)
+                .clipped()
+                .onChange(of: viewModel.selectedWeightDecimal) { _, _ in
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
+                }
+
+                Text("kg")
+                    .font(.system(size: 28, weight: .semibold))
+                    .foregroundColor(Theme.textPrimary)
+                    .padding(.leading, 8)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.horizontal)
-            .padding(.top, 20)
+            .frame(height: 150)
+
+            // Tip card
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "lightbulb.fill")
+                    .font(.title3)
+                    .foregroundColor(.yellow)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Tipp")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+
+                    Text("Dies ist relevant für die Kalorienberechnung.")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer()
+            }
+            .padding()
+            .background(Color.yellow.opacity(0.1))
+            .cornerRadius(12)
+            .padding(.horizontal, 32)
+            .padding(.top, 16)
 
             Spacer()
-
-            // Picker in center
-            VStack(spacing: 24) {
-                // Weight Pickers (kg + decimal)
-                HStack(spacing: 0) {
-                    // Whole kg picker
-                    Picker("Weight", selection: $selectedWeightWhole) {
-                        ForEach(40...200, id: \.self) { weight in
-                            Text("\(weight)")
-                                .font(.system(size: 26, weight: .semibold))
-                                .tag(weight)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(width: 100, height: 150)
-                    .clipped()
-                    .onChange(of: selectedWeightWhole) { _, _ in
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
-                        updateViewModel()
-                    }
-
-                    Text(".")
-                        .font(.system(size: 26, weight: .semibold))
-                        .foregroundColor(Theme.textPrimary)
-
-                    // Decimal picker
-                    Picker("Decimal", selection: $selectedWeightDecimal) {
-                        ForEach(0...9, id: \.self) { decimal in
-                            Text("\(decimal)")
-                                .font(.system(size: 26, weight: .semibold))
-                                .tag(decimal)
-                        }
-                    }
-                    .pickerStyle(.wheel)
-                    .frame(width: 60, height: 150)
-                    .clipped()
-                    .onChange(of: selectedWeightDecimal) { _, _ in
-                        let impactFeedback = UIImpactFeedbackGenerator(style: .light)
-                        impactFeedback.impactOccurred()
-                        updateViewModel()
-                    }
-
-                    Text("kg")
-                        .font(.system(size: 26, weight: .semibold))
-                        .foregroundColor(Theme.textPrimary)
-                        .padding(.leading, 8)
-                }
-            }
-
             Spacer()
         }
-        .onAppear {
-            // Initialize with default or existing value
-            if !viewModel.weightInput.isEmpty {
-                if let weight = Double(viewModel.weightInput) {
-                    selectedWeightWhole = Int(weight)
-                    selectedWeightDecimal = Int((weight - Double(Int(weight))) * 10)
-                }
-            } else {
-                // Set default to 70.0 kg
-                selectedWeightWhole = 70
-                selectedWeightDecimal = 0
-                updateViewModel()
-            }
-        }
-    }
-
-    private func updateViewModel() {
-        let weightValue = Double(selectedWeightWhole) + Double(selectedWeightDecimal) / 10.0
-        viewModel.weightInput = String(format: "%.1f", weightValue)
-        viewModel.weightInputError = nil
     }
 }
 
