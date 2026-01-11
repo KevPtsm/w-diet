@@ -114,11 +114,11 @@ struct PlateScannerView: View {
                 .font(.system(size: 80))
                 .foregroundColor(Theme.fireGold)
 
-            Text("Fotografiere dein Essen")
+            Text(Strings.PlateScanner.photographFood)
                 .font(.title2)
                 .fontWeight(.semibold)
 
-            Text("Die KI analysiert das Bild und schätzt die Nährwerte")
+            Text(Strings.PlateScanner.aiAnalysis)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -213,7 +213,10 @@ struct PlateScannerView: View {
             ScrollView {
                 VStack(spacing: 12) {
                     ForEach(result.items) { item in
-                        foodItemRow(item)
+                        FoodItemRowView(item: item) {
+                            onFoodAnalyzed(item)
+                            dismiss()
+                        }
                     }
                 }
             }
@@ -234,48 +237,6 @@ struct PlateScannerView: View {
                 .cornerRadius(12)
             }
         }
-    }
-
-    private func foodItemRow(_ item: FoodAnalysisResponse.FoodItem) -> some View {
-        Button {
-            onFoodAnalyzed(item)
-            dismiss()
-        } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.name)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    Text(item.portion)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("\(item.calories) kcal")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(Theme.fireGold)
-                    Text("E:\(Int(item.proteinG))g K:\(Int(item.carbsG))g F:\(Int(item.fatG))g")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-
-                Image(systemName: "plus.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(Theme.fireGold)
-            }
-            .padding()
-            .background(Theme.backgroundSecondary)
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
     }
 
     // MARK: - Helpers
@@ -422,7 +383,9 @@ struct PlateAnalysisResultsView: View {
                     ScrollView {
                         VStack(spacing: 12) {
                             ForEach(result.items) { item in
-                                foodItemRow(item)
+                                FoodItemRowView(item: item) {
+                                    onFoodSelected(item)
+                                }
                             }
                         }
                     }
@@ -448,46 +411,5 @@ struct PlateAnalysisResultsView: View {
                 }
             }
         }
-    }
-
-    private func foodItemRow(_ item: FoodAnalysisResponse.FoodItem) -> some View {
-        Button {
-            onFoodSelected(item)
-        } label: {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(item.name)
-                        .font(.headline)
-                        .foregroundColor(.primary)
-                    Text(item.portion)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Spacer()
-
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("\(item.calories) kcal")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                        .foregroundColor(Theme.fireGold)
-                    Text("E:\(Int(item.proteinG))g K:\(Int(item.carbsG))g F:\(Int(item.fatG))g")
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                }
-
-                Image(systemName: "plus.circle.fill")
-                    .font(.title2)
-                    .foregroundColor(Theme.fireGold)
-            }
-            .padding()
-            .background(Theme.backgroundSecondary)
-            .cornerRadius(12)
-            .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
-            )
-        }
-        .buttonStyle(.plain)
     }
 }

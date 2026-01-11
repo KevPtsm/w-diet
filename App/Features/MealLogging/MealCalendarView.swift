@@ -426,7 +426,9 @@ struct MealCalendarView: View {
             }
             mealLogs = logs
         } catch {
+            #if DEBUG
             print("Error loading meal history: \(error)")
+            #endif
         }
 
         isLoading = false

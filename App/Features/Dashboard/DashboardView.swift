@@ -88,50 +88,10 @@ struct DashboardView: View {
                     .padding(.bottom, 70) // Space for fixed button
                 }
                 .safeAreaInset(edge: .bottom) {
-                    // Fixed Add Food Buttons
-                    HStack(spacing: 12) {
-                        // Left: Add Food manually
-                        Button {
-                            showAddFood = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "plus.circle.fill")
-                                Text("Essen hinzufügen")
-                                    .font(.subheadline).fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
-                            .background(Theme.fireGold.opacity(0.8))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
-                            )
-                        }
-                        .buttonStyle(.plain)
-
-                        // Right: Scan Food with AI
-                        Button {
-                            showCamera = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "camera.viewfinder")
-                                Text("Teller scannen")
-                                    .font(.subheadline).fontWeight(.semibold)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 12)
-                            .background(Theme.fireGold.opacity(0.8))
-                            .foregroundColor(.white)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
-                            )
-                        }
-                        .buttonStyle(.plain)
-                    }
+                    AddFoodButtonBar(
+                        onAddFood: { showAddFood = true },
+                        onScanFood: { showCamera = true }
+                    )
                     .padding(.horizontal)
                     .padding(.bottom, 38)
                     .background(
@@ -250,7 +210,10 @@ struct DashboardView: View {
                             isAnalyzing = false
                             showAnalysisResults = false
                             capturedImage = nil
+                            viewModel.errorMessage = "Analyse fehlgeschlagen: \(error.localizedDescription)"
+                            #if DEBUG
                             print("Analysis error: \(error)")
+                            #endif
                         }
                     }
                 }
@@ -282,7 +245,10 @@ struct DashboardView: View {
                             }
                             await viewModel.loadData()
                         } catch {
+                            viewModel.errorMessage = "Speichern fehlgeschlagen: \(error.localizedDescription)"
+                            #if DEBUG
                             print("Error saving scanned meal: \(error)")
+                            #endif
                         }
                     }
                 }
@@ -431,104 +397,16 @@ struct DashboardView: View {
     }
 
     private var macroProgressSection: some View {
-        VStack(spacing: 35) {
-            // Circular Progress Ring
-            ZStack {
-                // Center text
-                VStack(spacing: 4) {
-                    Text(viewModel.caloriesConsumed, format: .number.grouping(.never))
-                        .font(.system(size: 48, weight: .bold))
-                        .foregroundColor(viewModel.caloriesConsumed > 0 ? Theme.fireGold : Theme.gray400)
-                    Text("/ \(viewModel.caloriesTarget.formatted(.number.grouping(.never)))")
-                        .font(.title3)
-                        .foregroundStyle(.secondary)
-                    Text("kcal")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                // Circular ring
-                CircularMacroRing(
-                    proteinCalories: viewModel.proteinConsumed * 4, // 4 kcal per gram
-                    carbsCalories: viewModel.carbsConsumed * 4, // 4 kcal per gram
-                    fatCalories: viewModel.fatConsumed * 9, // 9 kcal per gram
-                    targetCalories: Double(viewModel.caloriesTarget)
-                )
-                .frame(width: 200, height: 200)
-            }
-
-            // Three macros side by side
-            HStack(spacing: 16) {
-                macroColumn(
-                    title: "Eiweiß",
-                    consumed: viewModel.proteinConsumed,
-                    target: viewModel.proteinTarget,
-                    unit: "g",
-                    color: Theme.macroProtein
-                )
-
-                macroColumn(
-                    title: "Kohlenhydrate",
-                    consumed: viewModel.carbsConsumed,
-                    target: viewModel.carbsTarget,
-                    unit: "g",
-                    color: Theme.warning
-                )
-
-                macroColumn(
-                    title: "Fett",
-                    consumed: viewModel.fatConsumed,
-                    target: viewModel.fatTarget,
-                    unit: "g",
-                    color: Theme.macroFat
-                )
-            }
-        }
-    }
-
-    private func macroColumn(
-        title: String,
-        consumed: Double,
-        target: Double,
-        unit: String,
-        color: Color
-    ) -> some View {
-        let progress = target > 0 ? min(consumed / target, 1.0) : 0
-
-        return VStack(spacing: 8) {
-            // Title
-            Text(title)
-                .font(.footnote)
-                .fontWeight(.semibold)
-                .multilineTextAlignment(.center)
-
-            // Value (consumed / target)
-            Text("\(Int(consumed)) / \(Int(target))")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-
-            // Progress bar
-            GeometryReader { geometry in
-                ZStack(alignment: .leading) {
-                    // Background
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(Theme.gray100)
-                        .frame(height: 6)
-
-                    // Fill
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(color)
-                        .frame(width: geometry.size.width * progress, height: 6)
-
-                    // Border for light mode visibility
-                    RoundedRectangle(cornerRadius: 3)
-                        .strokeBorder(Theme.lightModeBorder, lineWidth: 1)
-                        .frame(height: 6)
-                }
-            }
-            .frame(height: 6)
-        }
-        .frame(maxWidth: .infinity)
+        MacroProgressView(
+            caloriesConsumed: viewModel.caloriesConsumed,
+            caloriesTarget: viewModel.caloriesTarget,
+            proteinConsumed: viewModel.proteinConsumed,
+            proteinTarget: viewModel.proteinTarget,
+            carbsConsumed: viewModel.carbsConsumed,
+            carbsTarget: viewModel.carbsTarget,
+            fatConsumed: viewModel.fatConsumed,
+            fatTarget: viewModel.fatTarget
+        )
     }
 
 }

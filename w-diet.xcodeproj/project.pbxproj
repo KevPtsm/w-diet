@@ -72,7 +72,12 @@
 		DB16B3FCB6734485862C3FA6 /* App/Features/Onboarding/Views/Step1GoalSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47621CB59A84974A24ED099 /* App/Features/Onboarding/Views/Step1GoalSelectionView.swift */; };
 		FBCFBFD18AB947769872E9FF /* App/Features/Onboarding/Views/Step5CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04791FF0452D4D04BC0CB6B5 /* App/Features/Onboarding/Views/Step5CompletionView.swift */; };
 		GDPR0CONSENT0BUILD0FILE1 /* App/Features/Onboarding/Views/Step0ConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GDPR0CONSENT0FILE0REF01 /* App/Features/Onboarding/Views/Step0ConsentView.swift */; };
-		5A03370124E737BD6BB718AA /* App/Features/Shared/ComingSoonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3784DE6E0524FC7C91CC626D /* App/Features/Shared/ComingSoonView.swift */; };
+		5A03370124E737BD6BB718AA /* ComingSoonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3784DE6E0524FC7C91CC626D /* ComingSoonView.swift */; };
+		MACRO0PROGRESS0BUILD0001 /* MacroProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MACRO0PROGRESS0FILE0001 /* MacroProgressView.swift */; };
+		ADDFOOD0BUTTON0BUILD001 /* AddFoodButtonBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADDFOOD0BUTTON0FILE0001 /* AddFoodButtonBar.swift */; };
+		FOODITEM0ROW0BUILD00001 /* FoodItemRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FOODITEM0ROW0FILE00001 /* FoodItemRowView.swift */; };
+		LAYOUTCONST0BUILD00001 /* LayoutConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = LAYOUTCONST0FILE000001 /* LayoutConstants.swift */; };
+		STRINGS0CONST0BUILD0001 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = STRINGS0CONST0FILE00001 /* Strings.swift */; };
 		ECFA1E07AFCD1D35281E8603 /* App/Features/MealLogging/MealHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12390556586B72817BF4121A /* App/Features/MealLogging/MealHistoryView.swift */; };
 		0F2E1827F141FEF73F562B29 /* App/Features/MealLogging/MealCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778AFAFA9EFEA4EE5622006B /* App/Features/MealLogging/MealCalendarView.swift */; };
 		SPLASH0VIEW0BUILD0FILE1 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SPLASH0VIEW0FILE0REF001 /* SplashView.swift */; };
@@ -155,7 +160,12 @@
 		DE48A91FEF844A4581F71A15 /* App/Features/Onboarding/OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/OnboardingViewModel.swift; sourceTree = SOURCE_ROOT; };
 		E14DE9EC6D4760CB17A1E013 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		GDPR0CONSENT0FILE0REF01 /* App/Features/Onboarding/Views/Step0ConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step0ConsentView.swift; sourceTree = SOURCE_ROOT; };
-		3784DE6E0524FC7C91CC626D /* App/Features/Shared/ComingSoonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Shared/ComingSoonView.swift; sourceTree = SOURCE_ROOT; };
+		3784DE6E0524FC7C91CC626D /* ComingSoonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComingSoonView.swift; sourceTree = "<group>"; };
+		MACRO0PROGRESS0FILE0001 /* MacroProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacroProgressView.swift; sourceTree = "<group>"; };
+		ADDFOOD0BUTTON0FILE0001 /* AddFoodButtonBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFoodButtonBar.swift; sourceTree = "<group>"; };
+		FOODITEM0ROW0FILE00001 /* FoodItemRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodItemRowView.swift; sourceTree = "<group>"; };
+		LAYOUTCONST0FILE000001 /* LayoutConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutConstants.swift; sourceTree = "<group>"; };
+		STRINGS0CONST0FILE00001 /* Strings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Strings.swift; sourceTree = "<group>"; };
 		12390556586B72817BF4121A /* App/Features/MealLogging/MealHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealHistoryView.swift; sourceTree = "<group>"; };
 		778AFAFA9EFEA4EE5622006B /* App/Features/MealLogging/MealCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCalendarView.swift; sourceTree = "<group>"; };
 		SPLASH0VIEW0FILE0REF001 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -269,11 +279,25 @@
 				0AAB172B2F0ADD00004D6216 /* CycleManagement */,
 				0AAB172C2F0ADD00004D6216 /* Dashboard */,
 				0AAB172D2F0ADD00004D6216 /* MealLogging */,
+				SHARED0GROUP0FEATURES001 /* Shared */,
 				0AAB172E2F0ADD00004D6216 /* WeightTracking */,
 				0ACDE78B2F0FE1CC00DD43AA /* Onboarding */,
 				0967CA117698A03C3E644FBB /* Splash */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		SHARED0GROUP0FEATURES001 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				ADDFOOD0BUTTON0FILE0001 /* AddFoodButtonBar.swift */,
+				3784DE6E0524FC7C91CC626D /* ComingSoonView.swift */,
+				FOODITEM0ROW0FILE00001 /* FoodItemRowView.swift */,
+				LAYOUTCONST0FILE000001 /* LayoutConstants.swift */,
+				MACRO0PROGRESS0FILE0001 /* MacroProgressView.swift */,
+				STRINGS0CONST0FILE00001 /* Strings.swift */,
+			);
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		0967CA117698A03C3E644FBB /* Splash */ = {
@@ -684,7 +708,12 @@
 				0ACDE78D2F0FE1CC00DD43AA /* Step3HeightInputView.swift in Sources */,
 				0ACDE78E2F0FE1CC00DD43AA /* Step3EatingWindowView.swift in Sources */,
 				GDPR0CONSENT0BUILD0FILE1 /* App/Features/Onboarding/Views/Step0ConsentView.swift in Sources */,
-				5A03370124E737BD6BB718AA /* App/Features/Shared/ComingSoonView.swift in Sources */,
+				5A03370124E737BD6BB718AA /* ComingSoonView.swift in Sources */,
+				MACRO0PROGRESS0BUILD0001 /* MacroProgressView.swift in Sources */,
+				ADDFOOD0BUTTON0BUILD001 /* AddFoodButtonBar.swift in Sources */,
+				FOODITEM0ROW0BUILD00001 /* FoodItemRowView.swift in Sources */,
+				LAYOUTCONST0BUILD00001 /* LayoutConstants.swift in Sources */,
+				STRINGS0CONST0BUILD0001 /* Strings.swift in Sources */,
 				0ACDE78F2F0FE1CC00DD43AA /* Step1GoalSelectionView.swift in Sources */,
 				0ACDE7902F0FE1CC00DD43AA /* Step2CalorieTargetView.swift in Sources */,
 				0ACDE7912F0FE1CC00DD43AA /* Step5CompletionView.swift in Sources */,
@@ -704,12 +733,10 @@
 				E5A1B2C3D4E5F6A7B8C9D0E2 /* App/Features/Dashboard/WeightHistoryView.swift in Sources */,
 				74648A59857248E78D15BE35 /* App/Features/Dashboard/DashboardViewModel.swift in Sources */,
 				10F4979572B54379B839177E /* App/Features/Dashboard/MatadorCycleCalendar.swift in Sources */,
-				ED316BDE08F5465E9BBAF5AF /* App/Features/MealLogging/MealLoggingView.swift in Sources */,
 				0F2E1827F141FEF73F562B29 /* App/Features/MealLogging/MealCalendarView.swift in Sources */,
 				ECFA1E07AFCD1D35281E8603 /* App/Features/MealLogging/MealHistoryView.swift in Sources */,
 				952C19390761406CB84ED900 /* App/Features/MealLogging/ManualEntryView.swift in Sources */,
 				741EDCEB49464EA2BB61DDCB /* App/Features/MealLogging/FoodSearchView.swift in Sources */,
-				0F630DEDD4BE498783FBD67B /* App/Features/MealLogging/MealLoggingViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

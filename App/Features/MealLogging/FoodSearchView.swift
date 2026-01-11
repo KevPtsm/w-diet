@@ -159,7 +159,9 @@ struct FoodSearchView: View {
                                 isAnalyzingPlate = false
                                 showPlateAnalysisResults = false
                                 capturedPlateImage = nil
+                                #if DEBUG
                                 print("Plate analysis error: \(error)")
+                                #endif
                             }
                         }
                     }
@@ -206,7 +208,9 @@ struct FoodSearchView: View {
                                 isAnalyzingNutrition = false
                                 showNutritionResults = false
                                 capturedNutritionImage = nil
+                                #if DEBUG
                                 print("Nutrition label error: \(error)")
+                                #endif
                             }
                         }
                     }
@@ -266,9 +270,9 @@ struct FoodSearchView: View {
             } label: {
                 VStack(spacing: 4) {
                     Image(systemName: "camera.viewfinder")
-                        .font(.system(size: 28))
+                        .font(.system(size: LayoutConstants.ScanButton.iconSize))
                         .foregroundColor(Theme.fireGold)
-                        .frame(width: 36, height: 36)
+                        .frame(width: LayoutConstants.ScanButton.frameSize, height: LayoutConstants.ScanButton.frameSize)
                     Text("Teller")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -283,9 +287,9 @@ struct FoodSearchView: View {
             } label: {
                 VStack(spacing: 4) {
                     Image(systemName: "doc.viewfinder")
-                        .font(.system(size: 28))
+                        .font(.system(size: LayoutConstants.ScanButton.iconSize))
                         .foregroundColor(Theme.fireGold)
-                        .frame(width: 36, height: 36)
+                        .frame(width: LayoutConstants.ScanButton.frameSize, height: LayoutConstants.ScanButton.frameSize)
                     Text("Nährwerte")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -300,9 +304,9 @@ struct FoodSearchView: View {
             } label: {
                 VStack(spacing: 4) {
                     Image(systemName: "barcode.viewfinder")
-                        .font(.system(size: 28))
+                        .font(.system(size: LayoutConstants.ScanButton.iconSize))
                         .foregroundColor(Theme.fireGold)
-                        .frame(width: 36, height: 36)
+                        .frame(width: LayoutConstants.ScanButton.frameSize, height: LayoutConstants.ScanButton.frameSize)
                     Text("Barcode")
                         .font(.caption)
                         .fontWeight(.medium)
@@ -341,7 +345,7 @@ struct FoodSearchView: View {
 
                     // Debounce: wait 400ms before searching
                     searchTask = Task {
-                        try? await Task.sleep(nanoseconds: 400_000_000)
+                        try? await Task.sleep(nanoseconds: LayoutConstants.Timing.searchDebounceNanoseconds)
                         guard !Task.isCancelled else { return }
                         await performSearch()
                     }

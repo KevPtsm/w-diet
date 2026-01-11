@@ -413,7 +413,9 @@ struct WeightHistoryView: View {
             }
             weightLogs = logs
         } catch {
+            #if DEBUG
             print("Error loading weight history: \(error)")
+            #endif
         }
 
         isLoading = false
