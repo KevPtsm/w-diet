@@ -8,6 +8,26 @@
 import SwiftUI
 import PhotosUI
 
+// MARK: - Confidence Helpers
+
+private enum ConfidenceHelper {
+    static func icon(_ confidence: String) -> String {
+        switch confidence.lowercased() {
+        case "high": return "checkmark.circle.fill"
+        case "medium": return "exclamationmark.circle.fill"
+        default: return "questionmark.circle.fill"
+        }
+    }
+
+    static func color(_ confidence: String) -> Color {
+        switch confidence.lowercased() {
+        case "high": return Theme.success
+        case "medium": return Theme.warning
+        default: return Theme.disabled
+        }
+    }
+}
+
 /// View for scanning a plate/meal with AI analysis
 struct PlateScannerView: View {
     // MARK: - Properties
@@ -46,8 +66,12 @@ struct PlateScannerView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Theme.fireGold)
                     }
                 }
             }
@@ -172,8 +196,8 @@ struct PlateScannerView: View {
 
             // Confidence indicator
             HStack {
-                Image(systemName: confidenceIcon(result.confidence))
-                    .foregroundColor(confidenceColor(result.confidence))
+                Image(systemName: ConfidenceHelper.icon(result.confidence))
+                    .foregroundColor(ConfidenceHelper.color(result.confidence))
                 Text("Genauigkeit: \(result.confidence)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
@@ -255,22 +279,6 @@ struct PlateScannerView: View {
     }
 
     // MARK: - Helpers
-
-    private func confidenceIcon(_ confidence: String) -> String {
-        switch confidence.lowercased() {
-        case "high": return "checkmark.circle.fill"
-        case "medium": return "exclamationmark.circle.fill"
-        default: return "questionmark.circle.fill"
-        }
-    }
-
-    private func confidenceColor(_ confidence: String) -> Color {
-        switch confidence.lowercased() {
-        case "high": return Theme.success
-        case "medium": return Theme.warning
-        default: return Theme.disabled
-        }
-    }
 
     private func loadImage(from item: PhotosPickerItem?) {
         guard let item else { return }
@@ -398,8 +406,8 @@ struct PlateAnalysisResultsView: View {
                     }
 
                     HStack {
-                        Image(systemName: confidenceIcon(result.confidence))
-                            .foregroundColor(confidenceColor(result.confidence))
+                        Image(systemName: ConfidenceHelper.icon(result.confidence))
+                            .foregroundColor(ConfidenceHelper.color(result.confidence))
                         Text("Genauigkeit: \(result.confidence)")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -430,8 +438,12 @@ struct PlateAnalysisResultsView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Theme.fireGold)
                     }
                 }
             }
@@ -477,21 +489,5 @@ struct PlateAnalysisResultsView: View {
             )
         }
         .buttonStyle(.plain)
-    }
-
-    private func confidenceIcon(_ confidence: String) -> String {
-        switch confidence.lowercased() {
-        case "high": return "checkmark.circle.fill"
-        case "medium": return "exclamationmark.circle.fill"
-        default: return "questionmark.circle.fill"
-        }
-    }
-
-    private func confidenceColor(_ confidence: String) -> Color {
-        switch confidence.lowercased() {
-        case "high": return Theme.success
-        case "medium": return Theme.warning
-        default: return Theme.disabled
-        }
     }
 }

@@ -15,7 +15,7 @@ struct ManualEntryPrefill {
     var carbs: Double = 0
     var fat: Double = 0
 
-    static let empty = ManualEntryPrefill()
+    nonisolated static let empty = ManualEntryPrefill()
 
     init(name: String = "", calories: Int = 0, protein: Double = 0, carbs: Double = 0, fat: Double = 0) {
         self.name = name
@@ -41,14 +41,17 @@ struct ManualEntryView: View {
     @Environment(\.dismiss) private var dismiss
     var onSave: (MealLog) -> Void
     var prefill: ManualEntryPrefill
+    var targetDate: Date?
     private let authManager: AuthManager
 
-    init(
+    @MainActor init(
         prefill: ManualEntryPrefill = .empty,
+        targetDate: Date? = nil,
         onSave: @escaping (MealLog) -> Void,
         authManager: AuthManager = .shared
     ) {
         self.prefill = prefill
+        self.targetDate = targetDate
         self.onSave = onSave
         self.authManager = authManager
 
@@ -150,8 +153,12 @@ struct ManualEntryView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Theme.fireGold)
                     }
                 }
 
@@ -227,7 +234,8 @@ struct ManualEntryView: View {
             caloriesKcal: finalCalories,
             proteinG: proteinValue,
             carbsG: carbsValue,
-            fatG: fatValue
+            fatG: fatValue,
+            loggedAt: targetDate ?? Date()
         )
 
         onSave(meal)

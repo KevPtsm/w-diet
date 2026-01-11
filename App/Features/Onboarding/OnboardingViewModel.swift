@@ -163,7 +163,7 @@ final class OnboardingViewModel: ObservableObject {
 
     // MARK: - Initialization
 
-    nonisolated init(
+    init(
         dbManager: GRDBManager = .shared,
         authManager: AuthManager = .shared
     ) {

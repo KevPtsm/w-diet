@@ -48,6 +48,7 @@ struct DashboardView: View {
     /// Show weight history
     @State private var showWeightHistory = false
 
+
     // MARK: - Tab enum
 
     enum Tab {
@@ -82,7 +83,6 @@ struct DashboardView: View {
 
                         // Cycle Status Card (MATADOR Calendar - secondary navigation)
                         cycleStatusCard
-                            .padding(.top, 10)
                     }
                     .padding()
                     .padding(.bottom, 70) // Space for fixed button
@@ -139,12 +139,7 @@ struct DashboardView: View {
                             .ignoresSafeArea()
                     )
                 }
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .principal) {
-                        EmptyView()
-                    }
-                }
+                .navigationBarHidden(true)
                 .task {
                     await viewModel.loadData()
                 }
@@ -168,8 +163,10 @@ struct DashboardView: View {
             }
             .tag(Tab.home)
 
-            // Logging Tab
-            MealLoggingView()
+            // Mahlzeiten Tab (Meal History)
+            NavigationStack {
+                MealHistoryView()
+            }
             .tabItem {
                 Image(systemName: selectedTab == .logging ? "fork.knife.circle.fill" : "fork.knife.circle")
             }
@@ -281,8 +278,7 @@ struct DashboardView: View {
                     Task {
                         do {
                             try await GRDBManager.shared.write { db in
-                                var m = meal
-                                try m.insert(db)
+                                try meal.insert(db)
                             }
                             await viewModel.loadData()
                         } catch {
@@ -349,29 +345,25 @@ struct DashboardView: View {
                 Text("Kein aktiver Zyklus")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
             }
         }
+        .frame(maxWidth: .infinity)
         .padding()
         .background(Theme.backgroundSecondary)
-        .cornerRadius(16)
-        .shadow(color: Color.black.opacity(0.05), radius: 8, y: 2)
+        .cornerRadius(12)
     }
 
     private var weightStatsCard: some View {
         Button {
             showWeightHistory = true
         } label: {
-            HStack(spacing: 0) {
+            HeroHeaderView {
                 // Left: 7-Day Average + Trend (PRIMARY)
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
-                        Image(systemName: "chart.xyaxis.line")
+                        Image(systemName: "calendar")
                             .font(.caption)
                             .foregroundColor(Theme.fireGold)
-                            .padding(6)
-                            .background(Theme.fireGold.opacity(0.15))
-                            .cornerRadius(6)
                         Text("Ø 7 Tage")
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -396,8 +388,7 @@ struct DashboardView: View {
                             .foregroundColor(viewModel.weightTrend.color)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
+            } center: {
                 // Center: Streak Indicator
                 VStack(spacing: 2) {
                     Text("\(viewModel.streakDays)")
@@ -409,7 +400,7 @@ struct DashboardView: View {
                         .font(.system(size: 24))
                         .foregroundColor(viewModel.todayHasActivity ? Theme.fireGold : Theme.disabled)
                 }
-
+            } right: {
                 // Right: Current Weight + Chevron (SECONDARY)
                 HStack(spacing: 8) {
                     VStack(alignment: .trailing, spacing: 4) {
@@ -434,9 +425,7 @@ struct DashboardView: View {
                         .font(.caption)
                         .foregroundStyle(.tertiary)
                 }
-                .frame(maxWidth: .infinity, alignment: .trailing)
             }
-            .padding(.horizontal)
         }
         .buttonStyle(.plain)
     }
@@ -659,6 +648,42 @@ struct SeparatorLine: View {
             }
             .stroke(Color(UIColor.systemBackground), style: StrokeStyle(lineWidth: 2, lineCap: .round))
         }
+    }
+}
+
+// MARK: - HeroHeaderView (shared layout component)
+
+/// A header component with left-center-right layout that maintains consistent height
+/// Used above the calorie ring on both Dashboard and MealHistory tabs
+struct HeroHeaderView<Left: View, Center: View, Right: View>: View {
+    let left: Left
+    let center: Center
+    let right: Right
+
+    init(
+        @ViewBuilder left: () -> Left,
+        @ViewBuilder center: () -> Center,
+        @ViewBuilder right: () -> Right
+    ) {
+        self.left = left()
+        self.center = center()
+        self.right = right()
+    }
+
+    var body: some View {
+        HStack(spacing: 0) {
+            // Left section
+            left
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Center section
+            center
+
+            // Right section
+            right
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+        .padding(.horizontal)
     }
 }
 

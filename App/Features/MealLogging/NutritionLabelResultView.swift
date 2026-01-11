@@ -14,20 +14,23 @@ struct NutritionLabelResultView: View {
     let image: UIImage?
     let result: NutritionLabelResult?
     let isAnalyzing: Bool
+    let targetDate: Date?
     var onSave: (MealLog) -> Void
 
     private let authManager: AuthManager
 
-    init(
+    @MainActor init(
         image: UIImage?,
         result: NutritionLabelResult?,
         isAnalyzing: Bool,
+        targetDate: Date? = nil,
         onSave: @escaping (MealLog) -> Void,
         authManager: AuthManager = .shared
     ) {
         self.image = image
         self.result = result
         self.isAnalyzing = isAnalyzing
+        self.targetDate = targetDate
         self.onSave = onSave
         self.authManager = authManager
     }
@@ -84,8 +87,12 @@ struct NutritionLabelResultView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Theme.fireGold)
                     }
                 }
 
@@ -249,7 +256,8 @@ struct NutritionLabelResultView: View {
             caloriesKcal: calculatedCalories,
             proteinG: calculatedProtein,
             carbsG: calculatedCarbs,
-            fatG: calculatedFat
+            fatG: calculatedFat,
+            loggedAt: targetDate ?? Date()
         )
 
         onSave(meal)

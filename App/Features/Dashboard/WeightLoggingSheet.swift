@@ -25,7 +25,7 @@ struct WeightLoggingSheet: View {
 
     // MARK: - Initialization
 
-    init(
+    @MainActor init(
         isPresented: Binding<Bool>,
         onWeightSaved: @escaping () -> Void,
         dbManager: GRDBManager = .shared,

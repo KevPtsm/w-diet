@@ -79,7 +79,7 @@ final class DashboardViewModel: ObservableObject {
 
     // MARK: - Initialization
 
-    nonisolated init(
+    init(
         timeProvider: TimeProvider = SystemTimeProvider(),
         dbManager: GRDBManager = .shared,
         authManager: AuthManager = .shared
@@ -371,16 +371,5 @@ final class DashboardViewModel: ObservableObject {
             appError.report()
             errorMessage = appError.userMessage
         }
-    }
-
-    /// Calculate macro progress percentage
-    func macroProgress(consumed: Double, target: Double) -> Double {
-        guard target > 0 else { return 0 }
-        return min(consumed / target, 1.0)
-    }
-
-    /// Formatted percentage string
-    func progressText(consumed: Double, target: Double, unit: String) -> String {
-        "\(Int(consumed)) / \(Int(target)) \(unit)"
     }
 }

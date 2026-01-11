@@ -47,7 +47,6 @@
 		0ACDE7962F0FE1CC00DD43AA /* OnboardingContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACDE7892F0FE1CC00DD43AA /* OnboardingContainerView.swift */; };
 		0ACDE7972F0FE1CC00DD43AA /* Step2GenderSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ACDE7802F0FE1CC00DD43AA /* Step2GenderSelectionView.swift */; };
 		0F4DBAD3FA0045F3B475DD32 /* App/Features/Onboarding/Views/Step2CalorieTargetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F4AFA4EE024F688AE9385F /* App/Features/Onboarding/Views/Step2CalorieTargetView.swift */; };
-		0F630DEDD4BE498783FBD67B /* App/Features/MealLogging/MealLoggingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0626302F9BD54BE3A993A4AC /* App/Features/MealLogging/MealLoggingViewModel.swift */; };
 		0F9975A73E0146319EBEDA88 /* App/Features/Onboarding/Views/Step4WeightInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3385C16E2EAC48BC8F998C2F /* App/Features/Onboarding/Views/Step4WeightInputView.swift */; };
 		10F4979572B54379B839177E /* App/Features/Dashboard/MatadorCycleCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D63A960BD949869C46651F /* App/Features/Dashboard/MatadorCycleCalendar.swift */; };
 		14635972AB0E408B946CC376 /* App/Features/Onboarding/Views/Step2GenderSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A2AECFAE6E4855B941B6B2 /* App/Features/Onboarding/Views/Step2GenderSelectionView.swift */; };
@@ -71,10 +70,12 @@
 		D4120E33732248DFA5322A89 /* App/Features/Onboarding/Views/Step3HeightInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE87DC48E1B43F99971BC75 /* App/Features/Onboarding/Views/Step3HeightInputView.swift */; };
 		D96050317BE665943A260AC3 /* Step3AgeInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C7F4FA0C288C217EB13994E /* Step3AgeInputView.swift */; };
 		DB16B3FCB6734485862C3FA6 /* App/Features/Onboarding/Views/Step1GoalSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47621CB59A84974A24ED099 /* App/Features/Onboarding/Views/Step1GoalSelectionView.swift */; };
-		ED316BDE08F5465E9BBAF5AF /* App/Features/MealLogging/MealLoggingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EBE4C688B64D3885773CFE /* App/Features/MealLogging/MealLoggingView.swift */; };
 		FBCFBFD18AB947769872E9FF /* App/Features/Onboarding/Views/Step5CompletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04791FF0452D4D04BC0CB6B5 /* App/Features/Onboarding/Views/Step5CompletionView.swift */; };
 		GDPR0CONSENT0BUILD0FILE1 /* App/Features/Onboarding/Views/Step0ConsentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GDPR0CONSENT0FILE0REF01 /* App/Features/Onboarding/Views/Step0ConsentView.swift */; };
 		5A03370124E737BD6BB718AA /* App/Features/Shared/ComingSoonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3784DE6E0524FC7C91CC626D /* App/Features/Shared/ComingSoonView.swift */; };
+		ECFA1E07AFCD1D35281E8603 /* App/Features/MealLogging/MealHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12390556586B72817BF4121A /* App/Features/MealLogging/MealHistoryView.swift */; };
+		0F2E1827F141FEF73F562B29 /* App/Features/MealLogging/MealCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778AFAFA9EFEA4EE5622006B /* App/Features/MealLogging/MealCalendarView.swift */; };
+		SPLASH0VIEW0BUILD0FILE1 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SPLASH0VIEW0FILE0REF001 /* SplashView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,7 +102,6 @@
 		1299C72D7C9484843E07598D /* PlateScannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlateScannerView.swift; sourceTree = "<group>"; };
 		D1LEGAL001 /* DatenschutzView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "App/Features/Legal/DatenschutzView.swift"; name = DatenschutzView.swift; sourceTree = "<group>"; };
 		04791FF0452D4D04BC0CB6B5 /* App/Features/Onboarding/Views/Step5CompletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step5CompletionView.swift; sourceTree = SOURCE_ROOT; };
-		0626302F9BD54BE3A993A4AC /* App/Features/MealLogging/MealLoggingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/MealLogging/MealLoggingViewModel.swift; sourceTree = SOURCE_ROOT; };
 		081437CFE2B5443DA47E009D /* App/AppConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/AppConfiguration.swift; sourceTree = SOURCE_ROOT; };
 		0AAB16F22F0AD241004D6216 /* w-diet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "w-diet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AAB16FF2F0AD243004D6216 /* w-dietTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "w-dietTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -137,7 +137,6 @@
 		2D8D2FA69AE348B28474FA86 /* App/Features/Dashboard/WeightLoggingSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Dashboard/WeightLoggingSheet.swift; sourceTree = SOURCE_ROOT; };
 		3385C16E2EAC48BC8F998C2F /* App/Features/Onboarding/Views/Step4WeightInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step4WeightInputView.swift; sourceTree = SOURCE_ROOT; };
 		35DFD6B75BED445CA76B28D5 /* App/Features/Onboarding/OnboardingContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/OnboardingContainerView.swift; sourceTree = SOURCE_ROOT; };
-		35EBE4C688B64D3885773CFE /* App/Features/MealLogging/MealLoggingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/MealLogging/MealLoggingView.swift; sourceTree = SOURCE_ROOT; };
 		3BC3A5AE76C1464BAADB6958 /* App/Features/MealLogging/ManualEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/MealLogging/ManualEntryView.swift; sourceTree = SOURCE_ROOT; };
 		4E322C15023F4E47B41BB72D /* App/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/RootView.swift; sourceTree = SOURCE_ROOT; };
 		634D909C3B4046F280D423C3 /* App/Features/MealLogging/FoodSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/MealLogging/FoodSearchView.swift; sourceTree = SOURCE_ROOT; };
@@ -157,6 +156,9 @@
 		E14DE9EC6D4760CB17A1E013 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		GDPR0CONSENT0FILE0REF01 /* App/Features/Onboarding/Views/Step0ConsentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Onboarding/Views/Step0ConsentView.swift; sourceTree = SOURCE_ROOT; };
 		3784DE6E0524FC7C91CC626D /* App/Features/Shared/ComingSoonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App/Features/Shared/ComingSoonView.swift; sourceTree = SOURCE_ROOT; };
+		12390556586B72817BF4121A /* App/Features/MealLogging/MealHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealHistoryView.swift; sourceTree = "<group>"; };
+		778AFAFA9EFEA4EE5622006B /* App/Features/MealLogging/MealCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealCalendarView.swift; sourceTree = "<group>"; };
+		SPLASH0VIEW0FILE0REF001 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -244,6 +246,8 @@
 		0AAB172D2F0ADD00004D6216 /* MealLogging */ = {
 			isa = PBXGroup;
 			children = (
+				778AFAFA9EFEA4EE5622006B /* MealCalendarView.swift */,
+				12390556586B72817BF4121A /* MealHistoryView.swift */,
 				D28C83EDF4887EBBE3604931 /* NutritionLabelResultView.swift */,
 				1299C72D7C9484843E07598D /* PlateScannerView.swift */,
 				0ACDE58C2F0EFADB00DD43AA /* BarcodeScannerView.swift */,
@@ -267,10 +271,20 @@
 				0AAB172D2F0ADD00004D6216 /* MealLogging */,
 				0AAB172E2F0ADD00004D6216 /* WeightTracking */,
 				0ACDE78B2F0FE1CC00DD43AA /* Onboarding */,
+				0967CA117698A03C3E644FBB /* Splash */,
 			);
 			path = Features;
 			sourceTree = "<group>";
 		};
+		0967CA117698A03C3E644FBB /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				SPLASH0VIEW0FILE0REF001 /* SplashView.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+
 		0AAB17302F0ADD00004D6216 /* App */ = {
 			isa = PBXGroup;
 			children = (
@@ -444,10 +458,8 @@
 				E5A1B2C3D4E5F6A7B8C9D0E1 /* App/Features/Dashboard/WeightHistoryView.swift */,
 				244C5016594C4E418F00C650 /* App/Features/Dashboard/DashboardViewModel.swift */,
 				17D63A960BD949869C46651F /* App/Features/Dashboard/MatadorCycleCalendar.swift */,
-				35EBE4C688B64D3885773CFE /* App/Features/MealLogging/MealLoggingView.swift */,
 				3BC3A5AE76C1464BAADB6958 /* App/Features/MealLogging/ManualEntryView.swift */,
 				634D909C3B4046F280D423C3 /* App/Features/MealLogging/FoodSearchView.swift */,
-				0626302F9BD54BE3A993A4AC /* App/Features/MealLogging/MealLoggingViewModel.swift */,
 				35DFD6B75BED445CA76B28D5 /* App/Features/Onboarding/OnboardingContainerView.swift */,
 				DE48A91FEF844A4581F71A15 /* App/Features/Onboarding/OnboardingViewModel.swift */,
 				B0A80F9354464C879AFF8D37 /* App/Features/Onboarding/Views/Step5ActivityLevelView.swift */,
@@ -654,7 +666,6 @@
 				FF355F8C684E56BB6168ECE3 /* GeminiService.swift in Sources */,
 				D89893FA180D4050BFB63DED /* PlateScannerView.swift in Sources */,
 				D1LEGAL002 /* DatenschutzView.swift in Sources */,
-				D96050317BE665943A260AC3 /* Step3AgeInputView.swift in Sources */,
 				41F09181DF6EB9BC9D772C45 /* LoginView.swift in Sources */,
 				9B3728A24B05955CAEE58AFB /* LoginViewModel.swift in Sources */,
 				0AAB174A2F0AF100004D6216 /* w_dietApp.swift in Sources */,
@@ -694,20 +705,11 @@
 				74648A59857248E78D15BE35 /* App/Features/Dashboard/DashboardViewModel.swift in Sources */,
 				10F4979572B54379B839177E /* App/Features/Dashboard/MatadorCycleCalendar.swift in Sources */,
 				ED316BDE08F5465E9BBAF5AF /* App/Features/MealLogging/MealLoggingView.swift in Sources */,
+				0F2E1827F141FEF73F562B29 /* App/Features/MealLogging/MealCalendarView.swift in Sources */,
+				ECFA1E07AFCD1D35281E8603 /* App/Features/MealLogging/MealHistoryView.swift in Sources */,
 				952C19390761406CB84ED900 /* App/Features/MealLogging/ManualEntryView.swift in Sources */,
 				741EDCEB49464EA2BB61DDCB /* App/Features/MealLogging/FoodSearchView.swift in Sources */,
 				0F630DEDD4BE498783FBD67B /* App/Features/MealLogging/MealLoggingViewModel.swift in Sources */,
-				B0BA135409BD4667A1C99E69 /* App/Features/Onboarding/OnboardingContainerView.swift in Sources */,
-				B670CD488A444D468B08BFDF /* App/Features/Onboarding/OnboardingViewModel.swift in Sources */,
-				94D668849D014AFB805A4D68 /* App/Features/Onboarding/Views/Step5ActivityLevelView.swift in Sources */,
-				9761C843A6B74E7295DC93CA /* App/Features/Onboarding/Views/Step3EatingWindowView.swift in Sources */,
-				0F9975A73E0146319EBEDA88 /* App/Features/Onboarding/Views/Step4WeightInputView.swift in Sources */,
-				14635972AB0E408B946CC376 /* App/Features/Onboarding/Views/Step2GenderSelectionView.swift in Sources */,
-				0F4DBAD3FA0045F3B475DD32 /* App/Features/Onboarding/Views/Step2CalorieTargetView.swift in Sources */,
-				FBCFBFD18AB947769872E9FF /* App/Features/Onboarding/Views/Step5CompletionView.swift in Sources */,
-				AD0DAEB03DAC4F46BE156860 /* App/Features/Onboarding/Views/Step4MatadorExplainerView.swift in Sources */,
-				DB16B3FCB6734485862C3FA6 /* App/Features/Onboarding/Views/Step1GoalSelectionView.swift in Sources */,
-				D4120E33732248DFA5322A89 /* App/Features/Onboarding/Views/Step3HeightInputView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

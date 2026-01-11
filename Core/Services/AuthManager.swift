@@ -30,7 +30,12 @@ import Combine
 final class AuthManager: ObservableObject {
     // MARK: - Singleton
 
-    static let shared = AuthManager()
+    private static let _shared = AuthManager()
+
+    /// Thread-safe singleton accessor for use as default parameter in inits
+    nonisolated static var shared: AuthManager {
+        MainActor.assumeIsolated { _shared }
+    }
 
     // MARK: - Published Properties
 
@@ -67,7 +72,9 @@ final class AuthManager: ObservableObject {
             supabaseKey: AppConfiguration.supabaseAnonKey.isEmpty ? "placeholder-key" : AppConfiguration.supabaseAnonKey,
             options: SupabaseClientOptions(
                 auth: SupabaseClientOptions.AuthOptions(
-                    redirectToURL: Self.redirectURL
+                    redirectToURL: Self.redirectURL,
+                    // Opt-in to new session behavior (will be default in next major version)
+                    emitLocalSessionAsInitialSession: true
                 )
             )
         )
@@ -225,7 +232,7 @@ final class AuthManager: ObservableObject {
         do {
             // Try to retrieve session from Keychain
             guard let sessionData = try retrieveSessionFromKeychain(),
-                  let session = try? JSONDecoder().decode(Session.self, from: sessionData) else {
+                  let _ = try? JSONDecoder().decode(Session.self, from: sessionData) else {
                 return
             }
 
@@ -233,7 +240,7 @@ final class AuthManager: ObservableObject {
             let currentSession = try await supabaseClient.auth.session
 
             // Update auth state
-            await updateAuthState(session: currentSession)
+            updateAuthState(session: currentSession)
 
         } catch {
             // Silent failure - user will need to sign in again

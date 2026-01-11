@@ -102,6 +102,35 @@ struct MealLog: Codable, Identifiable, FetchableRecord, PersistableRecord {
         syncedAt != nil
     }
 
+    /// Time of day emoji based on when the meal was logged
+    var timeOfDayEmoji: String {
+        let hour = Calendar.current.component(.hour, from: loggedAt)
+        switch hour {
+        case 5..<11: return "☀️"   // Morgens
+        case 11..<16: return "🌤️"  // Mittags
+        case 16..<19: return "🌅"  // Nachmittags
+        default: return "🌙"       // Abends
+        }
+    }
+
+    /// Time of day label in German
+    var timeOfDayLabel: String {
+        let hour = Calendar.current.component(.hour, from: loggedAt)
+        switch hour {
+        case 5..<11: return "Morgens"
+        case 11..<16: return "Mittags"
+        case 16..<19: return "Nachmittags"
+        default: return "Abends"
+        }
+    }
+
+    /// Formatted time string
+    var timeString: String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: loggedAt)
+    }
+
     // MARK: - Initialization
 
     init(
@@ -168,6 +197,59 @@ extension MealLog {
             .fetchCount(db)
 
         return count > 0
+    }
+
+    /// Fetch meal logs for a specific user on a specific date
+    static func fetchForDate(_ db: Database, userId: String, date: Date) throws -> [MealLog] {
+        let calendar = Calendar.current
+        let startOfDay = calendar.startOfDay(for: date)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+
+        return try MealLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfDay)
+            .filter(Column("logged_at") < endOfDay)
+            .order(Column("logged_at").asc)
+            .fetchAll(db)
+    }
+
+    /// Fetch all meal logs for a specific month
+    static func fetchForMonth(_ db: Database, userId: String, month: Date) throws -> [MealLog] {
+        let calendar = Calendar.current
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: month)),
+              let endOfMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth) else {
+            return []
+        }
+
+        return try MealLog
+            .filter(Column("user_id") == userId)
+            .filter(Column("logged_at") >= startOfMonth)
+            .filter(Column("logged_at") < endOfMonth)
+            .order(Column("logged_at").desc)
+            .fetchAll(db)
+    }
+
+    /// Calculate total calories for a specific date
+    static func totalCaloriesForDate(_ db: Database, userId: String, date: Date) throws -> Int {
+        let meals = try fetchForDate(db, userId: userId, date: date)
+        return meals.reduce(0) { $0 + $1.caloriesKcal }
+    }
+
+    /// Calculate total calories for a month
+    static func totalCaloriesForMonth(_ db: Database, userId: String, month: Date) throws -> Int {
+        let meals = try fetchForMonth(db, userId: userId, month: month)
+        return meals.reduce(0) { $0 + $1.caloriesKcal }
+    }
+
+    /// Get days with logged meals in a month
+    static func daysWithMealsInMonth(_ db: Database, userId: String, month: Date) throws -> Set<Int> {
+        let meals = try fetchForMonth(db, userId: userId, month: month)
+        let calendar = Calendar.current
+        var days: Set<Int> = []
+        for meal in meals {
+            days.insert(calendar.component(.day, from: meal.loggedAt))
+        }
+        return days
     }
 }
 

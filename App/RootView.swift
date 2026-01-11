@@ -72,7 +72,7 @@ extension EnvironmentValues {
 @MainActor
 final class RootViewModel: ObservableObject {
     @Published var isLoading = true
-    @Published var needsOnboarding = true
+    @Published var needsOnboarding = false  // Default to false - only show onboarding if explicitly needed
 
     private let dbManager: GRDBManager
     private let authManager: AuthManager

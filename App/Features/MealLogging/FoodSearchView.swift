@@ -14,10 +14,12 @@ struct FoodSearchView: View {
 
     @Environment(\.dismiss) private var dismiss
     var onFoodAdded: () -> Void
+    var targetDate: Date?
     private let authManager: AuthManager
 
-    init(onFoodAdded: @escaping () -> Void, authManager: AuthManager = .shared) {
+    @MainActor init(onFoodAdded: @escaping () -> Void, targetDate: Date? = nil, authManager: AuthManager = .shared) {
         self.onFoodAdded = onFoodAdded
+        self.targetDate = targetDate
         self.authManager = authManager
     }
 
@@ -108,8 +110,12 @@ struct FoodSearchView: View {
             .tint(.primary) // Ensure consistent button colors regardless of parent tint
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Theme.fireGold)
                     }
                 }
             }
@@ -119,11 +125,12 @@ struct FoodSearchView: View {
                     servingSize: $servingSize,
                     onConfirm: {
                         saveFoodFromSearch(product: product, servings: servingSize)
+                        selectedProduct = nil  // Dismiss detail sheet, stay in FoodSearchView
                     }
                 )
             }
             .sheet(isPresented: $showManualEntry) {
-                ManualEntryView(onSave: { meal in
+                ManualEntryView(targetDate: targetDate, onSave: { meal in
                     saveMeal(meal)
                 })
             }
@@ -174,7 +181,7 @@ struct FoodSearchView: View {
             }
             .sheet(isPresented: $showScannedEntry) {
                 if let prefill = scannedFoodPrefill {
-                    ManualEntryView(prefill: prefill) { meal in
+                    ManualEntryView(prefill: prefill, targetDate: targetDate) { meal in
                         saveMeal(meal)
                     }
                 }
@@ -212,11 +219,11 @@ struct FoodSearchView: View {
                 NutritionLabelResultView(
                     image: capturedNutritionImage,
                     result: nutritionLabelResult,
-                    isAnalyzing: isAnalyzingNutrition
+                    isAnalyzing: isAnalyzingNutrition,
+                    targetDate: targetDate
                 ) { meal in
                     saveMeal(meal)
-                    onFoodAdded()
-                    dismiss()
+                    // Stay in FoodSearchView - NutritionLabelResultView dismisses itself
                 }
             }
             .alert("Produkt nicht gefunden", isPresented: .constant(barcodeError != nil)) {
@@ -351,8 +358,10 @@ struct FoodSearchView: View {
                     searchResults = []
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
+                        .font(.title3)
+                        .foregroundColor(Theme.fireGold)
                 }
+                .buttonStyle(.plain)
             }
         }
         .padding()
@@ -539,21 +548,22 @@ struct FoodSearchView: View {
             caloriesKcal: Int(Double(product.caloriesKcal ?? 0) * servings / 100),
             proteinG: (product.proteinG ?? 0) * servings / 100,
             carbsG: (product.carbsG ?? 0) * servings / 100,
-            fatG: (product.fatG ?? 0) * servings / 100
+            fatG: (product.fatG ?? 0) * servings / 100,
+            loggedAt: targetDate ?? Date()
         )
         saveMeal(meal)
     }
 
-    private func saveMeal(_ meal: MealLog) {
+    private func saveMeal(_ meal: MealLog, shouldDismiss: Bool = false) {
         Task {
-            let mutableMeal = meal
             do {
                 try await GRDBManager.shared.write { db in
-                    var m = mutableMeal
-                    try m.insert(db)
+                    try meal.insert(db)
                 }
                 onFoodAdded()
-                dismiss()
+                if shouldDismiss {
+                    dismiss()
+                }
             } catch {
                 AppError.databaseWriteFailed(operation: "insert_meal", underlying: error).report()
             }
@@ -677,7 +687,7 @@ struct ProductDetailSheet: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 12)
-                        .background(Theme.fireGold)
+                        .background(Theme.fireGold.opacity(0.8))
                         .foregroundColor(.white)
                         .cornerRadius(10)
                         .overlay(
@@ -694,8 +704,12 @@ struct ProductDetailSheet: View {
             .tint(.primary) // Ensure consistent button colors
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
+                    Button {
                         dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(Theme.fireGold)
                     }
                 }
             }
